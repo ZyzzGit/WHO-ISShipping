@@ -24,6 +24,6 @@ val customColorScheme = lightColorScheme(
     onPrimary = white,
     secondary = green_who,
     background = white,
-    surface = white,
+    surface = white
     // Customize other colors as needed
 )

@@ -11,7 +11,7 @@ fun MyCustomTheme(content: @Composable () -> Unit) {
     MaterialTheme(
         colorScheme = customColorScheme,
         typography = customTypography,
-//        shapes = Shapes,
+        shapes = customShapes,
         content = content
     )
 }
