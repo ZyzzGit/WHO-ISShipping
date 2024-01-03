@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -15,6 +16,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.FloatingActionButtonElevation
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -138,6 +140,45 @@ fun SubstanceFrame(
                     )
                 }
             }
+        }
+    }
+}
+
+@Composable
+fun ClassificationStartButton(
+    modifier: Modifier = Modifier,
+    text: String,
+    onClick: () -> Unit
+) {
+    FloatingActionButton(
+        modifier = modifier,
+        onClick = onClick,
+        shape = customShapes.large,
+        containerColor = customColorScheme.primary
+    ) {
+        Row(
+            modifier = Modifier.padding(11.dp),
+            horizontalArrangement = Arrangement.spacedBy(
+                space = 11.dp,
+                alignment = Alignment.CenterHorizontally
+            ),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(
+                painter = painterResource(id = R.drawable.info_icon),
+                contentDescription = "Info icon"
+            )
+            Text(
+                modifier = Modifier.width(195.dp), /*TODO: remove hardcoding of width*/
+                text = text,
+                style = customTypography.bodySmall.copy(fontSize = 15.sp),
+                color = white,
+                textAlign = TextAlign.Center
+            )
+            Icon(
+                painter = painterResource(id = R.drawable.arrow_forward),
+                contentDescription = "Arrow forward icon"
+            )
         }
     }
 }

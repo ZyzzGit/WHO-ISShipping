@@ -104,37 +104,11 @@ fun HomeScreen(paddingModifier: Modifier) {
             )
         }
         Spacer(modifier = Modifier.height(34.dp))
-        FloatingActionButton(
-            modifier = Modifier.fillMaxWidth(),
+        ClassificationStartButton(
+            modifier = Modifier.fillMaxWidth().fillMaxHeight(),
             onClick = { /*TODO*/ },
-            shape = customShapes.large,
-            containerColor = customColorScheme.primary
-        ) {
-            Row (
-                modifier = Modifier.padding(11.dp),
-                horizontalArrangement = Arrangement.spacedBy(
-                    space = 11.dp,
-                    alignment = Alignment.CenterHorizontally
-                ),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.info_icon),
-                    contentDescription = "Info icon"
-                )
-                Text(
-                    modifier = Modifier.width(197.dp),
-                    text = "Click here if you don’t know your substance type!",
-                    style = customTypography.bodySmall.copy(fontSize = 15.sp),
-                    color = white,
-                    textAlign = TextAlign.Center
-                )
-                Icon(
-                    painter = painterResource(id = R.drawable.arrow_forward),
-                    contentDescription = "Info icon"
-                )
-            }
-        }
+            text = "Click here if you don’t know your substance type!"
+        )
     }
 }
 
