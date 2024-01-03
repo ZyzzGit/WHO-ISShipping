@@ -3,8 +3,11 @@ package com.example.iss_tool
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -26,7 +29,7 @@ fun HomeScreen(paddingModifier: Modifier) {
             .fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Show_logo(modifier = paddingModifier, id = R.drawable.who_logo, color = blue_who)
+        Show_logo(modifier = paddingModifier.align(Alignment.Start), id = R.drawable.who_logo, color = blue_who)
         Text(
             text = "Let's Get Started!",
             style = customTypography.bodyLarge,
@@ -35,6 +38,7 @@ fun HomeScreen(paddingModifier: Modifier) {
             style = customTypography.bodyMedium,
             color = black
         )
+        Spacer(modifier = Modifier.height(12.dp))
         Row (
             modifier = paddingModifier
                 .padding(12.dp)
@@ -45,11 +49,15 @@ fun HomeScreen(paddingModifier: Modifier) {
             )
         ) {
             SubstanceFrame(
-                text = "Infectious Substance\n Affecting Humans",
+                modifier = Modifier.weight(1f),
+                onClick = { }, // TBD
+                text = "Infectious Substance Affecting Humans",
                 unNumber = 2814
             )
             SubstanceFrame(
-                text = "Infectious Substance\n Affecting Animals",
+                modifier = Modifier.weight(1f),
+                onClick = { }, // TBD
+                text = "Infectious Substance Affecting Animals",
                 unNumber = 2900
             )
         }

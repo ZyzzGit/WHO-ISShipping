@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.requiredWidth
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.FloatingActionButtonElevation
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -89,38 +90,50 @@ fun Show_logo(modifier: Modifier,id:Int,color: Color){
 
 @Composable
 fun SubstanceFrame(
+    modifier: Modifier,
     text: String,
-    unNumber: Int
+    unNumber: Int,
+    onClick: () -> Unit
 ) {
     FloatingActionButton(
-        onClick = {  }, // TBD
+        modifier = modifier,
+        onClick = onClick,
         shape = customShapes.large,
-        containerColor = customColorScheme.background,
+        containerColor = customColorScheme.background
     ) {
-        Column(
-            modifier = Modifier.padding(10.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(10.dp)
+        // Encapsulating box is used only to obtain a fully white background, otherwise there is a gray tint
+        Box(
+            modifier = Modifier
+            .fillMaxWidth()
+            .clip(customShapes.large)
+            .background(customColorScheme.background),
+            contentAlignment = Alignment.Center
         ) {
-            Text(
-                text = text,
-                style = customTypography.bodySmall,
-                color = customColorScheme.primary,
-                textAlign = TextAlign.Center
-            )
-            Box(
-                modifier = Modifier
-                    .width(110.dp)
-                    .clip(customShapes.medium)
-                    .background(customColorScheme.primary.copy(alpha = 0.14f))
+            Column(
+                modifier = Modifier.padding(10.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(10.dp)
             ) {
                 Text(
-                    text = unNumber.toString(),
-                    style = customTypography.bodySmall.copy(fontSize = 15.sp),
+                    text = text,
+                    style = customTypography.bodySmall,
                     color = customColorScheme.primary,
-                    modifier = Modifier.padding(5.dp),
                     textAlign = TextAlign.Center
                 )
+                Box(
+                    modifier = Modifier
+                        .width(126.dp)
+                        .clip(customShapes.medium)
+                        .background(customColorScheme.primary.copy(alpha = 0.14f)),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = "UN ${unNumber.toString()}",
+                        style = customTypography.bodySmall.copy(fontSize = 15.sp),
+                        color = customColorScheme.primary,
+                        modifier = Modifier.padding(5.dp),
+                    )
+                }
             }
         }
     }
