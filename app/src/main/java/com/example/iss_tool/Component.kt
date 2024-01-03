@@ -94,7 +94,7 @@ fun Show_logo(modifier: Modifier,id:Int,color: Color){
 }
 
 @Composable
-fun SubstanceFrame(
+fun SubstanceSelectionButton(
     modifier: Modifier = Modifier,
     text: String,
     unNumber: Int? = null,  // should be null only for Category Exempt

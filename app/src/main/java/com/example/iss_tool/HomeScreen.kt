@@ -59,13 +59,13 @@ fun HomeScreen(paddingModifier: Modifier) {
                 alignment = Alignment.CenterHorizontally
             )
         ) {
-            SubstanceFrame(
+            SubstanceSelectionButton(
                 modifier = Modifier.weight(1f),
                 onClick = { /*TODO*/ },
                 text = "Infectious Substance Affecting Humans",
                 unNumber = 2814
             )
-            SubstanceFrame(
+            SubstanceSelectionButton(
                 modifier = Modifier.weight(1f),
                 onClick = { /*TODO*/ },
                 text = "Infectious Substance Affecting Animals",
@@ -80,13 +80,13 @@ fun HomeScreen(paddingModifier: Modifier) {
                 alignment = Alignment.CenterHorizontally
             )
         ) {
-            SubstanceFrame(
+            SubstanceSelectionButton(
                 modifier = Modifier.weight(1f),
                 onClick = { /*TODO*/ },
                 text = "Biological Substances Category B",
                 unNumber = 3373
             )
-            SubstanceFrame(
+            SubstanceSelectionButton(
                 modifier = Modifier.weight(1f),
                 onClick = { /*TODO*/ },
                 text = "Biomedical, Clinical or Medical Waste",
@@ -98,7 +98,7 @@ fun HomeScreen(paddingModifier: Modifier) {
             modifier = Modifier.fillMaxWidth(0.5f),
             horizontalArrangement = Arrangement.Center
         ) {
-            SubstanceFrame(
+            SubstanceSelectionButton(
                 onClick = { /*TODO*/ },
                 text = "Human/Animal Specimen Category Exempt"
             )
