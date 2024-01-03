@@ -22,6 +22,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -90,9 +93,9 @@ fun Show_logo(modifier: Modifier,id:Int,color: Color){
 
 @Composable
 fun SubstanceFrame(
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
     text: String,
-    unNumber: Int,
+    unNumber: Int? = null,  // should be null only for Category Exempt
     onClick: () -> Unit
 ) {
     FloatingActionButton(
@@ -128,7 +131,7 @@ fun SubstanceFrame(
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
-                        text = "UN ${unNumber.toString()}",
+                        text = if (unNumber != null) "UN ${unNumber.toString()}" else "-",
                         style = customTypography.bodySmall.copy(fontSize = 15.sp),
                         color = customColorScheme.primary,
                         modifier = Modifier.padding(5.dp),
