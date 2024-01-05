@@ -1,7 +1,5 @@
 package com.example.iss_tool
 
-import android.graphics.drawable.Icon
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -10,32 +8,42 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.requiredHeight
-import androidx.compose.foundation.layout.requiredWidth
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Info
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.composable
+import androidx.navigation.navigation
 import com.example.iss_tool.theme.black
 import com.example.iss_tool.theme.blue_who
 import com.example.iss_tool.theme.customColorScheme
-import com.example.iss_tool.theme.customShapes
 import com.example.iss_tool.theme.customTypography
-import com.example.iss_tool.theme.white
+
+object HomeNavigation {
+    const val MainHomeRoute = "main"
+    const val ClassificationRoute = "classification"
+}
+
+fun NavGraphBuilder.homeGraph(navController: NavHostController, paddingModifier: Modifier) {
+    navigation(
+        startDestination = HomeNavigation.MainHomeRoute,
+        route = BottomBarScreen.Home.route
+    ) {
+        composable(route = HomeNavigation.MainHomeRoute) {
+            HomeScreen(navController = navController, paddingModifier = paddingModifier)
+        }
+        composable(route = HomeNavigation.ClassificationRoute) {
+            ClassificationScreen(navController = navController, paddingModifier = paddingModifier)
+        }
+    }
+}
 
 @Composable
-fun HomeScreen(paddingModifier: Modifier) {
+fun HomeScreen(navController: NavHostController, paddingModifier: Modifier) {
     Column (
         modifier = paddingModifier
             .padding(24.dp)
@@ -105,8 +113,15 @@ fun HomeScreen(paddingModifier: Modifier) {
         }
         Spacer(modifier = Modifier.height(34.dp))
         ClassificationStartButton(
-            modifier = Modifier.fillMaxWidth().fillMaxHeight(),
-            onClick = { /*TODO*/ },
+            modifier = Modifier
+                .fillMaxWidth()
+                .fillMaxHeight(),
+            onClick = {
+                navController.navigate(HomeNavigation.ClassificationRoute) {
+                    popUpTo(navController.graph.findStartDestination().id)
+                    launchSingleTop = true
+                }
+            },
             text = "Click here if you don’t know your substance type!"
         )
     }
