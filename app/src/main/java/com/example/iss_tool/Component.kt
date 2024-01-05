@@ -1,12 +1,15 @@
 package com.example.iss_tool
 
+import android.content.res.Resources
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.requiredWidth
@@ -19,6 +22,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -26,7 +30,6 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.navigation
 import com.example.iss_tool.theme.customColorScheme
 import com.example.iss_tool.theme.customShapes
 import com.example.iss_tool.theme.customTypography
@@ -172,6 +175,56 @@ fun ClassificationStartButton(
                 painter = painterResource(id = R.drawable.arrow_forward),
                 contentDescription = "Arrow forward icon"
             )
+        }
+    }
+}
+
+@Composable
+fun BoxedFAB(
+    modifier: Modifier = Modifier,
+    iconId: Int,
+    text: String? = null,   // optional text over icon
+    onClick: () -> Unit
+) {
+    FloatingActionButton(
+        modifier = modifier,
+        onClick = onClick,
+        shape = customShapes.large,
+        containerColor = customColorScheme.background
+    ) {
+        // Encapsulating box is used only to obtain a fully white background, otherwise there is a gray tint
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .fillMaxHeight()
+                .clip(customShapes.large)
+                .background(customColorScheme.background),
+            contentAlignment = Alignment.Center
+        ) {
+            Box(
+                modifier = Modifier
+                    .width(123.dp)
+                    .height(71.dp)
+                    .clip(customShapes.medium)
+                    .background(customColorScheme.primary.copy(alpha = 0.14f)),
+                contentAlignment = Alignment.Center
+            ) {
+                Column (
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    if (text != null) {
+                        Text(
+                            text = text,
+                            style = customTypography.bodySmall,
+                            color = customColorScheme.primary
+                        )
+                    }
+                    Icon(
+                        painter = painterResource(id = iconId),
+                        contentDescription = LocalContext.current.resources.getResourceName(iconId)
+                    )
+                }
+            }
         }
     }
 }
