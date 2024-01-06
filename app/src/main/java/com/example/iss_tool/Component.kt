@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -226,5 +227,25 @@ fun BoxedFAB(
                 }
             }
         }
+    }
+}
+
+@Composable
+fun InfoBody(infoText: String) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.Center
+    ) {
+        Icon(
+            modifier = Modifier.weight(0.056f),
+            painter = painterResource(id = R.drawable.info_icon),
+            contentDescription = "Info icon",
+        )
+        Spacer(Modifier.width(2.dp))
+        Text(
+            modifier = Modifier.weight(0.89f),
+            text = infoText,
+            style = customTypography.bodyMedium.copy(fontSize = 10.sp),
+        )
     }
 }

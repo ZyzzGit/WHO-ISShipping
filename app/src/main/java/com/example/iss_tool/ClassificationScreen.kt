@@ -33,6 +33,8 @@ fun ClassificationScreen(navController: NavController, paddingModifier: Modifier
     var currentNode by remember { mutableStateOf<Any?>(classificationDecisionTree) }
 
     if (currentNode is ClassificationNode) {
+        val node = (currentNode as ClassificationNode)
+
         Column(
             modifier = paddingModifier
                 .padding(24.dp)
@@ -45,7 +47,7 @@ fun ClassificationScreen(navController: NavController, paddingModifier: Modifier
                 color = blue_who
             )
             Text(
-                text = (currentNode as ClassificationNode).question,
+                text = node.question,
                 style = customTypography.bodyMedium
             )
             Spacer(modifier = Modifier.height(24.dp))
@@ -60,44 +62,31 @@ fun ClassificationScreen(navController: NavController, paddingModifier: Modifier
                     modifier = Modifier
                         .weight(1f)
                         .height(94.dp),
-                    iconId = (currentNode as ClassificationNode).leftIconId!!,
-                    iconLabel = (currentNode as ClassificationNode).leftIconLabel,
-                    onClick = { currentNode = (currentNode as ClassificationNode).left },
+                    iconId = node.leftIconId!!,
+                    iconLabel = node.leftIconLabel,
+                    onClick = { currentNode = node.left },
                 )
                 BoxedFAB(
                     modifier = Modifier
                         .weight(1f)
                         .height(94.dp),
-                    iconId = (currentNode as ClassificationNode).rightIconId!!,
-                    iconLabel = (currentNode as ClassificationNode).rightIconLabel,
-                    onClick = { currentNode = (currentNode as ClassificationNode).right },
+                    iconId = node.rightIconId!!,
+                    iconLabel = node.rightIconLabel,
+                    onClick = { currentNode = node.right },
                 )
             }
             Spacer(modifier = Modifier.height(24.dp))
-            if ((currentNode as ClassificationNode).additionalInfo != null) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Center
-                ) {
-                    Icon(
-                        modifier = Modifier.weight(0.056f),
-                        painter = painterResource(id = R.drawable.info_icon),
-                        contentDescription = "Info icon"
-                    )
-                    Spacer(Modifier.width(2.dp))
-                    Text(
-                        modifier = Modifier.weight(0.89f),
-                        text = (currentNode as ClassificationNode).additionalInfo!!,
-                        style = customTypography.bodyMedium.copy(fontSize = 10.sp),
-                    )
-                }
+            if (node.additionalInfo != null) {
+                InfoBody(infoText = node.additionalInfo)
             }
         }
     } else if (currentNode is ClassificationLeaf) {
-        var title: String = if ((currentNode as ClassificationLeaf).unSubstance != null) {
-            (currentNode as ClassificationLeaf).unSubstance!!
+        val leaf = (currentNode as ClassificationLeaf)
+
+        val title: String = if (leaf.unSubstance != null) {
+            leaf.unSubstance!!
         } else {
-            (currentNode as ClassificationLeaf).category
+            leaf.category
         }
 
         Column(
@@ -116,33 +105,18 @@ fun ClassificationScreen(navController: NavController, paddingModifier: Modifier
                 style = customTypography.bodyLarge,
                 color = customColorScheme.primary
             )
-            if ((currentNode as ClassificationLeaf).unNumber != null) {
+            if (leaf.unNumber != null) {
                 Spacer(modifier = Modifier.height(24.dp))
                 Text(
-                    text = "UN ${(currentNode as ClassificationLeaf).unNumber.toString()}\n"
-                            + (currentNode as ClassificationLeaf).category,
+                    text = "UN ${leaf.unNumber.toString()}\n"
+                            + leaf.category,
                     style = customTypography.bodyLarge,
                     color = yellow_who
                 )
             }
             Spacer(modifier = Modifier.height(24.dp))
-            if ((currentNode as ClassificationLeaf).additionalInfo != null) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Center
-                ) {
-                    Icon(
-                        modifier = Modifier.weight(0.056f),
-                        painter = painterResource(id = R.drawable.info_icon),
-                        contentDescription = "Info icon",
-                    )
-                    Spacer(Modifier.width(2.dp))
-                    Text(
-                        modifier = Modifier.weight(0.89f),
-                        text = (currentNode as ClassificationLeaf).additionalInfo!!,
-                        style = customTypography.bodyMedium.copy(fontSize = 10.sp),
-                    )
-                }
+            if (leaf.additionalInfo != null) {
+                InfoBody(infoText = leaf.additionalInfo)
             }
         }
     } else {
