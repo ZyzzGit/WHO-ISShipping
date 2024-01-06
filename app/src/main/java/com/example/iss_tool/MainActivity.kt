@@ -98,7 +98,9 @@ fun RowScope.AddItem(
                 contentDescription = screen.route + " icon"
             )
         },
-        selected = screen.route == backStackEntry.value?.destination?.route,
+        selected = if (screen == BottomBarScreen.Home)
+            HomeNavigation.MainHomeRoute == backStackEntry.value?.destination?.route
+            else screen.route == backStackEntry.value?.destination?.route,
         onClick = {
             navController.navigate(screen.route) {
                 popUpTo(navController.graph.findStartDestination().id)
