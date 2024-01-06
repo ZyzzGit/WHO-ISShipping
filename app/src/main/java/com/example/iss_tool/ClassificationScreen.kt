@@ -7,8 +7,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -17,26 +15,21 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.iss_tool.theme.blue_who
 import com.example.iss_tool.theme.customColorScheme
 import com.example.iss_tool.theme.customTypography
 import com.example.iss_tool.theme.yellow_who
 
 @Composable
-fun ClassificationScreen(navController: NavController, paddingModifier: Modifier) {
+fun ClassificationScreen(navController: NavController, modifier: Modifier) {
     var currentNode by remember { mutableStateOf<Any?>(classificationDecisionTree) }
 
     if (currentNode is ClassificationNode) {
         val node = (currentNode as ClassificationNode)
 
         Column(
-            modifier = paddingModifier
+            modifier = modifier
                 .padding(24.dp)
                 .fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -78,14 +71,10 @@ fun ClassificationScreen(navController: NavController, paddingModifier: Modifier
     } else if (currentNode is ClassificationLeaf) {
         val leaf = (currentNode as ClassificationLeaf)
 
-        val title: String = if (leaf.unSubstance != null) {
-            leaf.unSubstance!!
-        } else {
-            leaf.category
-        }
+        val title: String = leaf.unSubstance ?: leaf.category
 
         Column(
-            modifier = paddingModifier
+            modifier = modifier
                 .padding(24.dp)
                 .fillMaxWidth(),
             horizontalAlignment = Alignment.Start,

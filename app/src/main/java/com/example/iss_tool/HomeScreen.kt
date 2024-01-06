@@ -35,7 +35,7 @@ fun NavGraphBuilder.homeGraph(navController: NavHostController, modifier: Modifi
             HomeScreen(navController = navController, modifier = modifier)
         }
         composable(route = HomeNavigation.ClassificationRoute) {
-            ClassificationScreen(navController = navController, paddingModifier = modifier)
+            ClassificationScreen(navController = navController, modifier = modifier)
         }
     }
 }

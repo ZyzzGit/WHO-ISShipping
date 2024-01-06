@@ -66,7 +66,7 @@ fun MainScreen() {
     {paddingValues->
         BottomNavigationGraph(
             navController = navController,
-            paddingModifier = Modifier.padding(paddingValues)
+            modifier = Modifier.padding(paddingValues)
         )
     }
 }
@@ -77,7 +77,7 @@ fun AppBottomBar(navController: NavHostController) {
         BottomBarScreen.Info,
         BottomBarScreen.Settings
     )
-    NavigationBar() {
+    NavigationBar {
         screens.forEach { screen ->
             AddItem(
                 screen = screen,

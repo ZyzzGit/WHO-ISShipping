@@ -1,6 +1,5 @@
 package com.example.iss_tool
 
-import android.content.res.Resources
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -61,18 +60,18 @@ sealed class BottomBarScreen(
 @Composable
 fun BottomNavigationGraph(
     navController: NavHostController,
-    paddingModifier: Modifier
+    modifier: Modifier
 ) {
     NavHost(
         navController = navController,
         startDestination = BottomBarScreen.Home.route
     ) {
-        homeGraph(navController, paddingModifier)
+        homeGraph(navController, modifier)
         composable(route= BottomBarScreen.Info.route) {
-            InfoScreen(paddingModifier)
+            InfoScreen(modifier)
         }
         composable(route= BottomBarScreen.Settings.route) {
-            SettingsScreen(paddingModifier)
+            SettingsScreen(modifier)
         }
     }
 }
@@ -130,7 +129,7 @@ fun SubstanceSelectionButton(
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
-                        text = if (unNumber != null) "UN ${unNumber.toString()}" else "-",
+                        text = if (unNumber != null) "UN $unNumber" else "-",
                         style = customTypography.bodySmall.copy(fontSize = 15.sp),
                         color = customColorScheme.primary,
                         modifier = Modifier.padding(5.dp),

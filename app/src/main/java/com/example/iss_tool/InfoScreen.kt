@@ -8,12 +8,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.iss_tool.theme.blue_who
 
 @Composable
-fun InfoScreen(paddingModifier: Modifier) {
+fun InfoScreen(modifier: Modifier) {
     Column (
-        paddingModifier
+        modifier
             .padding(24.dp)
             .fillMaxWidth()
     ){
