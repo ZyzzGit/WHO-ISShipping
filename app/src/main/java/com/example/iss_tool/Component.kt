@@ -78,11 +78,11 @@ fun BottomNavigationGraph(
 }
 
 @Composable
-fun Show_logo(modifier: Modifier,id:Int,color: Color){
+fun Show_logo(id:Int,color: Color){
     Image(
         painter = painterResource(id = id),
         contentDescription = "WHO Logo",
-        modifier = modifier
+        modifier = Modifier
             .requiredWidth(width = 125.dp)
             .requiredHeight(height = 35.dp),
         colorFilter = androidx.compose.ui.graphics.ColorFilter.tint(color)

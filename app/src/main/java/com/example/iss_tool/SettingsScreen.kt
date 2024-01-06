@@ -17,7 +17,6 @@ fun SettingsScreen(paddingModifier: Modifier) {
             .padding(24.dp)
             .fillMaxWidth()
     ){
-        Show_logo(modifier = paddingModifier, id =R.drawable.who_logo,color= blue_who)
         Text(text="Settings", fontSize = 50.sp)
     }
 }

@@ -41,11 +41,6 @@ fun ClassificationScreen(navController: NavController, paddingModifier: Modifier
                 .fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Show_logo(
-                modifier = paddingModifier.align(Alignment.Start),
-                id = R.drawable.who_logo,
-                color = blue_who
-            )
             Text(
                 text = node.question,
                 style = customTypography.bodyMedium
@@ -95,11 +90,6 @@ fun ClassificationScreen(navController: NavController, paddingModifier: Modifier
                 .fillMaxWidth(),
             horizontalAlignment = Alignment.Start,
         ) {
-            Show_logo(
-                modifier = paddingModifier,
-                id = R.drawable.who_logo,
-                color = blue_who
-            )
             Text(
                 text = title,
                 style = customTypography.bodyLarge,
@@ -108,7 +98,7 @@ fun ClassificationScreen(navController: NavController, paddingModifier: Modifier
             if (leaf.unNumber != null) {
                 Spacer(modifier = Modifier.height(24.dp))
                 Text(
-                    text = "UN ${leaf.unNumber.toString()}\n" + leaf.category,
+                    text = "UN ${leaf.unNumber}\n" + leaf.category,
                     style = customTypography.bodyLarge,
                     color = yellow_who
                 )

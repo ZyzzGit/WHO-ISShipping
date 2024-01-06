@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -19,7 +18,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.example.iss_tool.theme.black
-import com.example.iss_tool.theme.blue_who
 import com.example.iss_tool.theme.customColorScheme
 import com.example.iss_tool.theme.customTypography
 
@@ -28,29 +26,28 @@ object HomeNavigation {
     const val ClassificationRoute = "classification"
 }
 
-fun NavGraphBuilder.homeGraph(navController: NavHostController, paddingModifier: Modifier) {
+fun NavGraphBuilder.homeGraph(navController: NavHostController, modifier: Modifier) {
     navigation(
         startDestination = HomeNavigation.MainHomeRoute,
         route = BottomBarScreen.Home.route
     ) {
         composable(route = HomeNavigation.MainHomeRoute) {
-            HomeScreen(navController = navController, paddingModifier = paddingModifier)
+            HomeScreen(navController = navController, modifier = modifier)
         }
         composable(route = HomeNavigation.ClassificationRoute) {
-            ClassificationScreen(navController = navController, paddingModifier = paddingModifier)
+            ClassificationScreen(navController = navController, paddingModifier = modifier)
         }
     }
 }
 
 @Composable
-fun HomeScreen(navController: NavHostController, paddingModifier: Modifier) {
+fun HomeScreen(navController: NavHostController, modifier: Modifier) {
     Column (
-        modifier = paddingModifier
+        modifier = modifier
             .padding(24.dp)
             .fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Show_logo(modifier = paddingModifier.align(Alignment.Start), id = R.drawable.who_logo, color = blue_who)
         Text(
             text = "Let's Get Started!",
             style = customTypography.bodyLarge,
@@ -115,7 +112,7 @@ fun HomeScreen(navController: NavHostController, paddingModifier: Modifier) {
         ClassificationStartButton(
             modifier = Modifier
                 .fillMaxWidth()
-                .fillMaxHeight(),
+                .height(92.dp),
             onClick = {
                 navController.navigate(HomeNavigation.ClassificationRoute) {
                     popUpTo(navController.graph.findStartDestination().id)
