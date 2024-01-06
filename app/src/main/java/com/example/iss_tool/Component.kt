@@ -234,18 +234,18 @@ fun BoxedFAB(
 fun InfoBody(infoText: String) {
     Row(
         modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.Center
+        horizontalArrangement = Arrangement.Start
     ) {
         Icon(
-            modifier = Modifier.weight(0.056f),
+            modifier = Modifier.weight(0.06f),
             painter = painterResource(id = R.drawable.info_icon),
             contentDescription = "Info icon",
         )
-        Spacer(Modifier.width(2.dp))
+        Spacer(Modifier.width(3.dp))
         Text(
-            modifier = Modifier.weight(0.89f),
+            modifier = Modifier.weight(0.94f),
             text = infoText,
-            style = customTypography.bodyMedium.copy(fontSize = 10.sp),
+            style = customTypography.bodyMedium.copy(fontSize = 11.sp),
         )
     }
 }

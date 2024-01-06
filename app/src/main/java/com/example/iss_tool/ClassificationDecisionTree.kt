@@ -21,8 +21,8 @@ class ClassificationNode(
     val additionalInfo: String? = null,
     val leftIconId: Int? = R.drawable.check,    // default "yes"
     val rightIconId: Int? = R.drawable.close,   // default "no"
-    val leftIconLabel: String? = null,
-    val rightIconLabel: String? = null,
+    val leftIconLabel: String? = "Yes",
+    val rightIconLabel: String? = "No",
     val left: Any,
     val right: Any
 ) {
@@ -41,36 +41,82 @@ class ClassificationNode(
  *  all variables except final tree should be declared as private
  */
 
-private var rightLeaf = ClassificationLeaf(
+private var exceptionLeaf = ClassificationLeaf(
     category = "Exception",
-    additionalInfo = "The material/substance is not subject to any transport regulations (unless transported together with other dangerous goods.)"
+    additionalInfo = "The material/substance is not subject to any transport regulations (unless transported together with other dangerous goods)."
 )
 
-private var leftLeftLeaf = ClassificationLeaf(
-    category = "Test Category T1",
-    unNumber = 1337,
-    unSubstance = "Test T1"
+private var infectiousAffectingHumansLeaf = ClassificationLeaf(
+    category = "Category A",
+    unNumber = 2814,
+    unSubstance = "Infectious Substance Affecting Humans"
 )
 
-private var leftRightLeaf = ClassificationLeaf(
-    category = "Test Category T2",
-    unNumber = 4242,
-    unSubstance = "Test T2"
+private var infectiousAffectingAnimalsOnlyLeaf = ClassificationLeaf(
+    category = "Category A",
+    unNumber = 2900,
+    unSubstance = "Infectious Substance Affecting Animals Only"
 )
 
-private var leftNode = ClassificationNode(
-    question = "Does it meet or is it suspected to meet the definition of a Category A infectious substance?",
-    additionalInfo = "Category A: An infectious substance which is transported in a form that, when exposure to it occurs, is capable of causing permanent disability, life-threatening   or fatal disease in otherwise healthy humans or animals.",
-    left = leftLeftLeaf,
-    right = leftRightLeaf
+private var exemptLeaf = ClassificationLeaf(
+    category = "Exempt Human/Animal Specimen",
+    additionalInfo = "Apply basic triple packaging system."
+)
+
+private var infectiousBiologicalLeaf = ClassificationLeaf(
+    category = "Category B",
+    unNumber = 3373,
+    unSubstance = "Biological Substance"
+)
+
+private var infectiousWasteLeaf = ClassificationLeaf(
+    category = "Category B",
+    unNumber = 3291,
+    unSubstance = "Infectious Waste",
+    additionalInfo = "Biomedical Waste, n.o.s.\n" +
+            "OR Clinical Waste, unspecified n.o.s.\n" +
+            "OR Medical Waste, n.o.s."
+)
+
+private var categoryASplitNode = ClassificationNode(
+    question = "Is exposure to the specimen likely to cause serious disease in healthy humans or animals?",
+    leftIconId = R.drawable.animal_icon,
+    rightIconId = R.drawable.human_icon,
+    leftIconLabel = "Animals only",
+    rightIconLabel = "Humans and animals",
+    left = infectiousAffectingAnimalsOnlyLeaf,
+    right = infectiousAffectingHumansLeaf
+)
+
+private var categoryBSplitNode = ClassificationNode(
+    question = "Is the substance a biomedical, medical or clinical waste?",
+    left = infectiousWasteLeaf,
+    right = infectiousBiologicalLeaf
+)
+
+private var biologicalAgentsNode = ClassificationNode(
+    question = "Does the material/substance contain only a minimal likelihood of biological agents or biological agents that are unlikely to cause illness in exposed humans/animals?",
+    left = exemptLeaf,
+    right = categoryBSplitNode
+)
+
+private var criticalBiologicalAgentsNode = ClassificationNode(
+    question = "Is the material/substance known or reasonable expected to contain a biological agent capable of causing severe disability or life threatening or fatal illness in exposed humans or animals?",
+    left = categoryASplitNode,
+    right = biologicalAgentsNode
 )
 
 var classificationDecisionTree = ClassificationNode(
-    question = "Could the Specimen or Substance be Infectious?",
-    leftIconLabel = "Yes",
-    rightIconLabel = "No",
-    left = leftNode,
-    right = rightLeaf
+    question = "Could the material or substance be infectious?",
+    left = criticalBiologicalAgentsNode,
+    right = exceptionLeaf,
+    additionalInfo = "These substances are not considered infectious:\n" +
+            "• Sterile (free from biological agents)\n" +
+            "• Neutralized/inactivated\n" +
+            "• Environmental samples (e.g. food or water)\n" +
+            "• A product for transplant/transfusion\n" +
+            "• A dried blood spot\n" +
+            "• A regulated biological product"
 )
 
 

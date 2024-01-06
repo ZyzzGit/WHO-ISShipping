@@ -108,8 +108,7 @@ fun ClassificationScreen(navController: NavController, paddingModifier: Modifier
             if (leaf.unNumber != null) {
                 Spacer(modifier = Modifier.height(24.dp))
                 Text(
-                    text = "UN ${leaf.unNumber.toString()}\n"
-                            + leaf.category,
+                    text = "UN ${leaf.unNumber.toString()}\n" + leaf.category,
                     style = customTypography.bodyLarge,
                     color = yellow_who
                 )
