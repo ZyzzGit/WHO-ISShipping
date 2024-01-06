@@ -183,7 +183,7 @@ fun ClassificationStartButton(
 fun BoxedFAB(
     modifier: Modifier = Modifier,
     iconId: Int,
-    text: String? = null,   // optional text over icon
+    iconLabel: String? = null,   // optional label over icon
     onClick: () -> Unit
 ) {
     FloatingActionButton(
@@ -212,9 +212,9 @@ fun BoxedFAB(
                 Column (
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    if (text != null) {
+                    if (iconLabel != null) {
                         Text(
-                            text = text,
+                            text = iconLabel,
                             style = customTypography.bodySmall,
                             color = customColorScheme.primary
                         )
