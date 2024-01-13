@@ -8,7 +8,11 @@ class ClassificationLeaf(
     val category: String,
     val unNumber: Int? = null,
     val unSubstance: String? = null,
-    val additionalInfo: String? = null
+    val additionalInfo: String? = null,
+    val quantityQuestion:String? = null,
+    val substanceQuestion: String? = null,
+    var quantity: Int? = null,
+    var subtanceName:String? = null,
 )
 
 /**
@@ -66,7 +70,8 @@ private var exemptLeaf = ClassificationLeaf(
 private var infectiousBiologicalLeaf = ClassificationLeaf(
     category = "Category B",
     unNumber = 3373,
-    unSubstance = "Biological Substance"
+    unSubstance = "Biological Substance",
+    quantityQuestion="Write your shipped quantity per package in mL or g"
 )
 
 private var infectiousWasteLeaf = ClassificationLeaf(
@@ -78,14 +83,11 @@ private var infectiousWasteLeaf = ClassificationLeaf(
             "OR Medical Waste, n.o.s."
 )
 
-private var categoryASplitNode = ClassificationNode(
-    question = "Is exposure to the specimen likely to cause serious disease in healthy humans or animals?",
-    leftIconId = R.drawable.animal_icon,
-    rightIconId = R.drawable.human_icon,
-    leftIconLabel = "Animals only",
-    rightIconLabel = "Humans and animals",
-    left = infectiousAffectingAnimalsOnlyLeaf,
-    right = infectiousAffectingHumansLeaf
+private var infectiousCategoryALeaf = ClassificationLeaf(
+    category = "Category A",
+    unSubstance = "Infectious Substance Category A",
+    substanceQuestion = "Choose your substance:",
+    quantityQuestion="Write your shipped quantity per package in mL or g"
 )
 
 private var categoryBSplitNode = ClassificationNode(
@@ -102,21 +104,19 @@ private var biologicalAgentsNode = ClassificationNode(
 
 private var criticalBiologicalAgentsNode = ClassificationNode(
     question = "Is the material/substance known or reasonable expected to contain a biological agent capable of causing severe disability or life threatening or fatal illness in exposed humans or animals?",
-    left = categoryASplitNode,
+    left = infectiousCategoryALeaf,
     right = biologicalAgentsNode
 )
-
 var classificationDecisionTree = ClassificationNode(
-    question = "Could the material or substance be infectious?",
-    left = criticalBiologicalAgentsNode,
-    right = exceptionLeaf,
-    additionalInfo = "These substances are not considered infectious:\n" +
+    question = "Is the material or substance one of the following:\n" +
             "• Sterile (free from biological agents)\n" +
             "• Neutralized/inactivated\n" +
             "• Environmental samples (e.g. food or water)\n" +
             "• A product for transplant/transfusion\n" +
             "• A dried blood spot\n" +
-            "• A regulated biological product"
+            "• A regulated biological product",
+    left = exceptionLeaf,
+    right = criticalBiologicalAgentsNode,
 )
 
 

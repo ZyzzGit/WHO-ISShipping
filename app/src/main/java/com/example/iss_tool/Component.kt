@@ -1,10 +1,14 @@
 package com.example.iss_tool
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.ui.Alignment
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -14,26 +18,45 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.requiredWidth
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
+import androidx.core.text.isDigitsOnly
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.example.iss_tool.theme.blue_who
 import com.example.iss_tool.theme.customColorScheme
 import com.example.iss_tool.theme.customShapes
 import com.example.iss_tool.theme.customTypography
+import com.example.iss_tool.theme.emergency_red_who
 import com.example.iss_tool.theme.white
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.ui.text.input.KeyboardType
 
 sealed class BottomBarScreen(
     val route: String,
@@ -247,4 +270,111 @@ fun InfoBody(infoText: String) {
             style = customTypography.bodyMedium.copy(fontSize = 11.sp),
         )
     }
+}
+@OptIn(ExperimentalComposeUiApi::class)
+@Composable
+fun QuantityDisplay(
+    leaf: ClassificationLeaf,
+    modifier: Modifier = Modifier,
+    onDoneAction: () -> Unit
+) {
+    var text by remember { mutableStateOf(TextFieldValue("")) }
+    var assignedValue by remember { mutableStateOf<String?>(null) }
+    var showError by remember { mutableStateOf(false) }
+
+    Text(
+        text = leaf.quantityQuestion.toString(),
+        style = customTypography.bodyMedium,
+        modifier = modifier
+    )
+
+    OutlinedTextFieldComponent(
+        value = text,
+        showError = showError,
+        onValueChange = {
+            text = if (it.text.isDigitsOnly()) it else text
+            showError = false // Hide the error message when the user starts typing
+        },
+        onDoneAction = {
+            onDoneAction
+        },
+        modifier = modifier
+    )
+
+    if (showError) {
+        ErrorMessage("Quantity is required!", modifier = modifier)
+    }
+
+    StartButton(
+        onClick = {
+            if (text.text.isEmpty()) {
+                showError = true
+            } else {
+                assignedValue = text.text
+            }
+        },
+        modifier = modifier
+    )
+
+    if (assignedValue != null) {
+        leaf.quantity = assignedValue?.toInt()
+    }
+}
+
+@Composable
+fun OutlinedTextFieldComponent(
+    value: TextFieldValue,
+    showError: Boolean,
+    onValueChange: (TextFieldValue) -> Unit,
+    onDoneAction: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    OutlinedTextField(
+        value = value,
+        label = { Text(text = "Quantity in mL or g") },
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+        onValueChange = onValueChange,
+        keyboardActions = KeyboardActions(onDone = {
+            onDoneAction.invoke()
+        }),
+        modifier = modifier
+    )
+    // Additional components can be added here based on your requirements
+}
+
+@Composable
+fun StartButton(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Button(
+        onClick = onClick,
+        shape = RoundedCornerShape(10.dp),
+        colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
+        contentPadding = PaddingValues(horizontal = 24.dp, vertical = 10.dp),
+        border = BorderStroke(1.dp, blue_who),
+        modifier = modifier
+    ) {
+        Text(
+            text = "Start",
+            color = blue_who,
+            textAlign = TextAlign.Center,
+            lineHeight = 1.43.em,
+            style = MaterialTheme.typography.labelLarge,
+            modifier = Modifier.wrapContentHeight(align = Alignment.CenterVertically)
+        )
+    }
+}
+
+@Composable
+fun ErrorMessage(
+    message: String,
+    modifier: Modifier = Modifier
+) {
+    Text(
+        text = message,
+        style = MaterialTheme.typography.bodySmall,
+        color = emergency_red_who,
+        modifier = modifier.padding(top = 4.dp)
+    )
 }

@@ -14,13 +14,17 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.iss_tool.theme.customColorScheme
 import com.example.iss_tool.theme.customTypography
 import com.example.iss_tool.theme.yellow_who
 
+
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun ClassificationScreen(navController: NavController, modifier: Modifier) {
     var currentNode by remember { mutableStateOf<Any?>(classificationDecisionTree) }
@@ -35,15 +39,12 @@ fun ClassificationScreen(navController: NavController, modifier: Modifier) {
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Text(
-                text = node.question,
-                style = customTypography.bodyMedium
+                text = node.question, style = customTypography.bodyMedium
             )
             Spacer(modifier = Modifier.height(24.dp))
             Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(
-                    space = 22.dp,
-                    alignment = Alignment.CenterHorizontally
+                modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(
+                    space = 22.dp, alignment = Alignment.CenterHorizontally
                 )
             ) {
                 BoxedFAB(
@@ -80,9 +81,7 @@ fun ClassificationScreen(navController: NavController, modifier: Modifier) {
             horizontalAlignment = Alignment.Start,
         ) {
             Text(
-                text = title,
-                style = customTypography.bodyLarge,
-                color = customColorScheme.primary
+                text = title, style = customTypography.bodyLarge, color = customColorScheme.primary
             )
             if (leaf.unNumber != null) {
                 Spacer(modifier = Modifier.height(24.dp))
@@ -92,12 +91,36 @@ fun ClassificationScreen(navController: NavController, modifier: Modifier) {
                     color = yellow_who
                 )
             }
-            Spacer(modifier = Modifier.height(24.dp))
             if (leaf.additionalInfo != null) {
-                InfoBody(infoText = leaf.additionalInfo)
+                Spacer(modifier = Modifier.height(24.dp))
+                Text(
+                    text = leaf.additionalInfo, style = customTypography.bodySmall
+                )
+            }
+            // Reference to the software keyboard controller
+            val keyboardController = LocalSoftwareKeyboardController.current
+
+            if (leaf.category == "Category A") {
+                //choose substance from the list
+            }
+            if (leaf.category == "Category A" || leaf.category == "Category B") {
+                Spacer(modifier = Modifier.height(24.dp))
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    QuantityDisplay(leaf, Modifier, onDoneAction = {
+                        keyboardController?.hide()
+                    })
+
+                }
+
+
             }
         }
+
     } else {
         throw Exception("currentNode must be of type ClassificationNode or ClassificationLeaf")
     }
 }
+
+
+
+

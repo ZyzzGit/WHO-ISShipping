@@ -1,6 +1,7 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("kotlin-kapt")
 }
 android {
     buildFeatures {
@@ -17,7 +18,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.iss_tool"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -45,6 +46,12 @@ android {
 
 
 dependencies {
+    val roomversion = "2.6.1"
+    //Room database
+    implementation("androidx.room:room-runtime:$roomversion")
+    implementation("androidx.room:room-ktx:$roomversion")
+    kapt("androidx.room:room-compiler:$roomversion")
+    annotationProcessor("androidx.room:room-compiler:$roomversion")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2")
     implementation("androidx.compose.material3:material3-window-size-class:1.1.2")
     implementation ("androidx.compose.runtime:runtime:1.5.4")
