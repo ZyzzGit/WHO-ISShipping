@@ -97,30 +97,27 @@ fun ClassificationScreen(navController: NavController, modifier: Modifier) {
                     text = leaf.additionalInfo, style = customTypography.bodySmall
                 )
             }
-            // Reference to the software keyboard controller
             val keyboardController = LocalSoftwareKeyboardController.current
+            val substanceList = listOf(
+                "Bacillus anthracis (cultures only)",
+                "Brucella abortus (cultures only)",
+                "Brucella melitensis (cultures only)",
+                "Brucella suis (cultures only)",
+                "Burkholderia mallei – Pseudomonas mallei – Glanders (cultures only)",
+                "Burkholderia pseudomallei – Pseudomonas pseudomallei (cultures only)",
+                "Chlamydia psittaci – avian strains (cultures only)",
+                "Clostridium botulinum (cultures only)",
+                "Coccidioides immitis (cultures only)",
+            )
 
-            if (leaf.category == "Category A") {
-                //choose substance from the list
-            }
-            if (leaf.category == "Category A" || leaf.category == "Category B") {
-                Spacer(modifier = Modifier.height(24.dp))
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    QuantityDisplay(leaf, Modifier, onDoneAction = {
-                        keyboardController?.hide()
-                    })
 
-                }
-
-
-            }
+            FormDisplay(leaf = leaf, substanceList = substanceList, Modifier, onDoneAction = {
+                keyboardController?.hide()
+            })
         }
 
     } else {
         throw Exception("currentNode must be of type ClassificationNode or ClassificationLeaf")
     }
 }
-
-
-
 

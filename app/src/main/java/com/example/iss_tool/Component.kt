@@ -2,12 +2,10 @@ package com.example.iss_tool
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.ui.Alignment
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -20,25 +18,31 @@ import androidx.compose.foundation.layout.requiredWidth
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.ExperimentalComposeUiApi
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -54,53 +58,42 @@ import com.example.iss_tool.theme.customShapes
 import com.example.iss_tool.theme.customTypography
 import com.example.iss_tool.theme.emergency_red_who
 import com.example.iss_tool.theme.white
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.ui.text.input.KeyboardType
 
 sealed class BottomBarScreen(
-    val route: String,
-    val label: String,
-    val icon: Int
+    val route: String, val label: String, val icon: Int
 ) {
-    object Home: BottomBarScreen(
-        route = "home",
-        label ="Home",
-        icon = R.drawable.home_icon
+    object Home : BottomBarScreen(
+        route = "home", label = "Home", icon = R.drawable.home_icon
     )
-    object Info: BottomBarScreen(
-        route ="info",
-        label ="Info",
-        icon = R.drawable.info_icon
+
+    object Info : BottomBarScreen(
+        route = "info", label = "Info", icon = R.drawable.info_icon
     )
-    object Settings: BottomBarScreen(
-        route ="settings",
-        label ="Settings",
-        icon = R.drawable.settings_icon
+
+    object Settings : BottomBarScreen(
+        route = "settings", label = "Settings", icon = R.drawable.settings_icon
     )
 }
 
 @Composable
 fun BottomNavigationGraph(
-    navController: NavHostController,
-    modifier: Modifier
+    navController: NavHostController, modifier: Modifier
 ) {
     NavHost(
-        navController = navController,
-        startDestination = BottomBarScreen.Home.route
+        navController = navController, startDestination = BottomBarScreen.Home.route
     ) {
         homeGraph(navController, modifier)
-        composable(route= BottomBarScreen.Info.route) {
+        composable(route = BottomBarScreen.Info.route) {
             InfoScreen(modifier)
         }
-        composable(route= BottomBarScreen.Settings.route) {
+        composable(route = BottomBarScreen.Settings.route) {
             SettingsScreen(modifier)
         }
     }
 }
 
 @Composable
-fun Show_logo(id:Int,color: Color){
+fun Show_logo(id: Int, color: Color) {
     Image(
         painter = painterResource(id = id),
         contentDescription = "WHO Logo",
@@ -130,8 +123,7 @@ fun SubstanceSelectionButton(
             modifier = Modifier
                 .fillMaxWidth()
                 .clip(customShapes.large)
-                .background(customColorScheme.background),
-            contentAlignment = Alignment.Center
+                .background(customColorScheme.background), contentAlignment = Alignment.Center
         ) {
             Column(
                 modifier = Modifier.padding(10.dp),
@@ -165,9 +157,7 @@ fun SubstanceSelectionButton(
 
 @Composable
 fun ClassificationStartButton(
-    modifier: Modifier = Modifier,
-    text: String,
-    onClick: () -> Unit
+    modifier: Modifier = Modifier, text: String, onClick: () -> Unit
 ) {
     FloatingActionButton(
         modifier = modifier,
@@ -176,12 +166,9 @@ fun ClassificationStartButton(
         containerColor = customColorScheme.primary
     ) {
         Row(
-            modifier = Modifier.padding(11.dp),
-            horizontalArrangement = Arrangement.spacedBy(
-                space = 11.dp,
-                alignment = Alignment.CenterHorizontally
-            ),
-            verticalAlignment = Alignment.CenterVertically
+            modifier = Modifier.padding(11.dp), horizontalArrangement = Arrangement.spacedBy(
+                space = 11.dp, alignment = Alignment.CenterHorizontally
+            ), verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.info_icon),
@@ -221,8 +208,7 @@ fun BoxedFAB(
                 .fillMaxWidth()
                 .fillMaxHeight()
                 .clip(customShapes.large)
-                .background(customColorScheme.background),
-            contentAlignment = Alignment.Center
+                .background(customColorScheme.background), contentAlignment = Alignment.Center
         ) {
             Box(
                 modifier = Modifier
@@ -232,7 +218,7 @@ fun BoxedFAB(
                     .background(customColorScheme.primary.copy(alpha = 0.14f)),
                 contentAlignment = Alignment.Center
             ) {
-                Column (
+                Column(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     if (iconLabel != null) {
@@ -255,8 +241,7 @@ fun BoxedFAB(
 @Composable
 fun InfoBody(infoText: String) {
     Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.Start
+        modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Start
     ) {
         Icon(
             modifier = Modifier.weight(0.06f),
@@ -269,55 +254,6 @@ fun InfoBody(infoText: String) {
             text = infoText,
             style = customTypography.bodyMedium.copy(fontSize = 11.sp),
         )
-    }
-}
-@OptIn(ExperimentalComposeUiApi::class)
-@Composable
-fun QuantityDisplay(
-    leaf: ClassificationLeaf,
-    modifier: Modifier = Modifier,
-    onDoneAction: () -> Unit
-) {
-    var text by remember { mutableStateOf(TextFieldValue("")) }
-    var assignedValue by remember { mutableStateOf<String?>(null) }
-    var showError by remember { mutableStateOf(false) }
-
-    Text(
-        text = leaf.quantityQuestion.toString(),
-        style = customTypography.bodyMedium,
-        modifier = modifier
-    )
-
-    OutlinedTextFieldComponent(
-        value = text,
-        showError = showError,
-        onValueChange = {
-            text = if (it.text.isDigitsOnly()) it else text
-            showError = false // Hide the error message when the user starts typing
-        },
-        onDoneAction = {
-            onDoneAction
-        },
-        modifier = modifier
-    )
-
-    if (showError) {
-        ErrorMessage("Quantity is required!", modifier = modifier)
-    }
-
-    StartButton(
-        onClick = {
-            if (text.text.isEmpty()) {
-                showError = true
-            } else {
-                assignedValue = text.text
-            }
-        },
-        modifier = modifier
-    )
-
-    if (assignedValue != null) {
-        leaf.quantity = assignedValue?.toInt()
     }
 }
 
@@ -339,37 +275,36 @@ fun OutlinedTextFieldComponent(
         }),
         modifier = modifier
     )
-    // Additional components can be added here based on your requirements
 }
 
 @Composable
 fun StartButton(
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier
+    onClick: () -> Unit, modifier: Modifier = Modifier
 ) {
-    Button(
-        onClick = onClick,
-        shape = RoundedCornerShape(10.dp),
-        colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
-        contentPadding = PaddingValues(horizontal = 24.dp, vertical = 10.dp),
-        border = BorderStroke(1.dp, blue_who),
-        modifier = modifier
-    ) {
-        Text(
-            text = "Start",
-            color = blue_who,
-            textAlign = TextAlign.Center,
-            lineHeight = 1.43.em,
-            style = MaterialTheme.typography.labelLarge,
-            modifier = Modifier.wrapContentHeight(align = Alignment.CenterVertically)
-        )
+    Row(modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
+        Button(
+            onClick = onClick,
+            shape = RoundedCornerShape(10.dp),
+            colors = ButtonDefaults.buttonColors(containerColor = blue_who),
+            contentPadding = PaddingValues(horizontal = 24.dp, vertical = 10.dp),
+            border = BorderStroke(1.dp, blue_who),
+            modifier = modifier
+        ) {
+            Text(
+                text = "Start",
+                color = white,
+                textAlign = TextAlign.Center,
+                lineHeight = 1.43.em,
+                style = MaterialTheme.typography.labelLarge,
+                modifier = Modifier.wrapContentHeight(align = Alignment.CenterVertically)
+            )
+        }
     }
 }
 
 @Composable
 fun ErrorMessage(
-    message: String,
-    modifier: Modifier = Modifier
+    message: String, modifier: Modifier = Modifier
 ) {
     Text(
         text = message,
@@ -377,4 +312,86 @@ fun ErrorMessage(
         color = emergency_red_who,
         modifier = modifier.padding(top = 4.dp)
     )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun FormDisplay(
+    leaf: ClassificationLeaf,
+    substanceList: List<String>,
+    modifier: Modifier = Modifier,
+    onDoneAction: () -> Unit
+) {
+    if (leaf.category == "Category A" || leaf.category == "Category B") {
+        var text by remember { mutableStateOf(TextFieldValue("")) }
+        var assignedValue by remember { mutableStateOf<String?>(null) }
+        var showError by remember { mutableStateOf(false) }
+        var expanded by remember { mutableStateOf(false) }
+        var selectedSubstance by remember { mutableStateOf(substanceList[0]) }
+        if (leaf.category == "Category A") {
+            Spacer(modifier = Modifier.height(24.dp))
+            Text(
+                text = leaf.substanceQuestion.toString(),
+                style = customTypography.bodyMedium,
+                modifier = Modifier
+            )
+            ExposedDropdownMenuBox(expanded = expanded, onExpandedChange = {
+                expanded = !expanded
+            }) {
+                OutlinedTextField(modifier = Modifier.menuAnchor().fillMaxWidth(),
+                    readOnly = true,
+                    value = selectedSubstance,
+                    onValueChange = { },
+                    label = { Text("Substances") },
+                    trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) })
+                ExposedDropdownMenu(
+                    expanded = expanded,
+                    onDismissRequest = { expanded = false },
+                ) {
+                    substanceList.forEach { selectedSubstance_ ->
+                        DropdownMenuItem(
+                            text = { Text(selectedSubstance_) },
+                            onClick = {
+                                selectedSubstance = selectedSubstance_
+                                expanded = false
+                            },
+                            contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding,
+                        )
+                    }
+                }
+
+            }
+        }
+        Spacer(modifier = Modifier.height(24.dp))
+        Text(
+            text = leaf.quantityQuestion.toString(),
+            style = customTypography.bodyMedium,
+            modifier = Modifier
+        )
+        OutlinedTextFieldComponent(value = text, showError = showError, onValueChange = {
+            text = if (it.text.isDigitsOnly()) it else text
+            showError = false // Hide the error message when the user starts typing
+        }, onDoneAction = {
+            onDoneAction
+        }, modifier = modifier.fillMaxWidth()
+        )
+
+        if (showError) {
+            ErrorMessage("Quantity is required!", modifier = modifier)
+        }
+
+        Spacer(modifier = Modifier.height(24.dp))
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            StartButton(onClick = {
+                if (text.text.isEmpty()) {
+                    showError = true
+                } else {
+                    assignedValue = text.text
+                }
+            },modifier=Modifier)
+        }
+        if (assignedValue != null) {
+            leaf.quantity = assignedValue?.toInt()
+        }
+    }
 }

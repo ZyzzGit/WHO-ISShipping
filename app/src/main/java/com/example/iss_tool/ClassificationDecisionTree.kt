@@ -12,7 +12,7 @@ class ClassificationLeaf(
     val quantityQuestion:String? = null,
     val substanceQuestion: String? = null,
     var quantity: Int? = null,
-    var subtanceName:String? = null,
+    var substanceName:String? = null,
 )
 
 /**
@@ -86,7 +86,7 @@ private var infectiousWasteLeaf = ClassificationLeaf(
 private var infectiousCategoryALeaf = ClassificationLeaf(
     category = "Category A",
     unSubstance = "Infectious Substance Category A",
-    substanceQuestion = "Choose your substance:",
+    substanceQuestion = "Choose your substance to be shipped",
     quantityQuestion="Write your shipped quantity per package in mL or g"
 )
 
