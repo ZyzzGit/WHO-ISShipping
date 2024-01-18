@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -35,11 +36,15 @@ fun ClassificationScreen(navController: NavController, modifier: Modifier) {
         Column(
             modifier = modifier
                 .padding(24.dp)
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .fillMaxHeight(),
+
             horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
         ) {
             Text(
-                text = node.question, style = customTypography.bodyMedium
+                text = node.question, style = customTypography.bodyMedium,
+                modifier = Modifier.height(170.dp)
             )
             Spacer(modifier = Modifier.height(24.dp))
             Row(
