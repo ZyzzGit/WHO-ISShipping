@@ -23,7 +23,7 @@ abstract class SubstanceDatabase: RoomDatabase() {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     SubstanceDatabase::class.java,
-                    "Substance_db").build()
+                    "SubstanceDB").build()
                 INSTANCE=instance
                 return instance
 

@@ -15,17 +15,60 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.iss_tool.database.Substance
+import com.example.iss_tool.database.SubstanceViewModel
 import com.example.iss_tool.theme.MyCustomTheme
 import com.example.iss_tool.theme.blue_who
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import org.apache.commons.csv.CSVFormat
+import org.apache.commons.csv.CSVParser
+import java.io.BufferedReader
 
 class MainActivity : ComponentActivity() {
+    private lateinit var nSubstanceModel: SubstanceViewModel
+    private fun ReadExcel(): List<Substance> {
+        val bufferReader = BufferedReader(assets.open("substance_list.csv").reader())
+        val csvParser = CSVParser.parse(
+            bufferReader, CSVFormat.DEFAULT.withFirstRecordAsHeader()
+        )
+        val list = mutableListOf<Substance>()
+        csvParser.forEach {
+            it?.let {
+                val substance = Substance(
+                    id = it.get(0).toInt(),
+                    substanceName = it.get(1),
+                    category = it.get(2),
+                    code = it.get(3)
+                )
+                list.add(substance)
+            }
+
+        }
+        return list
+    }
+    private fun insertdataToDatabase() {
+        val list = ReadExcel()
+        list.forEach {
+            nSubstanceModel.addSubstance(it)
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
+
+        nSubstanceModel = ViewModelProvider(this).get(SubstanceViewModel::class.java)
+        GlobalScope.launch(Dispatchers.IO) {
+            insertdataToDatabase()
+        }
+
         super.onCreate(savedInstanceState)
         setContent {
             MyCustomTheme{
