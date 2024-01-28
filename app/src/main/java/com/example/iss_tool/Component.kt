@@ -331,7 +331,7 @@ fun FormDisplay(
         if (leaf.category == "Category A") {
             Spacer(modifier = Modifier.height(24.dp))
             Text(
-                text = leaf.substanceQuestion.toString(),
+                text = "Choose your substance to be shipped",
                 style = customTypography.bodyMedium,
                 modifier = Modifier
             )
@@ -364,7 +364,7 @@ fun FormDisplay(
         }
         Spacer(modifier = Modifier.height(24.dp))
         Text(
-            text = leaf.quantityQuestion.toString(),
+            text = "Write your shipped quantity per package in mL or g",
             style = customTypography.bodyMedium,
             modifier = Modifier
         )

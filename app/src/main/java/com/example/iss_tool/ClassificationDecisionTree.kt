@@ -9,10 +9,7 @@ class ClassificationLeaf(
     val unNumber: Int? = null,
     val unSubstance: String? = null,
     val additionalInfo: String? = null,
-    val quantityQuestion:String? = null,
-    val substanceQuestion: String? = null,
-    var quantity: Int? = null,
-    var substanceName:String? = null,
+    var quantity: Int? = null
 )
 
 /**
@@ -55,17 +52,13 @@ private var exceptionLeaf = ClassificationLeaf(
 private var infectiousAffectingHumansLeaf = ClassificationLeaf(
     category = "Category A",
     unNumber = 2814,
-    unSubstance = "Infectious Substance Affecting Humans",
-    substanceQuestion = "Choose your substance to be shipped",
-    quantityQuestion="Write your shipped quantity per package in mL or g"
+    unSubstance = "Infectious Substance Affecting Humans"
 )
 
 private var infectiousAffectingAnimalsOnlyLeaf = ClassificationLeaf(
     category = "Category A",
     unNumber = 2900,
-    unSubstance = "Infectious Substance Affecting Animals Only",
-    substanceQuestion = "Choose your substance to be shipped",
-    quantityQuestion="Write your shipped quantity per package in mL or g"
+    unSubstance = "Infectious Substance Affecting Animals Only"
 )
 
 private var exemptLeaf = ClassificationLeaf(
@@ -76,15 +69,13 @@ private var exemptLeaf = ClassificationLeaf(
 private var infectiousBiologicalLeaf = ClassificationLeaf(
     category = "Category B",
     unNumber = 3373,
-    unSubstance = "Biological Substance",
-    quantityQuestion="Write your shipped quantity per package in mL or g"
+    unSubstance = "Biological Substance"
 )
 
 private var infectiousWasteLeaf = ClassificationLeaf(
     category = "Category B",
     unNumber = 3291,
     unSubstance = "Infectious Waste",
-    quantityQuestion="Write your shipped quantity per package in mL or g",
     additionalInfo = "Biomedical Waste, n.o.s.\n" +
             "OR Clinical Waste, unspecified n.o.s.\n" +
             "OR Medical Waste, n.o.s."
@@ -92,9 +83,7 @@ private var infectiousWasteLeaf = ClassificationLeaf(
 
 private var infectiousCategoryALeaf = ClassificationLeaf(
     category = "Category A",
-    unSubstance = "Infectious Substance Category A",
-    substanceQuestion = "Choose your substance to be shipped",
-    quantityQuestion="Write your shipped quantity per package in mL or g"
+    unSubstance = "Infectious Substance Category A"
 )
 
 private var categoryASplitNode = ClassificationNode(
