@@ -53,13 +53,17 @@ private var exceptionLeaf = ClassificationLeaf(
 private var infectiousAffectingHumansLeaf = ClassificationLeaf(
     category = "Category A",
     unNumber = 2814,
-    unSubstance = "Infectious Substance Affecting Humans"
+    unSubstance = "Infectious Substance Affecting Humans",
+    substanceQuestion = "Choose your substance to be shipped",
+    quantityQuestion="Write your shipped quantity per package in mL or g"
 )
 
 private var infectiousAffectingAnimalsOnlyLeaf = ClassificationLeaf(
     category = "Category A",
     unNumber = 2900,
-    unSubstance = "Infectious Substance Affecting Animals Only"
+    unSubstance = "Infectious Substance Affecting Animals Only",
+    substanceQuestion = "Choose your substance to be shipped",
+    quantityQuestion="Write your shipped quantity per package in mL or g"
 )
 
 private var exemptLeaf = ClassificationLeaf(
@@ -90,6 +94,16 @@ private var infectiousCategoryALeaf = ClassificationLeaf(
     quantityQuestion="Write your shipped quantity per package in mL or g"
 )
 
+private var categoryASplitNode = ClassificationNode(
+    question = "Is exposure to the specimen likely to cause serious disease in healthy humans or animals?",
+    leftIconId = R.drawable.animal_icon,
+    rightIconId = R.drawable.human_icon,
+    leftIconLabel = "Animals only",
+    rightIconLabel = "Humans and animals",
+    left = infectiousAffectingAnimalsOnlyLeaf,
+    right = infectiousAffectingHumansLeaf
+)
+
 private var categoryBSplitNode = ClassificationNode(
     question = "Is the substance a biomedical, medical or clinical waste?",
     left = infectiousWasteLeaf,
@@ -104,7 +118,7 @@ private var biologicalAgentsNode = ClassificationNode(
 
 private var criticalBiologicalAgentsNode = ClassificationNode(
     question = "Is the material/substance known or reasonable expected to contain a biological agent capable of causing severe disability or life threatening or fatal illness in exposed humans or animals?",
-    left = infectiousCategoryALeaf,
+    left = categoryASplitNode,
     right = biologicalAgentsNode
 )
 var classificationDecisionTree = ClassificationNode(
