@@ -15,7 +15,9 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import androidx.navigation.navigation
 import com.example.iss_tool.theme.black
 import com.example.iss_tool.theme.customColorScheme
@@ -34,8 +36,14 @@ fun NavGraphBuilder.homeGraph(navController: NavHostController, modifier: Modifi
         composable(route = HomeNavigation.MainHomeRoute) {
             HomeScreen(navController = navController, modifier = modifier)
         }
-        composable(route = HomeNavigation.ClassificationRoute) {
-            ClassificationScreen(navController = navController, modifier = modifier)
+        composable(
+            route = "${HomeNavigation.ClassificationRoute}?unNumber={unNumber}",
+            arguments = listOf(navArgument("unNumber") {
+                nullable = true
+            })
+        ) { navBackStackEntry ->
+            val unNumber = navBackStackEntry.arguments?.getString("unNumber")
+            ClassificationScreen(navController = navController, modifier = modifier, unNumber = unNumber)
         }
     }
 }
@@ -66,13 +74,23 @@ fun HomeScreen(navController: NavHostController, modifier: Modifier) {
         ) {
             SubstanceSelectionButton(
                 modifier = Modifier.weight(1f),
-                onClick = { /*TODO*/ },
+                onClick = {
+                    // use '-' as unNumber for Category Exempt
+                    navController.navigate("${HomeNavigation.ClassificationRoute}?unNumber=2814") {
+                        popUpTo(navController.graph.findStartDestination().id)
+                        launchSingleTop = true
+                    }},
                 text = "Infectious Substance Affecting Humans",
                 unNumber = 2814
             )
             SubstanceSelectionButton(
                 modifier = Modifier.weight(1f),
-                onClick = { /*TODO*/ },
+                onClick = {
+                    // use '-' as unNumber for Category Exempt
+                    navController.navigate("${HomeNavigation.ClassificationRoute}?unNumber=2900") {
+                        popUpTo(navController.graph.findStartDestination().id)
+                        launchSingleTop = true
+                    }},
                 text = "Infectious Substance Affecting Animals",
                 unNumber = 2900
             )
@@ -87,13 +105,23 @@ fun HomeScreen(navController: NavHostController, modifier: Modifier) {
         ) {
             SubstanceSelectionButton(
                 modifier = Modifier.weight(1f),
-                onClick = { /*TODO*/ },
+                onClick = {
+                    // use '-' as unNumber for Category Exempt
+                    navController.navigate("${HomeNavigation.ClassificationRoute}?unNumber=3373") {
+                        popUpTo(navController.graph.findStartDestination().id)
+                        launchSingleTop = true
+                    }},
                 text = "Biological Substances Category B",
                 unNumber = 3373
             )
             SubstanceSelectionButton(
                 modifier = Modifier.weight(1f),
-                onClick = { /*TODO*/ },
+                onClick = {
+                    // use '-' as unNumber for Category Exempt
+                    navController.navigate("${HomeNavigation.ClassificationRoute}?unNumber=3291") {
+                        popUpTo(navController.graph.findStartDestination().id)
+                        launchSingleTop = true
+                    }},
                 text = "Biomedical, Clinical or Medical Waste",
                 unNumber = 3291
             )
@@ -104,7 +132,12 @@ fun HomeScreen(navController: NavHostController, modifier: Modifier) {
             horizontalArrangement = Arrangement.Center
         ) {
             SubstanceSelectionButton(
-                onClick = { /*TODO*/ },
+                onClick = {
+                    // use '-' as unNumber for Category Exempt
+                    navController.navigate("${HomeNavigation.ClassificationRoute}?unNumber=-") {
+                        popUpTo(navController.graph.findStartDestination().id)
+                        launchSingleTop = true
+                    }},
                 text = "Human/Animal Specimen Category Exempt"
             )
         }

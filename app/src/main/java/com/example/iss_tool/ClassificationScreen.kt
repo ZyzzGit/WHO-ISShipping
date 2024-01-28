@@ -24,11 +24,17 @@ import com.example.iss_tool.theme.customColorScheme
 import com.example.iss_tool.theme.customTypography
 import com.example.iss_tool.theme.yellow_who
 
-
+/**
+ * argument unNumber skips the classification process by directly selecting a leaf
+ * should only be provided when accessing screen from substance selection buttons in HomeScreen
+ * **/
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun ClassificationScreen(navController: NavController, modifier: Modifier) {
+fun ClassificationScreen(navController: NavController, modifier: Modifier, unNumber: String? = null) {
     var currentNode by remember { mutableStateOf<Any?>(classificationDecisionTree) }
+    if (unNumber != null) {
+        currentNode = getLeaf(unNumber)
+    }
 
     if (currentNode is ClassificationNode) {
         val node = (currentNode as ClassificationNode)
@@ -38,7 +44,6 @@ fun ClassificationScreen(navController: NavController, modifier: Modifier) {
                 .padding(24.dp)
                 .fillMaxWidth()
                 .fillMaxHeight(),
-
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
@@ -114,7 +119,6 @@ fun ClassificationScreen(navController: NavController, modifier: Modifier) {
                 "Clostridium botulinum (cultures only)",
                 "Coccidioides immitis (cultures only)",
             )
-
 
             FormDisplay(leaf = leaf, substanceList = substanceList, Modifier, onDoneAction = {
                 keyboardController?.hide()

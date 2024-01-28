@@ -42,7 +42,9 @@ class ClassificationNode(
 
 /**
  *  Build classification decision tree bottom up, starting with leaves
- *  all variables except final tree should be declared as private
+ *  all variables except final tree should be declared as private.
+ *  Finally, make sure to update getLeaf function accordingly for those substances that can be selected directly at HomeScreen
+ *  (also update HomeScreen navigation with respect to getLeaf mappings)
  */
 
 private var exceptionLeaf = ClassificationLeaf(
@@ -82,6 +84,7 @@ private var infectiousWasteLeaf = ClassificationLeaf(
     category = "Category B",
     unNumber = 3291,
     unSubstance = "Infectious Waste",
+    quantityQuestion="Write your shipped quantity per package in mL or g",
     additionalInfo = "Biomedical Waste, n.o.s.\n" +
             "OR Clinical Waste, unspecified n.o.s.\n" +
             "OR Medical Waste, n.o.s."
@@ -121,6 +124,7 @@ private var criticalBiologicalAgentsNode = ClassificationNode(
     left = categoryASplitNode,
     right = biologicalAgentsNode
 )
+
 var classificationDecisionTree = ClassificationNode(
     question = "Is the material or substance one of the following:\n" +
             "• Sterile (free from biological agents)\n" +
@@ -132,5 +136,17 @@ var classificationDecisionTree = ClassificationNode(
     left = exceptionLeaf,
     right = criticalBiologicalAgentsNode,
 )
+
+fun getLeaf(unNumber: String): ClassificationLeaf {
+    return when (unNumber) {
+        "2814" -> infectiousAffectingHumansLeaf
+        "2900" -> infectiousAffectingAnimalsOnlyLeaf
+        "3373" -> infectiousBiologicalLeaf
+        "3291" -> infectiousWasteLeaf
+        "-" -> exemptLeaf
+        else -> throw Exception("getLeaf: no match on unNumber")
+    }
+}
+
 
 
