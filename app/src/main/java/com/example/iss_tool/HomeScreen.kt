@@ -26,6 +26,7 @@ import com.example.iss_tool.theme.customTypography
 object HomeNavigation {
     const val MainHomeRoute = "main"
     const val ClassificationRoute = "classification"
+    const val ShippingRoute = "shipping"
 }
 
 fun NavGraphBuilder.homeGraph(navController: NavHostController, modifier: Modifier) {
@@ -44,6 +45,31 @@ fun NavGraphBuilder.homeGraph(navController: NavHostController, modifier: Modifi
         ) { navBackStackEntry ->
             val unNumber = navBackStackEntry.arguments?.getString("unNumber")
             ClassificationScreen(navController = navController, modifier = modifier, unNumber = unNumber)
+        }
+        composable(
+          route = "${HomeNavigation.ShippingRoute}/{category}/{unNumber}/{unSubstance}/{quantity}/{substanceName}",
+          arguments = listOf(
+              navArgument("category") { type = NavType.StringType },
+              navArgument("unNumber") { type = NavType.IntType },
+              navArgument("unSubstance") { type = NavType.StringType },
+              navArgument("quantity") { type = NavType.IntType },
+              navArgument("substanceName") { nullable = true }
+          )
+        ) {navBackStackEntry ->
+            val category = navBackStackEntry.arguments?.getString("category")
+            val unNumber = navBackStackEntry.arguments?.getInt("unNumber")
+            val unSubstance = navBackStackEntry.arguments?.getString("unSubstance")
+            val quantity = navBackStackEntry.arguments?.getInt("quantity")
+            val substanceName = navBackStackEntry.arguments?.getString("substanceName")
+            ShippingScreen(
+                navController = navController,
+                modifier = modifier,
+                category = category!!,
+                unNumber = unNumber!!,
+                unSubstance = unSubstance!!,
+                quantity = quantity!!,
+                substanceName = substanceName
+            )
         }
     }
 }

@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -20,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import com.example.iss_tool.theme.customColorScheme
 import com.example.iss_tool.theme.customTypography
 import com.example.iss_tool.theme.yellow_who
@@ -122,7 +124,33 @@ fun ClassificationScreen(navController: NavController, modifier: Modifier, unNum
 
             FormDisplay(leaf = leaf, substanceList = substanceList, Modifier, onDoneAction = {
                 keyboardController?.hide()
+                navController.navigate(
+                    "${HomeNavigation.ShippingRoute}/" +
+                            "${leaf.category}/" +
+                            "${leaf.unNumber}/" +
+                            "${leaf.unSubstance}/" +
+                            "${leaf.quantity}/" +
+                            "${leaf.substanceName}"
+                ) {
+                    launchSingleTop = true
+                }
             })
+
+            //TODO: remove test button
+            Button(onClick = {
+                navController.navigate(
+                    "${HomeNavigation.ShippingRoute}/" +
+                            "${leaf.category}/" +
+                            "${leaf.unNumber}/" +
+                            "${leaf.unSubstance}/" +
+                            "42/" +
+                            "Coccidioides immitis"
+                ) {
+                    launchSingleTop = true
+                }
+            }) {
+                Text(text = "TEST Shipping navigation!")
+            }
         }
 
     } else {

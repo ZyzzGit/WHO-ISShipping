@@ -3,13 +3,15 @@ package com.example.iss_tool
 /**
  * Marks the end of classification process, should be used as leafs for final ClassificationNode(s)
  * unNumber and unSubstance should be null for Category Exempt and "Category" Exception
+ * substanceName and quantity are null until specified by user with FormDisplay in end of ClassificationScreen
  */
 class ClassificationLeaf(
     val category: String,
     val unNumber: Int? = null,
     val unSubstance: String? = null,
     val additionalInfo: String? = null,
-    var quantity: Int? = null
+    var quantity: Int? = null,
+    var substanceName: String? = null
 )
 
 /**
