@@ -3,6 +3,7 @@ package com.example.iss_tool
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,6 +19,7 @@ import androidx.compose.foundation.layout.requiredWidth
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
@@ -28,9 +30,12 @@ import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -42,9 +47,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
@@ -52,6 +60,7 @@ import androidx.core.text.isDigitsOnly
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.example.iss_tool.theme.black
 import com.example.iss_tool.theme.blue_who
 import com.example.iss_tool.theme.customColorScheme
 import com.example.iss_tool.theme.customShapes
@@ -279,7 +288,7 @@ fun OutlinedTextFieldComponent(
 
 @Composable
 fun StartButton(
-    onClick: () -> Unit, modifier: Modifier = Modifier
+    onClick: () -> Unit, modifier: Modifier = Modifier, text: String = "Start"
 ) {
     Row(modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
         Button(
@@ -291,7 +300,7 @@ fun StartButton(
             modifier = modifier
         ) {
             Text(
-                text = "Start",
+                text = text,
                 color = white,
                 textAlign = TextAlign.Center,
                 lineHeight = 1.43.em,
@@ -338,7 +347,9 @@ fun FormDisplay(
             ExposedDropdownMenuBox(expanded = expanded, onExpandedChange = {
                 expanded = !expanded
             }) {
-                OutlinedTextField(modifier = Modifier.menuAnchor().fillMaxWidth(),
+                OutlinedTextField(modifier = Modifier
+                    .menuAnchor()
+                    .fillMaxWidth(),
                     readOnly = true,
                     value = selectedSubstance,
                     onValueChange = { },
@@ -393,5 +404,50 @@ fun FormDisplay(
         if (assignedValue != null) {
             leaf.quantity = assignedValue?.toInt()
         }
+    }
+}
+
+/**
+ *  This custom version lets us specify custom height while avoiding padding problems and maintaining the aesthetics of OutlinedTextField
+ *  **/
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun CustomOutlinedTextField(
+    value: String,
+    onValueChange: (String) -> Unit,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+    isError: Boolean = false,
+    singleLine: Boolean = true,
+    height: Dp = 36.dp,
+    label:  @Composable() (() -> Unit)? = null
+) {
+
+    val interactionSource = remember { MutableInteractionSource() }
+
+    BasicTextField(
+        value = value,
+        onValueChange = onValueChange,
+        modifier = modifier.height(height),
+        singleLine = singleLine,
+        interactionSource = interactionSource
+    ) { innerTextField ->
+        OutlinedTextFieldDefaults.DecorationBox(
+            value = value,
+            innerTextField = innerTextField,
+            enabled = enabled,
+            singleLine = singleLine,
+            visualTransformation = VisualTransformation.None,
+            interactionSource = interactionSource,
+            label = label,
+            colors = OutlinedTextFieldDefaults.colors(),
+            contentPadding = TextFieldDefaults.contentPaddingWithoutLabel(
+                top = 0.dp,
+                bottom = 0.dp,
+            ),
+            container = {
+                OutlinedTextFieldDefaults.ContainerBox(enabled, isError, interactionSource, OutlinedTextFieldDefaults.colors())
+            },
+        )
     }
 }
