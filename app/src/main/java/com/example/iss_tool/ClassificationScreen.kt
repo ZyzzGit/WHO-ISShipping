@@ -12,6 +12,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -20,11 +21,15 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import androidx.navigation.NavGraph.Companion.findStartDestination
+import com.example.iss_tool.database.SubstanceViewModel
 import com.example.iss_tool.theme.customColorScheme
 import com.example.iss_tool.theme.customTypography
 import com.example.iss_tool.theme.yellow_who
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.rememberUpdatedState
+
 
 /**
  * argument unNumber skips the classification process by directly selecting a leaf
@@ -34,6 +39,16 @@ import com.example.iss_tool.theme.yellow_who
 @Composable
 fun ClassificationScreen(navController: NavController, modifier: Modifier, unNumber: String? = null) {
     var currentNode by remember { mutableStateOf<Any?>(classificationDecisionTree) }
+//    /**
+//    Read substances from database
+//     * **/
+//    val substanceViewModel: SubstanceViewModel = viewModel()
+//    val substances = substanceViewModel._readAllData
+//    var list by remember { mutableStateOf<List<String>>(listOf()) }
+//    substances?.forEach {
+//        list += it.substanceName.toString()
+//    }
+
     if (unNumber != null) {
         currentNode = getLeaf(unNumber)
     }
@@ -95,7 +110,7 @@ fun ClassificationScreen(navController: NavController, modifier: Modifier, unNum
             Text(
                 text = title, style = customTypography.bodyLarge, color = customColorScheme.primary
             )
-            if (leaf.unNumber != null) {
+            if (leaf.unNumber != null && leaf.category != "Exempt Human or Animal Specimen") {
                 Spacer(modifier = Modifier.height(24.dp))
                 Text(
                     text = "UN ${leaf.unNumber}\n" + leaf.category,
@@ -109,47 +124,31 @@ fun ClassificationScreen(navController: NavController, modifier: Modifier, unNum
                     text = leaf.additionalInfo, style = customTypography.bodySmall
                 )
             }
+
             val keyboardController = LocalSoftwareKeyboardController.current
-            val substanceList = listOf(
-                "Bacillus anthracis (cultures only)",
-                "Brucella abortus (cultures only)",
-                "Brucella melitensis (cultures only)",
-                "Brucella suis (cultures only)",
-                "Burkholderia mallei – Pseudomonas mallei – Glanders (cultures only)",
-                "Burkholderia pseudomallei – Pseudomonas pseudomallei (cultures only)",
-                "Chlamydia psittaci – avian strains (cultures only)",
-                "Clostridium botulinum (cultures only)",
-                "Coccidioides immitis (cultures only)",
-            )
+            var substanceList = listOf("")
+            val substanceViewModel: SubstanceViewModel = viewModel()
+            val allData by substanceViewModel._readAllData.observeAsState(emptyList())
+            var tableList = listOf<List<String>>()
+            allData.forEach {
+                substanceList += it.substanceName?:""
+            }
+            tableList = allData.map { substance ->
+                listOf(substance.substanceName ?: "", substance.code ?: "")
+            }
 
-            FormDisplay(leaf = leaf, substanceList = substanceList, Modifier, onDoneAction = {
+            if (leaf.category == "Category A" || leaf.category == "Category B") {
+            FormDisplay(navController=navController,leaf = leaf, substanceList = substanceList, tableList=tableList,Modifier) {
                 keyboardController?.hide()
-                navController.navigate(
-                    "${HomeNavigation.ShippingRoute}/" +
-                            "${leaf.category}/" +
-                            "${leaf.unNumber}/" +
-                            "${leaf.unSubstance}/" +
-                            "${leaf.quantity}/" +
-                            "${leaf.substanceName}"
-                ) {
-                    launchSingleTop = true
                 }
-            })
 
-            //TODO: remove test button
-            Button(onClick = {
-                navController.navigate(
-                    "${HomeNavigation.ShippingRoute}/" +
-                            "${leaf.category}/" +
-                            "${leaf.unNumber}/" +
-                            "${leaf.unSubstance}/" +
-                            "42/" +
-                            "Coccidioides immitis"
-                ) {
-                    launchSingleTop = true
-                }
-            }) {
-                Text(text = "TEST Shipping navigation!")
+
+            }
+            else if(leaf.category == "Exempt Human or Animal Specimen"){
+                leaf.unNumber = 0
+                leaf.quantity = 0
+                leaf.unSubstance = "Exempt Human or Animal Specimen"
+                ExemptDisplay(navController = navController, leaf = leaf, modifier = Modifier)
             }
         }
 
@@ -157,4 +156,5 @@ fun ClassificationScreen(navController: NavController, modifier: Modifier, unNum
         throw Exception("currentNode must be of type ClassificationNode or ClassificationLeaf")
     }
 }
+
 

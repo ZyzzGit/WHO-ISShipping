@@ -15,4 +15,7 @@ interface SubstanceDao {
     suspend fun insertEntities(entities: List<Substance>)
     @Query("SELECT * FROM Substance ORDER BY id ASC")
     fun readAllData(): LiveData<List<Substance>>
+
+//    @Query("SELECT substanceName FROM Substance WHERE code='UN 2814'")
+//    fun readAnimalSub():List<String>
 }

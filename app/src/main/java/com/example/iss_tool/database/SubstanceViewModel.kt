@@ -9,12 +9,15 @@ import kotlinx.coroutines.launch
 
 class SubstanceViewModel(application: Application): AndroidViewModel(application) {
 
-    val readAllData: LiveData<List<Substance>>
-    val repository: SubstanceRepository
+    private val readAllData: LiveData<List<Substance>>
+    private val repository: SubstanceRepository
+//    private val readAnimalSub:List<String>
     init {
         val SubstanceDao = SubstanceDatabase.getDatabase(application).SubstanceDao()
         repository = SubstanceRepository(SubstanceDao)
         readAllData = repository.readAllData
+//        readAnimalSub = repository.readAnimalSub
+
     }
 
     fun addSubstance(Substance: Substance) {
@@ -22,5 +25,9 @@ class SubstanceViewModel(application: Application): AndroidViewModel(application
             repository.addSubstance(Substance)
         }
     }
+
+    val _readAllData: LiveData<List<Substance>> get() = readAllData
+
+
 }
 
