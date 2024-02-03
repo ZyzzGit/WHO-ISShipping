@@ -24,7 +24,7 @@ val customTypography = Typography(
     bodyMedium = TextStyle(
         fontFamily = sourceSansProFontFamily,
         fontSize = 16.sp,
-        fontWeight = FontWeight.Normal
+        fontWeight = FontWeight.Bold
     ),
     bodySmall = TextStyle(
         fontFamily = sourceSansProFontFamily,

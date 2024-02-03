@@ -7,11 +7,10 @@ package com.example.iss_tool
  */
 class ClassificationLeaf(
     val category: String,
-    val unNumber: Int? = null,
-    val unSubstance: String? = null,
+    var unNumber: Int? = null,
+    var unSubstance: String? = null,
     val additionalInfo: String? = null,
-    var quantity: Int? = null,
-    var substanceName: String? = null
+    var quantity: Int? = null
 )
 
 /**
@@ -64,7 +63,7 @@ private var infectiousAffectingAnimalsOnlyLeaf = ClassificationLeaf(
 )
 
 private var exemptLeaf = ClassificationLeaf(
-    category = "Exempt Human/Animal Specimen",
+    category = "Exempt Human or Animal Specimen",
     additionalInfo = "Apply basic triple packaging system."
 )
 
@@ -87,16 +86,17 @@ private var infectiousCategoryALeaf = ClassificationLeaf(
     category = "Category A",
     unSubstance = "Infectious Substance Category A"
 )
+//
+//private var categoryASplitNode = ClassificationNode(
+//    question = "Is exposure to the specimen likely to cause serious disease in healthy humans or animals?",
+//    leftIconId = R.drawable.animal_icon,
+//    rightIconId = R.drawable.human_icon,
+//    leftIconLabel = "Animals only",
+//    rightIconLabel = "Humans and animals",
+//    left = infectiousAffectingAnimalsOnlyLeaf,
+//    right = infectiousAffectingHumansLeaf
+//)
 
-private var categoryASplitNode = ClassificationNode(
-    question = "Is exposure to the specimen likely to cause serious disease in healthy humans or animals?",
-    leftIconId = R.drawable.animal_icon,
-    rightIconId = R.drawable.human_icon,
-    leftIconLabel = "Animals only",
-    rightIconLabel = "Humans and animals",
-    left = infectiousAffectingAnimalsOnlyLeaf,
-    right = infectiousAffectingHumansLeaf
-)
 
 private var categoryBSplitNode = ClassificationNode(
     question = "Is the substance a biomedical, medical or clinical waste?",
@@ -112,7 +112,7 @@ private var biologicalAgentsNode = ClassificationNode(
 
 private var criticalBiologicalAgentsNode = ClassificationNode(
     question = "Is the material/substance known or reasonable expected to contain a biological agent capable of causing severe disability or life threatening or fatal illness in exposed humans or animals?",
-    left = categoryASplitNode,
+    left = infectiousCategoryALeaf,
     right = biologicalAgentsNode
 )
 

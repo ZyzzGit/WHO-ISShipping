@@ -1,8 +1,10 @@
 package com.example.iss_tool
 
+import android.text.TextUtils.indexOf
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -16,12 +18,15 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.requiredWidth
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenuItem
@@ -45,6 +50,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -57,6 +63,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 import androidx.core.text.isDigitsOnly
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -66,6 +73,8 @@ import com.example.iss_tool.theme.customColorScheme
 import com.example.iss_tool.theme.customShapes
 import com.example.iss_tool.theme.customTypography
 import com.example.iss_tool.theme.emergency_red_who
+import com.example.iss_tool.theme.grey_who
+import com.example.iss_tool.theme.primary_navy_blue
 import com.example.iss_tool.theme.white
 
 sealed class BottomBarScreen(
@@ -294,9 +303,9 @@ fun StartButton(
         Button(
             onClick = onClick,
             shape = RoundedCornerShape(10.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = blue_who),
+            colors = ButtonDefaults.buttonColors(containerColor = primary_navy_blue),
             contentPadding = PaddingValues(horizontal = 24.dp, vertical = 10.dp),
-            border = BorderStroke(1.dp, blue_who),
+            border = BorderStroke(1.dp, primary_navy_blue),
             modifier = modifier
         ) {
             Text(
@@ -326,24 +335,21 @@ fun ErrorMessage(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FormDisplay(
+    navController: NavController,
     leaf: ClassificationLeaf,
     substanceList: List<String>,
+    tableList: List<List<String>>,
     modifier: Modifier = Modifier,
-    onDoneAction: () -> Unit
+    onDoneAction: () -> Unit,
 ) {
-    if (leaf.category == "Category A" || leaf.category == "Category B") {
         var text by remember { mutableStateOf(TextFieldValue("")) }
         var assignedValue by remember { mutableStateOf<String?>(null) }
+        var assignedSubstance by remember { mutableStateOf<String?>(null) }
         var showError by remember { mutableStateOf(false) }
         var expanded by remember { mutableStateOf(false) }
         var selectedSubstance by remember { mutableStateOf(substanceList[0]) }
-        if (leaf.category == "Category A") {
+        if (leaf.category == "Category A" && leaf.unNumber == null) {
             Spacer(modifier = Modifier.height(24.dp))
-            Text(
-                text = "Choose your substance to be shipped",
-                style = customTypography.bodyMedium,
-                modifier = Modifier
-            )
             ExposedDropdownMenuBox(expanded = expanded, onExpandedChange = {
                 expanded = !expanded
             }) {
@@ -353,13 +359,18 @@ fun FormDisplay(
                     readOnly = true,
                     value = selectedSubstance,
                     onValueChange = { },
-                    label = { Text("Substances") },
+                    label = {
+                        Text(
+                            "Choose your substance to be shipped",
+                            style = customTypography.bodyMedium
+                        )
+                    },
                     trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) })
                 ExposedDropdownMenu(
                     expanded = expanded,
                     onDismissRequest = { expanded = false },
                 ) {
-                    substanceList.forEach { selectedSubstance_ ->
+                    substanceList.drop(1).forEach { selectedSubstance_ ->
                         DropdownMenuItem(
                             text = { Text(selectedSubstance_) },
                             onClick = {
@@ -372,7 +383,11 @@ fun FormDisplay(
                 }
 
             }
+            val specificSubstanceName = assignedSubstance
+            val matchingElement = tableList.firstOrNull { it[0] == specificSubstanceName }
+            leaf.unNumber = matchingElement?.get(1)?.takeLast(4)?.toInt()
         }
+
         Spacer(modifier = Modifier.height(24.dp))
         Text(
             text = "Write your shipped quantity per package in mL or g",
@@ -399,12 +414,55 @@ fun FormDisplay(
                 } else {
                     assignedValue = text.text
                 }
-            },modifier=Modifier)
+                assignedSubstance = selectedSubstance
+            }, modifier = Modifier)
         }
+
+
         if (assignedValue != null) {
             leaf.quantity = assignedValue?.toInt()
+
+            navController.navigate(
+                "${HomeNavigation.PackagingRoute}/" +
+                        "${leaf.category}/" +
+                        "${leaf.unNumber}/" +
+                        "${leaf.unSubstance}/" +
+                        "${leaf.quantity}"
+
+            ) {
+                launchSingleTop = true
+            }
         }
+
     }
+    @Composable
+    fun ExemptDisplay(
+        navController: NavController,
+        leaf: ClassificationLeaf,
+        modifier: Modifier
+    ) {
+        StartButton(onClick = {
+            navController.navigate(
+                "${HomeNavigation.PackagingRoute}/" +
+                        "${leaf.category}/" +
+                        "${leaf.unNumber}/" +
+                        "${leaf.unSubstance}/" +
+                        "${leaf.quantity}"
+
+            ) {
+                launchSingleTop = true
+            }
+        })
+    }
+}
+
+@Composable
+fun ClickableIcon(modifier:Modifier,id:Int,description:String,onClick: () -> Unit) {
+    Icon(
+        painter = painterResource(id),
+        contentDescription = description,
+        modifier = modifier.clickable{onClick()}
+    )
 }
 
 /**

@@ -20,6 +20,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import androidx.navigation.navigation
+import com.example.iss_tool.HomeNavigation.ShippingDecision
 import com.example.iss_tool.theme.black
 import com.example.iss_tool.theme.customColorScheme
 import com.example.iss_tool.theme.customTypography
@@ -27,7 +28,9 @@ import com.example.iss_tool.theme.customTypography
 object HomeNavigation {
     const val MainHomeRoute = "main"
     const val ClassificationRoute = "classification"
+    const val PackagingRoute = "packaging"
     const val ShippingRoute = "shipping"
+    const val ShippingDecision = "shipping decision"
     const val ShippingInformationRoute = "shippingInfo"
     const val DocumentationRoute = "documentation"
 }
@@ -50,29 +53,70 @@ fun NavGraphBuilder.homeGraph(navController: NavHostController, modifier: Modifi
             ClassificationScreen(navController = navController, modifier = modifier, unNumber = unNumber)
         }
         composable(
-            route = "${HomeNavigation.ShippingRoute}/{category}/{unNumber}/{unSubstance}/{quantity}/{substanceName}",
+          route = "${HomeNavigation.PackagingRoute}/{category}/{unNumber}/{unSubstance}/{quantity}",
+          arguments = listOf(
+              navArgument("category") { type = NavType.StringType },
+              navArgument("unNumber") { type = NavType.IntType },
+              navArgument("unSubstance") { type = NavType.StringType },
+              navArgument("quantity") { type = NavType.IntType },
+          )
+        ) {navBackStackEntry ->
+            val category = navBackStackEntry.arguments?.getString("category")
+            val unNumber = navBackStackEntry.arguments?.getInt("unNumber")
+            val unSubstance = navBackStackEntry.arguments?.getString("unSubstance")
+            val quantity = navBackStackEntry.arguments?.getInt("quantity")
+            PackagingScreen(
+                navController = navController,
+                modifier = modifier,
+                category = category!!,
+                unNumber = unNumber,
+                unSubstance = unSubstance,
+                quantity = quantity)
+        }
+        composable(
+            route = "${HomeNavigation.ShippingRoute}/{category}/{unNumber}/{unSubstance}/{quantity}",
             arguments = listOf(
                 navArgument("category") { type = NavType.StringType },
                 navArgument("unNumber") { type = NavType.IntType },
                 navArgument("unSubstance") { type = NavType.StringType },
                 navArgument("quantity") { type = NavType.IntType },
-                navArgument("substanceName") { nullable = true }
             )
         ) {navBackStackEntry ->
             val category = navBackStackEntry.arguments?.getString("category")
             val unNumber = navBackStackEntry.arguments?.getInt("unNumber")
             val unSubstance = navBackStackEntry.arguments?.getString("unSubstance")
             val quantity = navBackStackEntry.arguments?.getInt("quantity")
-            val substanceName = navBackStackEntry.arguments?.getString("substanceName")
             ShippingScreen(
                 navController = navController,
                 modifier = modifier,
                 category = category!!,
                 unNumber = unNumber!!,
                 unSubstance = unSubstance!!,
-                quantity = quantity!!,
-                substanceName = substanceName
+                quantity = quantity!!)
+        }
+        composable(
+            route = "${HomeNavigation.ShippingDecision}/{category}/{unNumber}/{unSubstance}/{quantity}/{shippingMethod}",
+            arguments = listOf(
+                navArgument("category") { type = NavType.StringType },
+                navArgument("unNumber") { type = NavType.IntType },
+                navArgument("unSubstance") { type = NavType.StringType },
+                navArgument("quantity") { type = NavType.IntType },
+                navArgument("shippingMethod"){type = NavType.StringType}
             )
+        ) {navBackStackEntry ->
+            val category = navBackStackEntry.arguments?.getString("category")
+            val unNumber = navBackStackEntry.arguments?.getInt("unNumber")
+            val unSubstance = navBackStackEntry.arguments?.getString("unSubstance")
+            val quantity = navBackStackEntry.arguments?.getInt("quantity")
+            val shippingMethod = navBackStackEntry.arguments?.getString("shippingMethod")
+            ShippingDecision(
+                navController = navController,
+                modifier = modifier,
+                category = category!!,
+                unNumber = unNumber!!,
+                unSubstance = unSubstance!!,
+                quantity = quantity!!,
+                shippingMethod = shippingMethod!!)
         }
         composable(
           route = "${HomeNavigation.DocumentationRoute}/{category}/{unNumber}/{unSubstance}/{quantity}/{ice}/{aircraft}/{shipperName}/{shipperAddress}/" +
