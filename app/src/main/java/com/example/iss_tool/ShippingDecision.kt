@@ -109,7 +109,7 @@ fun ShippingDecision(
                 shipment(modifier = Modifier,
                     shipmentMethod = shippingMethod,
                     title = shippingMethod,
-                    info_body = "For shipments of Exempt Human or Animal Specimen category, there are no quantity limits per package."
+                    info_body = "For shipments of Exempt Human or Animal Specimen Category, there are no quantity limits per package. "
                 )
             }
         }

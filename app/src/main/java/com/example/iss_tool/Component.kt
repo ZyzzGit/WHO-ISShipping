@@ -346,6 +346,7 @@ fun FormDisplay(
         var assignedValue by remember { mutableStateOf<String?>(null) }
         var assignedSubstance by remember { mutableStateOf<String?>(null) }
         var showError by remember { mutableStateOf(false) }
+        var showErrorsubstance by remember { mutableStateOf(false) }
         var expanded by remember { mutableStateOf(false) }
         var selectedSubstance by remember { mutableStateOf(substanceList[0]) }
         if (leaf.category == "Category A" && leaf.unNumber == null) {
@@ -376,6 +377,8 @@ fun FormDisplay(
                             onClick = {
                                 selectedSubstance = selectedSubstance_
                                 expanded = false
+                                showErrorsubstance = false
+
                             },
                             contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding,
                         )
@@ -383,10 +386,15 @@ fun FormDisplay(
                 }
 
             }
+            if(showErrorsubstance){
+                ErrorMessage(message = "Substance is required")
+            }
             val specificSubstanceName = assignedSubstance
             val matchingElement = tableList.firstOrNull { it[0] == specificSubstanceName }
             leaf.unNumber = matchingElement?.get(1)?.takeLast(4)?.toInt()
         }
+
+
 
         Spacer(modifier = Modifier.height(24.dp))
         Text(
@@ -409,13 +417,14 @@ fun FormDisplay(
         Spacer(modifier = Modifier.height(24.dp))
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             StartButton(onClick = {
-                if (text.text.isEmpty()) {
+                if (text.text.isEmpty() || selectedSubstance.isNullOrEmpty()) {
                     showError = true
+                    showErrorsubstance=true
                 } else {
                     assignedValue = text.text
+                    assignedSubstance = selectedSubstance
                 }
-                assignedSubstance = selectedSubstance
-            }, modifier = Modifier)
+            },modifier=Modifier)
         }
 
 
@@ -454,7 +463,7 @@ fun FormDisplay(
             }
         })
     }
-}
+
 
 @Composable
 fun ClickableIcon(modifier:Modifier,id:Int,description:String,onClick: () -> Unit) {
