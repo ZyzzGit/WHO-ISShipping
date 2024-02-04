@@ -23,6 +23,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -50,7 +52,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -62,6 +63,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
+import androidx.core.os.bundleOf
 import androidx.core.text.isDigitsOnly
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
@@ -73,7 +75,6 @@ import com.example.iss_tool.theme.customColorScheme
 import com.example.iss_tool.theme.customShapes
 import com.example.iss_tool.theme.customTypography
 import com.example.iss_tool.theme.emergency_red_who
-import com.example.iss_tool.theme.grey_who
 import com.example.iss_tool.theme.primary_navy_blue
 import com.example.iss_tool.theme.white
 
@@ -389,9 +390,7 @@ fun FormDisplay(
             if(showErrorsubstance){
                 ErrorMessage(message = "Substance is required")
             }
-            val specificSubstanceName = assignedSubstance
-            val matchingElement = tableList.firstOrNull { it[0] == specificSubstanceName }
-            leaf.unNumber = matchingElement?.get(1)?.takeLast(4)?.toInt()
+
         }
 
 
@@ -417,62 +416,71 @@ fun FormDisplay(
         Spacer(modifier = Modifier.height(24.dp))
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             StartButton(onClick = {
-                if (text.text.isEmpty() || selectedSubstance.isNullOrEmpty()) {
+                if(leaf.category == "Category A")
+                { if(selectedSubstance.isNullOrEmpty()) {
+                    showErrorsubstance = true
+                    }
+                    else {
+                    assignedSubstance = selectedSubstance
+                    }
+                }
+                if (text.text.isEmpty()) {
                     showError = true
-                    showErrorsubstance=true
                 } else {
                     assignedValue = text.text
-                    assignedSubstance = selectedSubstance
+
+
+
                 }
             },modifier=Modifier)
         }
 
+    if(assignedSubstance != null){
+        val specificSubstanceName = assignedSubstance
+        val matchingElement = tableList.firstOrNull { it[0] == specificSubstanceName }
+        leaf.unNumber = matchingElement?.get(1)?.takeLast(4)?.toInt()
+        leaf.substanceName = assignedSubstance?.toString()
+    }
 
-        if (assignedValue != null) {
-            leaf.quantity = assignedValue?.toInt()
 
-            navController.navigate(
-                "${HomeNavigation.PackagingRoute}/" +
-                        "${leaf.category}/" +
-                        "${leaf.unNumber}/" +
-                        "${leaf.unSubstance}/" +
-                        "${leaf.quantity}"
 
-            ) {
-                launchSingleTop = true
-            }
+    if (assignedValue != null) {
+        leaf.quantity = assignedValue?.toInt()
+        if(assignedSubstance == null && leaf.category=="Category A"){
+            showErrorsubstance=true
         }
+        else{
+            if(leaf.category != "Category A"){
+        navController.navigate(
+            "${HomeNavigation.PackagingRoute}/" +
+                    "${leaf.category}/" +
+                    "${leaf.unNumber}/" +
+                    "${leaf.unSubstance}/" +
+                    "${leaf.quantity}/" +
+                    "  "
 
-    }
-    @Composable
-    fun ExemptDisplay(
-        navController: NavController,
-        leaf: ClassificationLeaf,
-        modifier: Modifier
-    ) {
-        StartButton(onClick = {
-            navController.navigate(
-                "${HomeNavigation.PackagingRoute}/" +
-                        "${leaf.category}/" +
-                        "${leaf.unNumber}/" +
-                        "${leaf.unSubstance}/" +
-                        "${leaf.quantity}"
+        ) {
+            launchSingleTop = true
+        }
+        }
+            else{
+                navController.navigate(
+                    "${HomeNavigation.PackagingRoute}/" +
+                            "${leaf.category}/" +
+                            "${leaf.unNumber}/" +
+                            "${leaf.unSubstance}/" +
+                            "${leaf.quantity}/" +
+                            "${leaf.substanceName}"
 
-            ) {
-                launchSingleTop = true
+                ) {
+                    launchSingleTop = true
+                }
             }
-        })
+
+            }            }
     }
 
 
-@Composable
-fun ClickableIcon(modifier:Modifier,id:Int,description:String,onClick: () -> Unit) {
-    Icon(
-        painter = painterResource(id),
-        contentDescription = description,
-        modifier = modifier.clickable{onClick()}
-    )
-}
 
 /**
  *  This custom version lets us specify custom height while avoiding padding problems and maintaining the aesthetics of OutlinedTextField
@@ -517,4 +525,31 @@ fun CustomOutlinedTextField(
             },
         )
     }
+}
+@Composable
+fun ExemptDisplay(navController: NavController,
+                  leaf: ClassificationLeaf,
+                  modifier:Modifier){
+    StartButton(onClick = { navController.navigate(
+        "${HomeNavigation.PackagingRoute}/" +
+                "${leaf.category}/" +
+                "${leaf.unNumber}/" +
+                "${leaf.unSubstance}/" +
+                "${leaf.quantity}/" +
+                "${leaf.substanceName}"
+
+            ) {
+                launchSingleTop = true
+            }
+        })
+    }
+
+
+@Composable
+fun ClickableIcon(modifier:Modifier,id:Int,description:String,onClick: () -> Unit) {
+    Icon(
+        painter = painterResource(id),
+        contentDescription = description,
+        modifier = modifier.clickable{onClick()}
+    )
 }

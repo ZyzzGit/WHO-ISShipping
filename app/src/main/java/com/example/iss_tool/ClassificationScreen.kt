@@ -148,6 +148,7 @@ fun ClassificationScreen(navController: NavController, modifier: Modifier, unNum
                 leaf.unNumber = 0
                 leaf.quantity = 0
                 leaf.unSubstance = "Exempt Human or Animal Specimen"
+                leaf.substanceName=" "
                 ExemptDisplay(navController = navController, leaf = leaf, modifier = Modifier)
             }
         }

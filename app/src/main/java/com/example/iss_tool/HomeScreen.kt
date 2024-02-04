@@ -53,25 +53,28 @@ fun NavGraphBuilder.homeGraph(navController: NavHostController, modifier: Modifi
             ClassificationScreen(navController = navController, modifier = modifier, unNumber = unNumber)
         }
         composable(
-          route = "${HomeNavigation.PackagingRoute}/{category}/{unNumber}/{unSubstance}/{quantity}",
+          route = "${HomeNavigation.PackagingRoute}/{category}/{unNumber}/{unSubstance}/{quantity}/{substanceName}",
           arguments = listOf(
               navArgument("category") { type = NavType.StringType },
               navArgument("unNumber") { type = NavType.IntType },
               navArgument("unSubstance") { type = NavType.StringType },
               navArgument("quantity") { type = NavType.IntType },
+              navArgument("substanceName") { type = NavType.StringType },
           )
         ) {navBackStackEntry ->
             val category = navBackStackEntry.arguments?.getString("category")
             val unNumber = navBackStackEntry.arguments?.getInt("unNumber")
             val unSubstance = navBackStackEntry.arguments?.getString("unSubstance")
             val quantity = navBackStackEntry.arguments?.getInt("quantity")
+            val substanceName = navBackStackEntry.arguments?.getString("substanceName")
             PackagingScreen(
                 navController = navController,
                 modifier = modifier,
                 category = category!!,
                 unNumber = unNumber,
                 unSubstance = unSubstance,
-                quantity = quantity)
+                quantity = quantity,
+                substanceName=substanceName)
         }
         composable(
             route = "${HomeNavigation.ShippingRoute}/{category}/{unNumber}/{unSubstance}/{quantity}",

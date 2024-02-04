@@ -34,7 +34,8 @@ fun PackagingScreen(
     category: String,
     unNumber: Int?,
     unSubstance: String?,
-    quantity: Int?
+    quantity: Int?,
+    substanceName:String?=null
 ) {
 
     Column(

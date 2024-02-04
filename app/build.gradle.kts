@@ -46,6 +46,7 @@ android {
 
 
 dependencies {
+    implementation("com.tom-roush:pdfbox-android:2.0.27.0")
     val roomversion = "2.6.1"
     //Room database
     implementation("androidx.room:room-runtime:$roomversion")

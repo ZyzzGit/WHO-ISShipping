@@ -10,7 +10,8 @@ class ClassificationLeaf(
     var unNumber: Int? = null,
     var unSubstance: String? = null,
     val additionalInfo: String? = null,
-    var quantity: Int? = null
+    var quantity: Int? = null,
+    var substanceName:String?=null
 )
 
 /**
