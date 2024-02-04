@@ -76,4 +76,6 @@ dependencies {
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
     //apache api  for excel
     implementation("org.apache.commons:commons-csv:1.5")
+    //tool for working with pdfs (Apache PDFBox ported to Android)
+    implementation("com.tom-roush:pdfbox-android:2.0.27.0")
 }
