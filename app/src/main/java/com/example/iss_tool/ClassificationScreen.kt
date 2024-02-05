@@ -88,7 +88,7 @@ fun ClassificationScreen(navController: NavController, modifier: Modifier, unNum
     } else if (currentNode is ClassificationLeaf) {
         val leaf = (currentNode as ClassificationLeaf)
 
-        val title: String = leaf.unSubstance ?: leaf.category
+        val title: String = leaf.unSubstance?.toString() ?: leaf.category.toString()
 
         Column(
             modifier = modifier
@@ -99,7 +99,7 @@ fun ClassificationScreen(navController: NavController, modifier: Modifier, unNum
             Text(
                 text = title, style = customTypography.bodyLarge, color = customColorScheme.primary
             )
-            if (leaf.unNumber != null && leaf.category != "Exempt Human or Animal Specimen") {
+            if (leaf.unNumber != null && leaf.category != Category.Exempt) {
                 Spacer(modifier = Modifier.height(24.dp))
                 Text(
                     text = "UN ${leaf.unNumber}\n" + leaf.category,
@@ -126,13 +126,13 @@ fun ClassificationScreen(navController: NavController, modifier: Modifier, unNum
                 listOf(substance.substanceName ?: "", substance.code ?: "")
             }
 
-            if (leaf.category == "Category A" || leaf.category == "Category B") {
+            if (leaf.category == Category.A || leaf.category == Category.B) {
             FormDisplay(navController=navController,leaf = leaf, substanceList = substanceList, tableList=tableList,Modifier) {
                 keyboardController?.hide()
                 }
 
             }
-            else if(leaf.category == "Exempt Human or Animal Specimen"){
+            else if(leaf.category == Category.Exempt){
                 ExemptDisplay(navController = navController, leaf = leaf, modifier = Modifier)
             }
         }

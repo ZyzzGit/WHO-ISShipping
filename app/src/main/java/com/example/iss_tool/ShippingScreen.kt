@@ -43,9 +43,9 @@ import com.example.iss_tool.theme.white
 fun ShippingScreen(
     navController: NavController,
     modifier: Modifier,
-    category: String,
+    category: Category,
     unNumber: Int?,
-    unSubstance: String,
+    unSubstance: UnSubstance,
     quantity: Int?,
     substanceName:String?
 ){
@@ -83,14 +83,14 @@ fun ShippingScreen(
             }
         }
         when(category){
-            "Category A" ->{
+            Category.A ->{
                 noteText(modifier = Modifier,
                     id=R.drawable.info_icon,
                     icon_info = "info",
                     textInfo ="For shipments being carried in the cargo hold of passenger aircraft, no more than 50mL or 50g of Category A infectious substance per package is allowed. \n" +
                             "For shipments being carried on a cargo only aircraft, no more than 4L or 4kg of Category A infectious substance per package is allowed.")
             }
-            "Category B" -> {
+            Category.B -> {
                 noteText(modifier = Modifier,
                     id=R.drawable.info_icon,
                     icon_info = "info",
@@ -98,6 +98,8 @@ fun ShippingScreen(
                             "For shipments being carried via surface transport (road, rail or maritime), there are no quantity limits per package."
                 )
             }
+            Category.Exempt -> {}
+            else -> { throw Exception("Argument exception: Category.$category is not handled by ShippingScreen.") }
         }
 
         Spacer(modifier = Modifier.height(24.dp))

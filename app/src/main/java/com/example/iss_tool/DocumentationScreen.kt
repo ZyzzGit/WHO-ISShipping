@@ -11,7 +11,6 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.currentCompositionLocalContext
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -41,12 +40,12 @@ import java.time.LocalDate
 fun DocumentationScreen(
     navController: NavController,
     modifier: Modifier,
-    category: String,
-    unNumber: Int,
-    unSubstance: String,
+    category: Category,
+    unNumber: Int?,
+    unSubstance: UnSubstance,
     quantity: Int,
     ice: Int,
-    shippingMethod: String,
+    shippingMethod: ShippingMethod,
     shipperName: String,
     shipperAddress: String,
     receiverName: String,
@@ -70,7 +69,7 @@ fun DocumentationScreen(
         var pageImage: Bitmap? by remember { mutableStateOf(null) }
 
         // Dangerous goods declaration required only for category A substances and biological/clinical/medical wastes (UN 3291)
-        if (category == "Category A" || unNumber == 3291) {
+        if (category == Category.A || unNumber == 3291) {
             LaunchedEffect(Unit) {
                 documentDGTD = getFilledDangerousGoodDeclaration(
                     context, category, unNumber, unSubstance, quantity, ice, shippingMethod, shipperName, shipperAddress, receiverName, receiverAddress, substanceName, responsibleName, responsiblePhone
@@ -127,12 +126,12 @@ fun DocumentationScreen(
 
 private fun getFilledDangerousGoodDeclaration(
     context: Context,
-    category: String,
-    unNumber: Int,
-    unSubstance: String,
+    category: Category,
+    unNumber: Int?,
+    unSubstance: UnSubstance,
     quantity: Int,
     ice: Int,
-    shippingMethod: String,
+    shippingMethod: ShippingMethod,
     shipperName: String,
     shipperAddress: String,
     receiverName: String,
@@ -174,8 +173,8 @@ private fun getFilledDangerousGoodDeclaration(
         ofPages.value = "1"
         shipper.value = "$shipperName\n$shipperAddress"
         receiver.value = "$receiverName\n$receiverAddress"
-        un.value = "UN\n$unNumber"
-        shippingName.value = unSubstance
+        un.value = "UN\n${unNumber ?: '-'}"
+        shippingName.value = unSubstance.toString()
         classDivision.value = "6.2"
         quantityAndPackagingType.value = "${quantity}ml"
         packagingInstructions.value = "620"
@@ -183,18 +182,18 @@ private fun getFilledDangerousGoodDeclaration(
         signatureDate.value = LocalDate.now().toString()
 
         // Additional info for category A only
-        if (category == "Category A") {
+        if (category == Category.A) {
             shippingName.value = shippingName.value + "\n($substanceName)"
             responsiblePerson.value = "Responsible person: $responsibleName\nPhone: $responsiblePhone"
         }
 
         // Fill shipment limitations
         when (shippingMethod) {
-            "CargoOnly" -> {
+            ShippingMethod.CargoOnly -> {
                 cargoOnly.setValue(cargoOnly.options[0])
                 passengerAndCargo.setValue(cargoOnly.options[1])
             }
-            "Passenger" -> {
+            ShippingMethod.Passenger -> {
                 cargoOnly.setValue(cargoOnly.options[1])
                 passengerAndCargo.setValue(cargoOnly.options[0])
             }
@@ -230,12 +229,12 @@ fun DocumentationScreenPreview() {
     DocumentationScreen(
         navController = navController,
         modifier = Modifier,
-        category = "Category A",
+        category = Category.A,
         unNumber = 2814,
-        unSubstance = "Infectious Substance Affecting Humans",
+        unSubstance = UnSubstance.ISHumans,
         quantity = 42,
         ice = 17,
-        shippingMethod = "Passenger",
+        shippingMethod = ShippingMethod.Passenger,
         shipperName = "Nico",
         shipperAddress = "Examplestreet 7",
         receiverName = "WHO Italy",

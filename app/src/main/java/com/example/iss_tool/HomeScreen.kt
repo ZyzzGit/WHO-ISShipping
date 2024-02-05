@@ -63,9 +63,9 @@ fun NavGraphBuilder.homeGraph(navController: NavHostController, modifier: Modifi
               navArgument("substanceName") { type = NavType.StringType;nullable = true },
           )
         ) {navBackStackEntry ->
-            val category = navBackStackEntry.arguments?.getString("category")
+            val category = navBackStackEntry.arguments?.getString("category")?.let { Category.fromString(it) }
             val unNumber = navBackStackEntry.arguments?.getString("unNumber")?.toIntOrNull()
-            val unSubstance = navBackStackEntry.arguments?.getString("unSubstance")
+            val unSubstance = navBackStackEntry.arguments?.getString("unSubstance")?.let { UnSubstance.fromString(it) }
             val quantity = navBackStackEntry.arguments?.getString("quantity")?.toIntOrNull()
             val substanceName = navBackStackEntry.arguments?.getString("substanceName")
             PackagingScreen(
@@ -87,9 +87,9 @@ fun NavGraphBuilder.homeGraph(navController: NavHostController, modifier: Modifi
                 navArgument("substanceName") { type = NavType.StringType;nullable = true },
             )
         ) {navBackStackEntry ->
-            val category = navBackStackEntry.arguments?.getString("category")
+            val category = navBackStackEntry.arguments?.getString("category")?.let { Category.fromString(it) }
             val unNumber = navBackStackEntry.arguments?.getString("unNumber")?.toIntOrNull()
-            val unSubstance = navBackStackEntry.arguments?.getString("unSubstance")
+            val unSubstance = navBackStackEntry.arguments?.getString("unSubstance")?.let { UnSubstance.fromString(it) }
             val quantity = navBackStackEntry.arguments?.getString("quantity")?.toIntOrNull()
             val substanceName = navBackStackEntry.arguments?.getString("substanceName")
             ShippingScreen(
@@ -112,9 +112,9 @@ fun NavGraphBuilder.homeGraph(navController: NavHostController, modifier: Modifi
                 navArgument("shippingMethod"){type = NavType.StringType}
             )
         ) {navBackStackEntry ->
-            val category = navBackStackEntry.arguments?.getString("category")
+            val category = navBackStackEntry.arguments?.getString("category")?.let { Category.fromString(it) }
             val unNumber = navBackStackEntry.arguments?.getString("unNumber")?.toIntOrNull()
-            val unSubstance = navBackStackEntry.arguments?.getString("unSubstance")
+            val unSubstance = navBackStackEntry.arguments?.getString("unSubstance")?.let { UnSubstance.fromString(it) }
             val quantity = navBackStackEntry.arguments?.getString("quantity")?.toIntOrNull()
             val substanceName = navBackStackEntry.arguments?.getString("substanceName")
             val shippingMethod = navBackStackEntry.arguments?.getString("shippingMethod")
@@ -141,12 +141,12 @@ fun NavGraphBuilder.homeGraph(navController: NavHostController, modifier: Modifi
                 navArgument("iceQuantity") { type = androidx.navigation.NavType.StringType;nullable = true },
             )
         ) {navBackStackEntry ->
-            val category = navBackStackEntry.arguments?.getString("category")
+            val category = navBackStackEntry.arguments?.getString("category")?.let { Category.fromString(it) }
             val unNumber = navBackStackEntry.arguments?.getString("unNumber")?.toIntOrNull()
-            val unSubstance = navBackStackEntry.arguments?.getString("unSubstance")
+            val unSubstance = navBackStackEntry.arguments?.getString("unSubstance")?.let { UnSubstance.fromString(it) }
             val quantity = navBackStackEntry.arguments?.getString("quantity")?.toIntOrNull()
             val substanceName = navBackStackEntry.arguments?.getString("substanceName")
-            val shippingMethod = navBackStackEntry.arguments?.getString("shippingMethod")
+            val shippingMethod = navBackStackEntry.arguments?.getString("shippingMethod")?.let { ShippingMethod.fromString(it) }
             val ice = navBackStackEntry.arguments?.getString("ice")
             val iceQuantity = navBackStackEntry.arguments?.getString("iceQuantity")?.toIntOrNull()
             ShippingInformationScreen(
@@ -174,18 +174,18 @@ fun NavGraphBuilder.homeGraph(navController: NavHostController, modifier: Modifi
                 navArgument("shipperAddress") { type = NavType.StringType },
                 navArgument("receiverName") { type = NavType.StringType },
                 navArgument("receiverAddress") { type = NavType.StringType },
-                navArgument("responsibleName") { type = NavType.StringType;},
-                navArgument("responsiblePhone") { type = NavType.StringType;} ,
+                navArgument("responsibleName") { type = NavType.StringType; nullable = true},
+                navArgument("responsiblePhone") { type = NavType.StringType; nullable = true } ,
                 navArgument("ice") { type =NavType.StringType; },
                 navArgument("iceQuantity") { type = androidx.navigation.NavType.StringType;nullable = true },
             )
         ){navBackStackEntry ->
-            val category = navBackStackEntry.arguments?.getString("category")
+            val category = navBackStackEntry.arguments?.getString("category")?.let { Category.fromString(it) }
             val unNumber = navBackStackEntry.arguments?.getString("unNumber")?.toIntOrNull()
-            val unSubstance = navBackStackEntry.arguments?.getString("unSubstance")
+            val unSubstance = navBackStackEntry.arguments?.getString("unSubstance")?.let { UnSubstance.fromString(it) }
             val quantity = navBackStackEntry.arguments?.getString("quantity")?.toIntOrNull()
             val substanceName = navBackStackEntry.arguments?.getString("substanceName")
-            val shippingMethod = navBackStackEntry.arguments?.getString("shippingMethod")
+            val shippingMethod = navBackStackEntry.arguments?.getString("shippingMethod")?.let { ShippingMethod.fromString(it) }
             val shipperName = navBackStackEntry.arguments?.getString("shipperName")
             val shipperAddress = navBackStackEntry.arguments?.getString("shipperAddress")
             val receiverName = navBackStackEntry.arguments?.getString("receiverName")
@@ -214,15 +214,15 @@ fun NavGraphBuilder.homeGraph(navController: NavHostController, modifier: Modifi
             )
         }
         composable(
-          route = "${HomeNavigation.DocumentationRoute}/{category}/{unNumber}/{unSubstance}/{quantity}/{ice}/{aircraft}/{shipperName}/{shipperAddress}/" +
+          route = "${HomeNavigation.DocumentationRoute}/{category}/{unNumber}/{unSubstance}/{quantity}/{ice}/{shippingMethod}/{shipperName}/{shipperAddress}/" +
                   "{receiverName}/{receiverAddress}/{substanceName}/{responsibleName}/{responsiblePhone}",
           arguments = listOf(
               navArgument("category") { type = NavType.StringType },
-              navArgument("unNumber") { type = NavType.IntType },
+              navArgument("unNumber") { type = NavType.StringType; nullable = true },
               navArgument("unSubstance") { type = NavType.StringType },
               navArgument("quantity") { type = NavType.IntType },
               navArgument("ice") { type = NavType.IntType },
-              navArgument("aircraft") {type = NavType.StringType},
+              navArgument("shippingMethod") { type = NavType.StringType },
               navArgument("shipperName") { type = NavType.StringType },
               navArgument("shipperAddress") { type = NavType.StringType },
               navArgument("receiverName") { type = NavType.StringType },
@@ -232,12 +232,12 @@ fun NavGraphBuilder.homeGraph(navController: NavHostController, modifier: Modifi
               navArgument("responsiblePhone") { nullable = true }
           )
         ) {navBackStackEntry ->
-            val category = navBackStackEntry.arguments?.getString("category")
-            val unNumber = navBackStackEntry.arguments?.getInt("unNumber")
-            val unSubstance = navBackStackEntry.arguments?.getString("unSubstance")
+            val category = navBackStackEntry.arguments?.getString("category")?.let { Category.fromString(it) }
+            val unNumber = navBackStackEntry.arguments?.getString("unNumber")?.toIntOrNull()
+            val unSubstance = navBackStackEntry.arguments?.getString("unSubstance")?.let { UnSubstance.fromString(it) }
             val quantity = navBackStackEntry.arguments?.getInt("quantity")
             val ice = navBackStackEntry.arguments?.getInt("ice")
-            val aircraft = navBackStackEntry.arguments?.getString("aircraft")
+            val shippingMethod = navBackStackEntry.arguments?.getString("shippingMethod")?.let { ShippingMethod.fromString(it) }
             val shipperName = navBackStackEntry.arguments?.getString("shipperName")
             val shipperAddress = navBackStackEntry.arguments?.getString("shipperAddress")
             val receiverName = navBackStackEntry.arguments?.getString("receiverName")
@@ -249,11 +249,11 @@ fun NavGraphBuilder.homeGraph(navController: NavHostController, modifier: Modifi
                 navController = navController,
                 modifier = modifier,
                 category = category!!,
-                unNumber = unNumber!!,
+                unNumber = unNumber,
                 unSubstance = unSubstance!!,
                 quantity = quantity!!,
                 ice = ice!!,
-                shippingMethod = aircraft!!,
+                shippingMethod = shippingMethod!!,
                 shipperName = shipperName!!,
                 shipperAddress = shipperAddress!!,
                 receiverName = receiverName!!,

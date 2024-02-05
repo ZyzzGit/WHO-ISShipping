@@ -24,12 +24,12 @@ import com.example.iss_tool.theme.customTypography
 fun ShippingInformationScreen(
     navController: NavController,
     modifier: Modifier,
-    category: String,
+    category: Category,
     unNumber: Int?,
-    unSubstance: String,
+    unSubstance: UnSubstance,
     quantity: Int?,
     substanceName: String?,  // only provided for Category A
-    shippingMethod:String?,
+    shippingMethod: ShippingMethod,
     ice:String,
     iceQuantity:Int?
 ) {
@@ -45,8 +45,8 @@ fun ShippingInformationScreen(
         var shipperAddress by remember { mutableStateOf("") }
         var receiverName by remember { mutableStateOf("") }
         var receiverAddress by remember { mutableStateOf("") }
-        var responsibleName by remember { mutableStateOf(" ") }
-        var responsiblePhone by remember { mutableStateOf(" ") }
+        var responsibleName: String? by remember { mutableStateOf(if (category == Category.A) "" else null) }
+        var responsiblePhone: String? by remember { mutableStateOf(if (category == Category.A) "" else null) }
 
 
         var invalidSubmit by remember { mutableStateOf(false) }
@@ -105,7 +105,7 @@ fun ShippingInformationScreen(
             label = { Text(text = "Address") }
         )
 
-        if (category == "Category A") {
+        if (category == Category.A) {
             Spacer(modifier = Modifier.height(20.dp))
             Text(
                 modifier = Modifier.padding(6.dp),
@@ -117,7 +117,7 @@ fun ShippingInformationScreen(
                 modifier = Modifier
                     .padding(6.dp)
                     .fillMaxWidth(0.8F),
-                value = responsibleName,
+                value = responsibleName!!,
                 onValueChange = { responsibleName = it },
                 isError = invalidSubmit && responsibleName == "",
                 label = { Text(text = "Name") }
@@ -126,7 +126,7 @@ fun ShippingInformationScreen(
                 modifier = Modifier
                     .padding(6.dp)
                     .fillMaxWidth(0.8F),
-                value = responsiblePhone,
+                value = responsiblePhone!!,
                 onValueChange = { responsiblePhone = it },
                 isError = invalidSubmit && responsiblePhone == "",
                 label = { Text(text = "Phone") }
@@ -139,7 +139,7 @@ fun ShippingInformationScreen(
                 if (
                     shipperName != "" && shipperAddress != "" &&
                     receiverName != "" && receiverAddress != "" &&
-                    (category != "Category A" || (responsibleName != " " && responsiblePhone != " "))
+                    (category != Category.A || (responsibleName != "" && responsiblePhone != ""))
                 ) {
                     navController.navigate(
                         "${HomeNavigation.MarkingRoute}/" +
@@ -156,7 +156,7 @@ fun ShippingInformationScreen(
                                 "${responsibleName}/"+
                                 "${responsiblePhone}/"+
                                 "${ice}/"+
-                                "${iceQuantity}"
+                                "$iceQuantity"
 
                     ) {
                         launchSingleTop = true

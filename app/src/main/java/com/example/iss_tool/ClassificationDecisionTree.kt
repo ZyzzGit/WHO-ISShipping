@@ -6,9 +6,9 @@ package com.example.iss_tool
  * substanceName and quantity are null until specified by user with FormDisplay in end of ClassificationScreen
  */
 class ClassificationLeaf(
-    val category: String,
+    val category: Category,
     var unNumber: Int? = null,
-    var unSubstance: String? = null,
+    var unSubstance: UnSubstance? = null,
     val additionalInfo: String? = null,
     var quantity: Int? = null,
     var substanceName:String?=null
@@ -47,46 +47,46 @@ class ClassificationNode(
  */
 
 private var exceptionLeaf = ClassificationLeaf(
-    category = "Exception",
+    category = Category.Exception,
     additionalInfo = "The material/substance is not subject to any transport regulations (unless transported together with other dangerous goods)."
 )
 
 private var infectiousAffectingHumansLeaf = ClassificationLeaf(
-    category = "Category A",
+    category = Category.A,
     unNumber = 2814,
-    unSubstance = "Infectious Substance Affecting Humans"
+    unSubstance = UnSubstance.ISHumans
 )
 
 private var infectiousAffectingAnimalsOnlyLeaf = ClassificationLeaf(
-    category = "Category A",
+    category = Category.A,
     unNumber = 2900,
-    unSubstance = "Infectious Substance Affecting Animals Only"
+    unSubstance = UnSubstance.ISAnimalsOnly
 )
 
 private var exemptLeaf = ClassificationLeaf(
-    category = "Exempt Human or Animal Specimen",
-    unSubstance = "Exempt Human or Animal Specimen",
+    category = Category.Exempt,
+    unSubstance = UnSubstance.Exmept,
     additionalInfo = "Apply basic triple packaging system."
 )
 
 private var infectiousBiologicalLeaf = ClassificationLeaf(
-    category = "Category B",
+    category = Category.B,
     unNumber = 3373,
-    unSubstance = "Biological Substance"
+    unSubstance = UnSubstance.Biological
 )
 
 private var infectiousWasteLeaf = ClassificationLeaf(
-    category = "Category B",
+    category = Category.B,
     unNumber = 3291,
-    unSubstance = "Infectious Waste",
+    unSubstance = UnSubstance.IWaste,
     additionalInfo = "Biomedical Waste, n.o.s.\n" +
             "OR Clinical Waste, unspecified n.o.s.\n" +
             "OR Medical Waste, n.o.s."
 )
 
 private var infectiousCategoryALeaf = ClassificationLeaf(
-    category = "Category A",
-    unSubstance = "Infectious Substance Category A"
+    category = Category.A,
+    unSubstance = UnSubstance.ISCategoryA
 )
 //
 //private var categoryASplitNode = ClassificationNode(

@@ -26,20 +26,20 @@ import com.example.iss_tool.theme.primary_navy_blue
 fun LabelsMarksScreen(
     navController: NavHostController,
     modifier: Modifier,
-    category: String,
+    category: Category,
     unNumber: Int?,
-    unSubstance: String,
+    unSubstance: UnSubstance,
     quantity: Int?,
     substanceName: String?,  // only provided for Category A
-    shippingMethod:String,
-    shipperName:String,
-    shipperAddress:String,
-    receiverName:String,
-    receiverAddress:String,
-    responsibleName:String?,
-    responsiblePhone:String?,
-    ice:String,
-    iceQuantity:Int?
+    shippingMethod: ShippingMethod,
+    shipperName: String,
+    shipperAddress: String,
+    receiverName: String,
+    receiverAddress: String,
+    responsibleName: String?,
+    responsiblePhone: String?,
+    ice: String,
+    iceQuantity: Int?
 
     ){
     Column(
@@ -71,7 +71,7 @@ fun LabelsMarksScreen(
             dangerous_goods = true
         }
         when(category){
-            "Category A"->
+            Category.A->
             {
                 shipper_info = true
                 receiver_info = true
@@ -82,23 +82,23 @@ fun LabelsMarksScreen(
                     orientation_arrows = true
                 }
                 shipping_name_number=true
-                if(shippingMethod == "CargoOnly"){
+                if(shippingMethod == ShippingMethod.CargoOnly){
                     cargo_label = true
                 }
             }
-            "Category B"->{
+            Category.B->{
                 shipper_info = true
                 receiver_info = true
                 shipping_name = true
                 shipping_number = true
 
             }
-            "Exempt Human or Animal Specimen"->{
+            Category.Exempt->{
                 shipper_info = true
                 receiver_info = true
                 shipping_name = true
             }
-
+            else -> { throw Exception("Argument exception: Category.$category is not handled by LabelsMarksScreen.")}
         }
 
     Text("MARKS AND LABELS",style= customTypography.bodyMedium, color = primary_navy_blue)

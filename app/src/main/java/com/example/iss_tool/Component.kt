@@ -344,7 +344,7 @@ fun FormDisplay(
     modifier: Modifier = Modifier,
     onDoneAction: () -> Unit,
 ) {
-    if (leaf.category == "Category A" || leaf.category == "Category B") {
+    if (leaf.category == Category.A || leaf.category == Category.B) {
         var text by remember { mutableStateOf(TextFieldValue("")) }
         var assignedValue by remember { mutableStateOf<String?>(null) }
         var assignedSubstance by remember { mutableStateOf<String?>(null) }
@@ -353,7 +353,7 @@ fun FormDisplay(
         var expanded by remember { mutableStateOf(false) }
         var selectedSubstance by remember { mutableStateOf(substanceList[0]) }
 
-        if (leaf.category == "Category A" && leaf.unNumber == null) {
+        if (leaf.category == Category.A && leaf.unNumber == null) {
             Spacer(modifier = Modifier.height(24.dp))
             ExposedDropdownMenuBox(expanded = expanded, onExpandedChange = {
                 expanded = !expanded
@@ -417,7 +417,7 @@ fun FormDisplay(
         Spacer(modifier = Modifier.height(24.dp))
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             StartButton(onClick = {
-                if (leaf.category == "Category A") {
+                if (leaf.category == Category.A) {
                     if (selectedSubstance.isNullOrEmpty()) {
                         showErrorsubstance = true
                     } else {
@@ -438,17 +438,17 @@ fun FormDisplay(
 
             leaf.unNumber = matchingElement?.get(1)?.takeLast(4)?.toInt()
             if(leaf.unNumber == 2814){
-                leaf.unSubstance = "Infectious Substance Affecting Humans"
+                leaf.unSubstance = UnSubstance.ISHumans
             }
             else if(leaf.unNumber == 2900){
 
-                leaf.unSubstance = "Infectious Substance Affecting Animals Only"
+                leaf.unSubstance = UnSubstance.ISAnimalsOnly
             }
             leaf.substanceName = assignedSubstance?.toString()
         }
         if (assignedValue != null) {
             leaf.quantity = assignedValue?.toInt()
-            if (assignedSubstance == null && leaf.category == "Category A"  && leaf.unNumber == null) {
+            if (assignedSubstance == null && leaf.category == Category.A && leaf.unNumber == null) {
                 showErrorsubstance = true
             }
             else {

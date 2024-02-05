@@ -44,12 +44,12 @@ import com.example.iss_tool.theme.primary_navy_blue
 fun ShippingDecision(
     navController: NavController,
     modifier: Modifier,
-    category: String,
+    category: Category,
     unNumber: Int?,
-    unSubstance: String,
+    unSubstance: UnSubstance,
     quantity: Int?,
-    substanceName:String?,
-    shippingMethod:String,
+    substanceName: String?,
+    shippingMethod: String,
 ){
     Column(
         modifier = modifier
@@ -83,7 +83,7 @@ fun ShippingDecision(
                         .wrapContentWidth(Alignment.CenterHorizontally)
                 )
             }
-            if(category == "Exempt Human or Animal Specimen") {
+            if(category == Category.Exempt) {
                 ClickableIcon(
                     modifier = Modifier.align(Alignment.CenterVertically),
                     id = R.drawable.arrow_forward,
@@ -108,7 +108,7 @@ fun ShippingDecision(
             }
         }
         when(category){
-            "Category A" -> when(shippingMethod){
+            Category.A -> when(shippingMethod){
                 "CargoOnly" -> {
                     shipment(modifier = Modifier,
                         shipmentMethod = shippingMethod,
@@ -130,7 +130,7 @@ fun ShippingDecision(
                     )
                 }
             }
-            "Category B" -> when(shippingMethod){
+            Category.B -> when(shippingMethod){
                 "CargoOnly" -> {
                     shipment(modifier = Modifier,
                         shipmentMethod = shippingMethod,
@@ -153,16 +153,17 @@ fun ShippingDecision(
                     )
                 }
             }
-            "Exempt Human or Animal Specimen" ->{
+            Category.Exempt ->{
                 shipment(modifier = Modifier,
                     shipmentMethod = shippingMethod,
                     title = shippingMethod,
                     info_body = "For shipments of Exempt Human or Animal Specimen Category, there are no quantity limits per package. "
                 )
             }
+            else -> { throw Exception("Argument exception: Category.$category is not handled by ShippingDecisionScreen.")}
         }
         var selectedOption by remember { mutableStateOf<IceOption?>(IceOption.Option2) }
-        if(category == "Category A" || category == "Category B") {
+        if(category == Category.A || category == Category.B) {
 
             Box(
                 modifier = Modifier

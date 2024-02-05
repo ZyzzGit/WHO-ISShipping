@@ -31,9 +31,9 @@ import com.example.iss_tool.theme.customTypography
 fun PackagingScreen(
     navController: NavController,
     modifier: Modifier,
-    category: String,
+    category: Category,
     unNumber: Int?,
-    unSubstance: String?,
+    unSubstance: UnSubstance?,
     quantity: Int?,
     substanceName:String?
 ) {
@@ -75,7 +75,7 @@ fun PackagingScreen(
 
             ClickableIcon(modifier = Modifier.align(Alignment.CenterVertically),id = R.drawable.arrow_forward, description = "Proceed") {
                when(category){
-                   "Category A" -> {
+                   Category.A -> {
                        if(quantity in 51..4000){
                            navController.navigate(
                                "${HomeNavigation.ShippingDecision}/" +
@@ -116,7 +116,7 @@ fun PackagingScreen(
                            }
                        }
                    }
-                   "Category B" -> {
+                   Category.B -> {
                        if(quantity!! > 1000){
                            navController.navigate(
                                "${HomeNavigation.ShippingDecision}/" +
@@ -169,7 +169,7 @@ fun PackagingScreen(
             ) {
                 when(category){
                     //Category A packaging
-                    "Category A"->{
+                    Category.A->{
                         packagingDisplay(
                             modifier = Modifier,
                             pageCount = 2,
@@ -184,7 +184,7 @@ fun PackagingScreen(
                             ,)
                     }
                     //Category B packaging
-                    "Category B"->{
+                    Category.B->{
                         packagingDisplay(
                             modifier = Modifier,
                             pageCount = 2,
@@ -195,13 +195,13 @@ fun PackagingScreen(
 
                     }
                     //Category Exempt Human or Animal Specimen packaging
-                    "Exempt Human or Animal Specimen" ->{
+                    Category.Exempt ->{
                         packagingDisplay(
                             modifier = Modifier,
                             pageCount = 1
                         )
                     }
-
+                    else -> { throw Exception("Argument exception: Category.$category is not handled by PackagingScreen.")}
                 }
 
 
