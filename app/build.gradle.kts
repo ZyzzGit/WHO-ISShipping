@@ -80,4 +80,7 @@ dependencies {
     implementation("org.apache.commons:commons-csv:1.5")
     //tool for working with pdfs (Apache PDFBox ported to Android)
     implementation("com.tom-roush:pdfbox-android:2.0.27.0")
+    //for debugging
+    debugImplementation("androidx.compose.ui:ui-tooling")
+    debugImplementation("androidx.compose.ui:ui-test-manifest")
 }

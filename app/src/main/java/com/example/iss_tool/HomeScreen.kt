@@ -12,7 +12,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
@@ -196,7 +195,7 @@ fun NavGraphBuilder.homeGraph(navController: NavHostController, modifier: Modifi
             val ice = navBackStackEntry.arguments?.getString("ice")
             val iceQuantity = navBackStackEntry.arguments?.getString("iceQuantity")?.toIntOrNull()
             LabelsMarksScreen(
-                navController = NavController,
+                navController = navController,
                 modifier = modifier,
                 category =category!!,
                 unNumber =unNumber,
@@ -214,7 +213,6 @@ fun NavGraphBuilder.homeGraph(navController: NavHostController, modifier: Modifi
                 iceQuantity = iceQuantity
             )
         }
-
         composable(
           route = "${HomeNavigation.DocumentationRoute}/{category}/{unNumber}/{unSubstance}/{quantity}/{ice}/{aircraft}/{shipperName}/{shipperAddress}/" +
                   "{receiverName}/{receiverAddress}/{substanceName}/{responsibleName}/{responsiblePhone}",
@@ -243,10 +241,10 @@ fun NavGraphBuilder.homeGraph(navController: NavHostController, modifier: Modifi
             val shipperName = navBackStackEntry.arguments?.getString("shipperName")
             val shipperAddress = navBackStackEntry.arguments?.getString("shipperAddress")
             val receiverName = navBackStackEntry.arguments?.getString("receiverName")
+            val substanceName = navBackStackEntry.arguments?.getString("substanceName")
             val responsibleName = navBackStackEntry.arguments?.getString("responsibleName")
             val responsiblePhone = navBackStackEntry.arguments?.getString("responsiblePhone")
             val receiverAddress = navBackStackEntry.arguments?.getString("receiverAddress")
-            val substanceName = navBackStackEntry.arguments?.getString("substanceName")
             DocumentationScreen(
                 navController = navController,
                 modifier = modifier,
