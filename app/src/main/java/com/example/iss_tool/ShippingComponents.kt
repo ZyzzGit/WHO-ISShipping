@@ -10,10 +10,15 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -31,6 +36,42 @@ import com.example.iss_tool.theme.orange_who
 import com.example.iss_tool.theme.white
 
 
+
+
+
+enum class IceOption(val text: String) {
+    Option1("YES"),
+    Option2("NO")
+}
+@Composable
+fun OptionRadioButton(
+    option: IceOption,
+    selectedOption: IceOption?,
+    onOptionSelected: (IceOption) -> Unit
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .selectable(
+                selected = option == selectedOption,
+                onClick = { onOptionSelected(option) }
+            )
+            .padding(8.dp),
+//            .background(MaterialTheme.colorScheme.primaryContainer),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        RadioButton(
+            selected = option == selectedOption,
+            onClick = { onOptionSelected(option) },
+            modifier = Modifier.size(16.dp)
+        )
+
+        Spacer(modifier = Modifier.width(4.dp))
+
+        Text(option.text)
+    }
+}
+
 @Composable
 fun shipment(modifier: Modifier,shipmentMethod:String,title:String,info_body:String){
         Text(
@@ -43,29 +84,6 @@ fun shipment(modifier: Modifier,shipmentMethod:String,title:String,info_body:Str
         icon_info = "info",
         textInfo ="$info_body")
         Spacer(modifier = Modifier.height(24.dp))
-
-//        Box(
-//                modifier = modifier
-//                    .fillMaxWidth()
-//                    .clip(customShapes.large)
-//                    .background(blue_who.copy(alpha = 0.2f))
-//                    .padding(bottom = 10.dp, start = 10.dp, end = 10.dp)
-//            ) {
-//                Column(
-//                    modifier = modifier
-//                        .fillMaxWidth()
-//                        .verticalScroll(rememberScrollState()),
-////                horizontalAlignment = Alignment.CenterHorizontally
-//                ){ layerDisplay(title = "Packing in Overpacks", body = "\"Overpack\" is an enclosure used by a single shipper to contain one or more packages and to form one handling unit for convenience of handling and stowage.\n" +
-//                        "If dry ice is being used to protect contents, the overpacks may be comprised of insulated vessels or flasks to allow dissipation of carbon dioxide gas.\n" +
-//                        " Whenever an overpack is used, the required marks and labels shown on the packages of infectious substance inside must be repeated on the outermost layer of the overpack (unless already clearly visible, for example through a clear plastic wrapping).\n" +
-//                        " Overpacks must be marked with the word “OVERPACK” in lettering at least 12mm high.\n",
-//                    modifier = modifier.align(Alignment.Start))
-//                }
-//            }
-
-
-
 }
 
 @Composable

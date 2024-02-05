@@ -65,6 +65,7 @@ private var infectiousAffectingAnimalsOnlyLeaf = ClassificationLeaf(
 
 private var exemptLeaf = ClassificationLeaf(
     category = "Exempt Human or Animal Specimen",
+    unSubstance = "Exempt Human or Animal Specimen",
     additionalInfo = "Apply basic triple packaging system."
 )
 

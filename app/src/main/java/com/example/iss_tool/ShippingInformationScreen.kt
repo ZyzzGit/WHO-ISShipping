@@ -25,10 +25,13 @@ fun ShippingInformationScreen(
     navController: NavController,
     modifier: Modifier,
     category: String,
-    unNumber: Int,
+    unNumber: Int?,
     unSubstance: String,
-    quantity: Int,
-    substanceName: String?  // only provided for Category A
+    quantity: Int?,
+    substanceName: String?,  // only provided for Category A
+    shippingMethod:String?,
+    ice:String,
+    iceQuantity:Int?
 ) {
     Column(
         modifier = modifier
@@ -42,8 +45,9 @@ fun ShippingInformationScreen(
         var shipperAddress by remember { mutableStateOf("") }
         var receiverName by remember { mutableStateOf("") }
         var receiverAddress by remember { mutableStateOf("") }
-        var responsibleName by remember { mutableStateOf("") }
-        var responsiblePhone by remember { mutableStateOf("") }
+        var responsibleName by remember { mutableStateOf(" ") }
+        var responsiblePhone by remember { mutableStateOf(" ") }
+
 
         var invalidSubmit by remember { mutableStateOf(false) }
 
@@ -135,9 +139,28 @@ fun ShippingInformationScreen(
                 if (
                     shipperName != "" && shipperAddress != "" &&
                     receiverName != "" && receiverAddress != "" &&
-                    (category != "Category A" || (responsibleName != "" && responsiblePhone != ""))
+                    (category != "Category A" || (responsibleName != " " && responsiblePhone != " "))
                 ) {
-                    // TODO: Navigate to next screen
+                    navController.navigate(
+                        "${HomeNavigation.MarkingRoute}/" +
+                                "${category}/" +
+                                "${unNumber}/" +
+                                "${unSubstance}/" +
+                                "${quantity}/"+
+                                "${substanceName}/"+
+                                "${shippingMethod}/"+
+                                "${shipperName}/"+
+                                "${shipperAddress}/"+
+                                "${receiverName}/"+
+                                "${receiverAddress}/"+
+                                "${responsibleName}/"+
+                                "${responsiblePhone}/"+
+                                "${ice}/"+
+                                "${iceQuantity}"
+
+                    ) {
+                        launchSingleTop = true
+                    }
                 } else {
                     invalidSubmit = true
                 }

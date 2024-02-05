@@ -35,7 +35,7 @@ fun PackagingScreen(
     unNumber: Int?,
     unSubstance: String?,
     quantity: Int?,
-    substanceName:String?=null
+    substanceName:String?
 ) {
 
     Column(
@@ -51,7 +51,7 @@ fun PackagingScreen(
                 .padding(bottom = 5.dp),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            if(category != "Exempt Human or Animal Specimen"){
+            if(unNumber != null){
             Text(
                 text = "$unSubstance\nUN $unNumber\n",
                 style = customTypography.bodyLarge,
@@ -61,7 +61,7 @@ fun PackagingScreen(
                     .wrapContentWidth(Alignment.CenterHorizontally)
                     .align(Alignment.CenterVertically)
             )}
-            else {
+            else{
                 Text(
                     text = "$unSubstance\n",
                     style = customTypography.bodyLarge,
@@ -72,6 +72,7 @@ fun PackagingScreen(
                         .align(Alignment.CenterVertically)
                 )
             }
+
             ClickableIcon(modifier = Modifier.align(Alignment.CenterVertically),id = R.drawable.arrow_forward, description = "Proceed") {
                when(category){
                    "Category A" -> {
@@ -82,6 +83,7 @@ fun PackagingScreen(
                                        "${unNumber}/" +
                                        "${unSubstance}/" +
                                        "${quantity}/"+
+                                       "${substanceName}/"+
                                        "CargoOnly"
                            ) {
                                launchSingleTop = true
@@ -94,6 +96,7 @@ fun PackagingScreen(
                                        "${unNumber}/" +
                                        "${unSubstance}/" +
                                        "${quantity}/"+
+                                       "${substanceName}/"+
                                        "ByRoad"
                            ) {
                                launchSingleTop = true
@@ -105,7 +108,8 @@ fun PackagingScreen(
                                        "${category}/" +
                                        "${unNumber}/" +
                                        "${unSubstance}/" +
-                                       "$quantity"
+                                       "${quantity}/"+
+                                       "${substanceName}"
 
                            ) {
                                launchSingleTop = true
@@ -120,6 +124,7 @@ fun PackagingScreen(
                                        "${unNumber}/" +
                                        "${unSubstance}/" +
                                        "${quantity}/"+
+                                       "${substanceName}/"+
                                        "ByRoad"
                            ) {
                                launchSingleTop = true
@@ -131,7 +136,8 @@ fun PackagingScreen(
                                    "${category}/" +
                                    "${unNumber}/" +
                                    "${unSubstance}/" +
-                                   "$quantity"
+                                   "${quantity}/"+
+                                   "${substanceName}"
 
                        ) {
                            launchSingleTop = true
@@ -143,7 +149,8 @@ fun PackagingScreen(
                                    "${category}/" +
                                    "${unNumber}/" +
                                    "${unSubstance}/" +
-                                   "$quantity"
+                                   "${quantity}/"+
+                                   "${substanceName}"
 
                        ) {
                            launchSingleTop = true

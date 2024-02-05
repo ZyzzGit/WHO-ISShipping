@@ -44,9 +44,10 @@ fun ShippingScreen(
     navController: NavController,
     modifier: Modifier,
     category: String,
-    unNumber: Int,
+    unNumber: Int?,
     unSubstance: String,
-    quantity: Int
+    quantity: Int?,
+    substanceName:String?
 ){
     Column(
         modifier = modifier
@@ -61,7 +62,7 @@ fun ShippingScreen(
                 .padding(bottom = 5.dp),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            if (unNumber != 0) {
+            if (unNumber != null) {
                 Text(
                     text = "$unSubstance\nUN $unNumber\n",
                     style = customTypography.bodyLarge,
@@ -121,6 +122,7 @@ fun ShippingScreen(
                                 "${unNumber}/" +
                                 "${unSubstance}/" +
                                 "${quantity}/" +
+                                "${substanceName}/" +
                                 "Passenger"
 
                     ) {
@@ -150,6 +152,7 @@ fun ShippingScreen(
                                 "${unNumber}/" +
                                 "${unSubstance}/" +
                                 "${quantity}/" +
+                                "${substanceName}/" +
                                 "CargoOnly"
 
                     ) {
@@ -181,6 +184,7 @@ fun ShippingScreen(
                                 "${unNumber}/" +
                                 "${unSubstance}/" +
                                 "${quantity}/" +
+                                "${substanceName}/" +
                                 "ByRoad"
 
                     ) {

@@ -278,6 +278,7 @@ fun InfoBody(infoText: String) {
 
 @Composable
 fun OutlinedTextFieldComponent(
+    text:String,
     value: TextFieldValue,
     showError: Boolean,
     onValueChange: (TextFieldValue) -> Unit,
@@ -286,7 +287,7 @@ fun OutlinedTextFieldComponent(
 ) {
     OutlinedTextField(
         value = value,
-        label = { Text(text = "Quantity in mL or g") },
+        label = { Text(text = "$text") },
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
         onValueChange = onValueChange,
         keyboardActions = KeyboardActions(onDone = {
@@ -343,6 +344,7 @@ fun FormDisplay(
     modifier: Modifier = Modifier,
     onDoneAction: () -> Unit,
 ) {
+    if (leaf.category == "Category A" || leaf.category == "Category B") {
         var text by remember { mutableStateOf(TextFieldValue("")) }
         var assignedValue by remember { mutableStateOf<String?>(null) }
         var assignedSubstance by remember { mutableStateOf<String?>(null) }
@@ -350,6 +352,7 @@ fun FormDisplay(
         var showErrorsubstance by remember { mutableStateOf(false) }
         var expanded by remember { mutableStateOf(false) }
         var selectedSubstance by remember { mutableStateOf(substanceList[0]) }
+
         if (leaf.category == "Category A" && leaf.unNumber == null) {
             Spacer(modifier = Modifier.height(24.dp))
             ExposedDropdownMenuBox(expanded = expanded, onExpandedChange = {
@@ -387,13 +390,11 @@ fun FormDisplay(
                 }
 
             }
-            if(showErrorsubstance){
+            if (showErrorsubstance) {
                 ErrorMessage(message = "Substance is required")
             }
 
         }
-
-
 
         Spacer(modifier = Modifier.height(24.dp))
         Text(
@@ -401,7 +402,7 @@ fun FormDisplay(
             style = customTypography.bodyMedium,
             modifier = Modifier
         )
-        OutlinedTextFieldComponent(value = text, showError = showError, onValueChange = {
+        OutlinedTextFieldComponent(text="Quantity in mL or g",value = text, showError = showError, onValueChange = {
             text = if (it.text.isDigitsOnly()) it else text
             showError = false // Hide the error message when the user starts typing
         }, onDoneAction = {
@@ -416,12 +417,11 @@ fun FormDisplay(
         Spacer(modifier = Modifier.height(24.dp))
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             StartButton(onClick = {
-                if(leaf.category == "Category A")
-                { if(selectedSubstance.isNullOrEmpty()) {
-                    showErrorsubstance = true
-                    }
-                    else {
-                    assignedSubstance = selectedSubstance
+                if (leaf.category == "Category A") {
+                    if (selectedSubstance.isNullOrEmpty()) {
+                        showErrorsubstance = true
+                    } else {
+                        assignedSubstance = selectedSubstance
                     }
                 }
                 if (text.text.isEmpty()) {
@@ -429,55 +429,44 @@ fun FormDisplay(
                 } else {
                     assignedValue = text.text
 
-
-
                 }
-            },modifier=Modifier)
+            }, modifier = Modifier)
         }
+        if (assignedSubstance != null) {
+            val specificSubstanceName = assignedSubstance
+            val matchingElement = tableList.firstOrNull { it[0] == specificSubstanceName }
 
-    if(assignedSubstance != null){
-        val specificSubstanceName = assignedSubstance
-        val matchingElement = tableList.firstOrNull { it[0] == specificSubstanceName }
-        leaf.unNumber = matchingElement?.get(1)?.takeLast(4)?.toInt()
-        leaf.substanceName = assignedSubstance?.toString()
-    }
-
-
-
-    if (assignedValue != null) {
-        leaf.quantity = assignedValue?.toInt()
-        if(assignedSubstance == null && leaf.category=="Category A"){
-            showErrorsubstance=true
-        }
-        else{
-            if(leaf.category != "Category A"){
-        navController.navigate(
-            "${HomeNavigation.PackagingRoute}/" +
-                    "${leaf.category}/" +
-                    "${leaf.unNumber}/" +
-                    "${leaf.unSubstance}/" +
-                    "${leaf.quantity}/" +
-                    "  "
-
-        ) {
-            launchSingleTop = true
-        }
-        }
-            else{
-                navController.navigate(
-                    "${HomeNavigation.PackagingRoute}/" +
-                            "${leaf.category}/" +
-                            "${leaf.unNumber}/" +
-                            "${leaf.unSubstance}/" +
-                            "${leaf.quantity}/" +
-                            "${leaf.substanceName}"
-
-                ) {
-                    launchSingleTop = true
-                }
+            leaf.unNumber = matchingElement?.get(1)?.takeLast(4)?.toInt()
+            if(leaf.unNumber == 2814){
+                leaf.unSubstance = "Infectious Substance Affecting Humans"
             }
+            else if(leaf.unNumber == 2900){
 
-            }            }
+                leaf.unSubstance = "Infectious Substance Affecting Animals Only"
+            }
+            leaf.substanceName = assignedSubstance?.toString()
+        }
+        if (assignedValue != null) {
+            leaf.quantity = assignedValue?.toInt()
+            if (assignedSubstance == null && leaf.category == "Category A"  && leaf.unNumber == null) {
+                showErrorsubstance = true
+            }
+            else {
+                    navController.navigate(
+                        "${HomeNavigation.PackagingRoute}/" +
+                                "${leaf.category}/" +
+                                "${leaf.unNumber}/" +
+                                "${leaf.unSubstance}/" +
+                                "${leaf.quantity}/" +
+                                "${leaf.substanceName}"
+
+                    ) {
+                        launchSingleTop = true
+                    }
+                }
+
+            }
+        }
     }
 
 
@@ -553,3 +542,5 @@ fun ClickableIcon(modifier:Modifier,id:Int,description:String,onClick: () -> Uni
         modifier = modifier.clickable{onClick()}
     )
 }
+
+

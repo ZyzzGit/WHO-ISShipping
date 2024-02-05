@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -27,8 +26,7 @@ import com.example.iss_tool.database.SubstanceViewModel
 import com.example.iss_tool.theme.customColorScheme
 import com.example.iss_tool.theme.customTypography
 import com.example.iss_tool.theme.yellow_who
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.rememberUpdatedState
+
 
 
 /**
@@ -39,15 +37,6 @@ import androidx.compose.runtime.rememberUpdatedState
 @Composable
 fun ClassificationScreen(navController: NavController, modifier: Modifier, unNumber: String? = null) {
     var currentNode by remember { mutableStateOf<Any?>(classificationDecisionTree) }
-//    /**
-//    Read substances from database
-//     * **/
-//    val substanceViewModel: SubstanceViewModel = viewModel()
-//    val substances = substanceViewModel._readAllData
-//    var list by remember { mutableStateOf<List<String>>(listOf()) }
-//    substances?.forEach {
-//        list += it.substanceName.toString()
-//    }
 
     if (unNumber != null) {
         currentNode = getLeaf(unNumber)
@@ -142,13 +131,8 @@ fun ClassificationScreen(navController: NavController, modifier: Modifier, unNum
                 keyboardController?.hide()
                 }
 
-
             }
             else if(leaf.category == "Exempt Human or Animal Specimen"){
-                leaf.unNumber = 0
-                leaf.quantity = 0
-                leaf.unSubstance = "Exempt Human or Animal Specimen"
-                leaf.substanceName=" "
                 ExemptDisplay(navController = navController, leaf = leaf, modifier = Modifier)
             }
         }
