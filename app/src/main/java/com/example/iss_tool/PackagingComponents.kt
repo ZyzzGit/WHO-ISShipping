@@ -27,7 +27,7 @@ import com.example.iss_tool.theme.white
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun Triplepackagingsystem(modifier:Modifier,category:Category,ice:String){
+fun Triplepackagingsystem(modifier: Modifier, category: Category, ice: Boolean){
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -62,7 +62,7 @@ fun Triplepackagingsystem(modifier:Modifier,category:Category,ice:String){
 
         secondaryPackaging(modifier = modifier.align(Alignment.CenterHorizontally), category = category, ice = ice)
 
-        if(category == Category.B && ice == "NO"){
+        if(category == Category.B && !ice){
            categoryBNoice(modifier = modifier.align(Alignment.CenterHorizontally), category = category, ice = ice)
         }
         Spacer(Modifier.height(8.dp))
@@ -73,12 +73,12 @@ fun Triplepackagingsystem(modifier:Modifier,category:Category,ice:String){
         categoryAapproval(modifier = modifier.align(Alignment.CenterHorizontally), category = category, ice = ice)
         }
         Spacer(Modifier.height(8.dp))
-        if(category == Category.Exempt && ice == "YES"){
+        if(category == Category.Exempt && ice){
 
         }
         else{
             packaging2To3(modifier = modifier.align(Alignment.CenterHorizontally), category = category, ice = ice)}
-        if(ice =="YES"){
+        if(ice){
             icePackaging(modifier = modifier.align(Alignment.CenterHorizontally), category = category, ice = ice)
 
         }
@@ -92,7 +92,7 @@ fun Triplepackagingsystem(modifier:Modifier,category:Category,ice:String){
 
 
 @Composable
-fun primaryReceptable(modifier: Modifier,category:Category,ice:String){
+fun primaryReceptable(modifier: Modifier,category:Category,ice:Boolean){
     Box(
         Modifier
             .fillMaxWidth()
@@ -104,7 +104,7 @@ fun primaryReceptable(modifier: Modifier,category:Category,ice:String){
             Text("1. PRIMARY RECEPTABLE",style= customTypography.bodyMedium)
             Text("- It shall be leakproof;" ,
                 Modifier.align(Alignment.Start),style= customTypography.bodySmall)
-            if(ice == "YES" && category != Category.Exempt){
+            if(ice && category != Category.Exempt){
                 Text("- It shall maintain its integrity at the temperature of dry ice;" ,
                     Modifier.align(Alignment.Start),style= customTypography.bodySmall)
             }
@@ -129,7 +129,7 @@ fun primaryReceptable(modifier: Modifier,category:Category,ice:String){
 
 
 @Composable
-fun primaryReceptableEssentials(modifier: Modifier,category:Category,ice:String){
+fun primaryReceptableEssentials(modifier: Modifier,category:Category,ice:Boolean){
     Box(
         Modifier
             .fillMaxWidth()
@@ -150,7 +150,7 @@ fun primaryReceptableEssentials(modifier: Modifier,category:Category,ice:String)
 }
 
 @Composable
-fun secondaryPackaging(modifier: Modifier,category:Category,ice:String){
+fun secondaryPackaging(modifier: Modifier,category:Category,ice:Boolean){
     Box(
         Modifier
             .fillMaxWidth()
@@ -162,7 +162,7 @@ fun secondaryPackaging(modifier: Modifier,category:Category,ice:String){
             Text("2. SECONDARY PACKAGING",style= customTypography.bodyMedium)
             Text("- It shall be leakproof;",
                 Modifier.align(Alignment.Start),style= customTypography.bodySmall)
-            if(ice == "YES" && category != Category.Exempt){
+            if(ice && category != Category.Exempt){
                 Text("- It shall maintain its integrity at the temperature of dry ice;" ,
                     Modifier.align(Alignment.Start),style= customTypography.bodySmall)
             }
@@ -184,7 +184,7 @@ fun secondaryPackaging(modifier: Modifier,category:Category,ice:String){
 }
 
 @Composable
-fun categoryBNoice(modifier: Modifier,category:Category,ice:String){
+fun categoryBNoice(modifier: Modifier,category:Category,ice:Boolean){
     Spacer(Modifier.height(8.dp))
     Box(
         Modifier
@@ -205,7 +205,7 @@ fun categoryBNoice(modifier: Modifier,category:Category,ice:String){
 }
 
 @Composable
-fun outerPackaging(modifier: Modifier,category:Category,ice:String){
+fun outerPackaging(modifier: Modifier,category:Category,ice:Boolean){
     Box(
         Modifier
             .fillMaxWidth()
@@ -231,7 +231,7 @@ fun outerPackaging(modifier: Modifier,category:Category,ice:String){
 }
 
 @Composable
-fun categoryAapproval(modifier: Modifier,category:Category,ice:String){
+fun categoryAapproval(modifier: Modifier,category:Category,ice:Boolean){
     Spacer(Modifier.height(8.dp))
     Box(
         Modifier
@@ -250,7 +250,7 @@ fun categoryAapproval(modifier: Modifier,category:Category,ice:String){
 }
 
 @Composable
-fun packaging2To3(modifier: Modifier,category:Category,ice:String){
+fun packaging2To3(modifier: Modifier,category:Category,ice:Boolean){
     Spacer(Modifier.height(8.dp))
     Box(
         Modifier
@@ -266,7 +266,7 @@ fun packaging2To3(modifier: Modifier,category:Category,ice:String){
                         "If the packaging is not approved 4GU/CLASS 6.2..., you must verify that your packaging is the same as the prototype tested.",
                     Modifier.align(Alignment.Start),style= customTypography.bodySmall)
             }
-            else if(category == Category.B && ice == "NO"){
+            else if(category == Category.B && !ice){
                 Text("Put the suitable cushioning material and the secondary packaging into the outer packaging\n" +
                         "An itemized list of contents shall be enclosed between the secondary container and outer packaging.\n" +
                         "Close the Outer packaging",
@@ -287,7 +287,7 @@ fun packaging2To3(modifier: Modifier,category:Category,ice:String){
 
 
 @Composable
-fun icePackaging(modifier: Modifier,category:Category,ice:String){
+fun icePackaging(modifier: Modifier,category:Category,ice:Boolean){
     Spacer(Modifier.height(8.dp))
     Box(
         Modifier
@@ -373,7 +373,7 @@ fun icePackaging(modifier: Modifier,category:Category,ice:String){
 }
 
 @Composable
-fun additionalBpackaging(modifier: Modifier,category:Category,ice:String){
+fun additionalBpackaging(modifier: Modifier,category:Category,ice:Boolean){
     Spacer(Modifier.height(8.dp))
     Box(
         Modifier

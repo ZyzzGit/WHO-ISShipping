@@ -30,8 +30,7 @@ fun ShippingInformationScreen(
     quantity: Int?,
     substanceName: String?,  // only provided for Category A
     shippingMethod: ShippingMethod,
-    ice:String,
-    iceQuantity:Int?
+    iceQuantity: Int
 ) {
     Column(
         modifier = modifier
@@ -155,7 +154,6 @@ fun ShippingInformationScreen(
                                 "${receiverAddress}/"+
                                 "${responsibleName}/"+
                                 "${responsiblePhone}/"+
-                                "${ice}/"+
                                 "$iceQuantity"
 
                     ) {

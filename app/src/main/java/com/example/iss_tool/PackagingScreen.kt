@@ -35,8 +35,7 @@ fun PackagingScreen(
     unSubstance: UnSubstance?,
     quantity: Int?,
     substanceName:String?,
-    ice:String?,
-    iceQuantity:Int?
+    iceQuantity:Int
 ) {
 
     Column(
@@ -86,8 +85,7 @@ fun PackagingScreen(
                                        "${quantity}/"+
                                        "${substanceName}/"+
                                        "CargoOnly/"+
-                                        "${ice}/"+
-                                       "${iceQuantity}"
+                                       "$iceQuantity"
 
                            ) {
                                launchSingleTop = true
@@ -102,8 +100,7 @@ fun PackagingScreen(
                                        "${quantity}/"+
                                        "${substanceName}/"+
                                        "ByRoad/"+
-                                       "${ice}/"+
-                                       "${iceQuantity}"
+                                       "$iceQuantity"
                            ) {
                                launchSingleTop = true
                            }
@@ -116,8 +113,7 @@ fun PackagingScreen(
                                        "${unSubstance}/" +
                                        "${quantity}/"+
                                        "${substanceName}/"+
-                                       "${ice}/"+
-                                       "${iceQuantity}"
+                                       "$iceQuantity"
 
                            ) {
                                launchSingleTop = true
@@ -134,8 +130,7 @@ fun PackagingScreen(
                                        "${quantity}/"+
                                        "${substanceName}/"+
                                        "ByRoad/"+
-                                       "${ice}/"+
-                                       "${iceQuantity}"
+                                       "$iceQuantity"
                            ) {
                                launchSingleTop = true
                            }
@@ -148,8 +143,7 @@ fun PackagingScreen(
                                    "${unSubstance}/" +
                                    "${quantity}/"+
                                    "${substanceName}/"+
-                                   "${ice}/"+
-                                   "${iceQuantity}"
+                                   "$iceQuantity"
 
                        ) {
                            launchSingleTop = true
@@ -163,8 +157,7 @@ fun PackagingScreen(
                                    "${unSubstance}/" +
                                    "${quantity}/"+
                                    "${substanceName}/"+
-                                   "${ice}/"+
-                                   "${iceQuantity}"
+                                   "$iceQuantity"
 
                        ) {
                            launchSingleTop = true
@@ -182,7 +175,7 @@ fun PackagingScreen(
                     .padding(bottom = 10.dp, start = 10.dp, end = 10.dp)
             ) {
 
-                Triplepackagingsystem(Modifier,category,ice!!)
+                Triplepackagingsystem(Modifier,category,iceQuantity > 0)
 
             }
 

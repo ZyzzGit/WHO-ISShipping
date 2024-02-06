@@ -37,8 +37,7 @@ fun ShippingScreen(
     unSubstance: UnSubstance,
     quantity: Int?,
     substanceName:String?,
-    ice:String?,
-    iceQuantity:Int?
+    iceQuantity:Int
 ){
     Column(
         modifier = modifier
@@ -117,8 +116,7 @@ fun ShippingScreen(
                                 "${quantity}/" +
                                 "${substanceName}/" +
                                 "Passenger/"+
-                                "${ice}/"+
-                                "${iceQuantity}"
+                                "$iceQuantity"
 
                     ) {
                         launchSingleTop = true
@@ -149,8 +147,7 @@ fun ShippingScreen(
                                 "${quantity}/" +
                                 "${substanceName}/" +
                                 "CargoOnly/"+
-                                "${ice}/"+
-                                "${iceQuantity}"
+                                "$iceQuantity"
 
                     ) {
                         launchSingleTop = true
@@ -183,8 +180,7 @@ fun ShippingScreen(
                                 "${quantity}/" +
                                 "${substanceName}/" +
                                 "ByRoad/"+
-                                "${ice}/"+
-                                "${iceQuantity}"
+                                "$iceQuantity"
 
                     ) {
                         launchSingleTop = true

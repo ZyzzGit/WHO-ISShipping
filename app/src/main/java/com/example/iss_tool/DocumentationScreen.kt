@@ -49,7 +49,7 @@ fun DocumentationScreen(
     unNumber: Int?,
     unSubstance: UnSubstance,
     quantity: Int?,
-    ice: Int?,
+    iceQuantity: Int,
     shippingMethod: ShippingMethod,
     shipperName: String,
     shipperAddress: String,
@@ -77,7 +77,7 @@ fun DocumentationScreen(
         if (category == Category.A || unNumber == 3291) {
             LaunchedEffect(Unit) {
                 documentDGTD = getFilledDangerousGoodDeclaration(
-                    context, category, unNumber, unSubstance, quantity!!, ice!!, shippingMethod, shipperName, shipperAddress, receiverName, receiverAddress, substanceName, responsibleName, responsiblePhone
+                    context, category, unNumber, unSubstance, quantity, iceQuantity, shippingMethod, shipperName, shipperAddress, receiverName, receiverAddress, substanceName, responsibleName, responsiblePhone
                 )
             }
         }
@@ -139,8 +139,8 @@ private fun getFilledDangerousGoodDeclaration(
     category: Category,
     unNumber: Int?,
     unSubstance: UnSubstance,
-    quantity: Int,
-    ice: Int?,
+    quantity: Int?,
+    iceQuantity: Int,
     shippingMethod: ShippingMethod,
     shipperName: String,
     shipperAddress: String,
@@ -186,7 +186,7 @@ private fun getFilledDangerousGoodDeclaration(
         un.value = "UN\n${unNumber ?: '-'}"
         shippingName.value = unSubstance.toString()
         classDivision.value = "6.2"
-        quantityAndPackagingType.value = "${quantity}ml"
+        quantityAndPackagingType.value = if (quantity != null) "${quantity}ml" else "-"
         packagingInstructions.value = "620"
         signatoryName.value = shipperName
         signatureDate.value = LocalDate.now().toString()
@@ -214,11 +214,11 @@ private fun getFilledDangerousGoodDeclaration(
         }
 
         // Fill extra row when shipping with ice
-        if (ice!! > 0) {
+        if (iceQuantity > 0) {
             un.value = un.value + "\n\n\nUN\n1845"
             shippingName.value = shippingName.value + "\n\n\nDry ice"
             classDivision.value = classDivision.value + "\n\n\n\n9"
-            quantityAndPackagingType.value = quantityAndPackagingType.value + "\n\n\n\n${ice}kg"
+            quantityAndPackagingType.value = quantityAndPackagingType.value + "\n\n\n\n${iceQuantity}kg"
             packagingInstructions.value = packagingInstructions.value + "\n\n\n\n954"
         }
 
@@ -267,7 +267,7 @@ fun DocumentationScreenPreview() {
         unNumber = 2814,
         unSubstance = UnSubstance.ISHumans,
         quantity = 42,
-        ice = 17,
+        iceQuantity = 17,
         shippingMethod = ShippingMethod.Passenger,
         shipperName = "Nico",
         shipperAddress = "Examplestreet 7",

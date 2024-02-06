@@ -41,8 +41,7 @@ fun LabelsMarksScreen(
     receiverAddress: String,
     responsibleName: String?,
     responsiblePhone: String?,
-    ice: String,
-    iceQuantity: Int?
+    iceQuantity: Int
 
     ){
     Column(
@@ -66,7 +65,7 @@ fun LabelsMarksScreen(
         var shipping_name:Boolean = false
         var shipping_number:Boolean = false
 
-        if(ice=="YES"){
+        if(iceQuantity > 0){
             dry_ice_label = true
             dangerous_goods = true
         }
@@ -132,7 +131,7 @@ fun LabelsMarksScreen(
                                 "${receiverAddress}/" +
                                 "${substanceName}/" +
                                 "${responsibleName}/" +
-                                "${responsiblePhone}"
+                                "$responsiblePhone"
 
                     ) {
                         launchSingleTop = true
@@ -155,7 +154,7 @@ fun LabelsMarksScreen(
     }
         Spacer(modifier = Modifier.height(5.dp))
     if(receiver_info){
-        InfoBox(modifier = Modifier, title = "RECEIVER", name ="$receiverName" , address ="$receiverAddress" )
+        InfoBox(modifier = Modifier, title = "RECEIVER", name = receiverName, address = receiverAddress)
     }
         Spacer(modifier = Modifier.height(5.dp))
     if(responsible_info){
@@ -279,7 +278,7 @@ fun LabelsMarksScreen(
                         "${unNumber}/" +
                         "${unSubstance}/" +
                         "$quantity/" +
-                        "${ice}/" +
+                        "${iceQuantity}/" +
                         "${shippingMethod}//" +
                         "${shipperName}/" +
                         "${shipperAddress}/" +

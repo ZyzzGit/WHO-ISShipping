@@ -411,7 +411,7 @@ fun FormDisplay(
         if (showError) {
             ErrorMessage("Quantity is required!", modifier = modifier)
         }
-        var selectedOption by remember { mutableStateOf<IceOption?>(IceOption.Option2) }
+        var selectedOption by remember { mutableStateOf<IceOption?>(IceOption.No) }
         Spacer(modifier = Modifier.height(24.dp))
         Box(
             modifier = Modifier
@@ -426,17 +426,17 @@ fun FormDisplay(
             ) {
                 Text("Are you using Ice as Refrigerant?")
                 OptionRadioButton(
-                    option = IceOption.Option1,
+                    option = IceOption.Yes,
                     selectedOption = selectedOption,
                     onOptionSelected = { selectedOption = it }
                 )
                 OptionRadioButton(
-                    option = IceOption.Option2,
+                    option = IceOption.No,
                     selectedOption = selectedOption,
                     onOptionSelected = { selectedOption = it }
                 )
 
-                if (selectedOption == IceOption.Option1) {
+                if (selectedOption == IceOption.Yes) {
 
                     // Display quantity  box when yes is selected
                     OutlinedTextFieldComponent(text="Quantity in Kg",value = text2, showError = showError2, onValueChange = {
@@ -491,7 +491,7 @@ fun FormDisplay(
                 showErrorsubstance = true
             }
             else {
-                if(selectedOption == IceOption.Option2){
+                if(selectedOption == IceOption.No){
                     navController.navigate(
                         "${HomeNavigation.PackagingRoute}/" +
                                 "${leaf.category}/" +
@@ -499,7 +499,6 @@ fun FormDisplay(
                                 "${leaf.unSubstance}/" +
                                 "${leaf.quantity}/" +
                                 "${leaf.substanceName}/"+
-                                "${selectedOption?.text}/"
                                 +0
 
                     ) {
@@ -518,8 +517,7 @@ fun FormDisplay(
                                     "${leaf.unSubstance}/" +
                                     "${leaf.quantity}/" +
                                     "${leaf.substanceName}/"+
-                                    "${selectedOption?.text}/"
-                                    +"${assignedValue2}"
+                                    "${assignedValue2!!.toInt()}"
 
                         ) {
                             launchSingleTop = true
@@ -591,7 +589,7 @@ fun ExemptDisplay(navController: NavController,
     var text2 by remember { mutableStateOf(TextFieldValue("")) }
     var showError2 by remember { mutableStateOf(false) }
     val keyboardController = LocalSoftwareKeyboardController.current
-    var selectedOption by remember { mutableStateOf<IceOption?>(IceOption.Option2) }
+    var selectedOption by remember { mutableStateOf<IceOption?>(IceOption.No) }
     var assignedValue2 by remember { mutableStateOf<String?>(null) }
     Spacer(modifier = Modifier.height(24.dp))
     Box(
@@ -607,17 +605,17 @@ fun ExemptDisplay(navController: NavController,
         ) {
             Text("Are you using Ice as Refrigerant?")
             OptionRadioButton(
-                option = IceOption.Option1,
+                option = IceOption.Yes,
                 selectedOption = selectedOption,
                 onOptionSelected = { selectedOption = it }
             )
             OptionRadioButton(
-                option = IceOption.Option2,
+                option = IceOption.No,
                 selectedOption = selectedOption,
                 onOptionSelected = { selectedOption = it }
             )
 
-            if (selectedOption == IceOption.Option1) {
+            if (selectedOption == IceOption.Yes) {
 
                 // Display quantity  box when yes is selected
                 OutlinedTextFieldComponent(text="Quantity in Kg",value = text2, showError = showError2, onValueChange = {
@@ -635,7 +633,7 @@ fun ExemptDisplay(navController: NavController,
         }
     }
     StartButton(onClick = {
-        if(selectedOption == IceOption.Option2){
+        if(selectedOption == IceOption.No){
             navController.navigate(
                 "${HomeNavigation.PackagingRoute}/" +
                         "${leaf.category}/" +
@@ -644,7 +642,7 @@ fun ExemptDisplay(navController: NavController,
                         "${leaf.quantity}/" +
                         "${leaf.substanceName}/"+
                         "${selectedOption?.text}/"
-                        +0
+                        +"${0}"
 
             ) {
                 launchSingleTop = true
@@ -663,7 +661,7 @@ fun ExemptDisplay(navController: NavController,
                             "${leaf.quantity}/" +
                             "${leaf.substanceName}/"+
                             "${selectedOption?.text}/"
-                            +"${assignedValue2}"
+                            +"${assignedValue2!!.toInt()}"
 
                 ) {
                     launchSingleTop = true

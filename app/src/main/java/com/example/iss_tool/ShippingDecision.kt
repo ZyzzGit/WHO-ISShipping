@@ -29,8 +29,7 @@ fun ShippingDecision(
     quantity: Int?,
     substanceName: String?,
     shippingMethod: String,
-    ice:String?,
-    iceQuantity:Int?
+    iceQuantity: Int
 ){
     Column(
         modifier = modifier
@@ -78,8 +77,7 @@ fun ShippingDecision(
                                 "${quantity}/" +
                                 "${substanceName}/"+
                                 "${shippingMethod}/"+
-                                "${ice}/"+
-                                "${iceQuantity}"
+                                "$iceQuantity"
 
                     ) {
                         launchSingleTop = true
