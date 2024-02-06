@@ -1,13 +1,16 @@
 package com.example.iss_tool
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material3.MaterialTheme
@@ -46,10 +49,7 @@ fun LabelsMarksScreen(
         modifier = modifier
             .padding(24.dp)
             .fillMaxWidth(),
-//            .fillMaxHeight()
-//            .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally,
-//        verticalArrangement = Arrangement.SpaceEvenly
     ) {
         var shipper_info : Boolean = false
         var receiver_info : Boolean =  false
@@ -100,8 +100,46 @@ fun LabelsMarksScreen(
             }
             else -> { throw Exception("Argument exception: Category.$category is not handled by LabelsMarksScreen.")}
         }
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 5.dp),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text("MARKS AND LABELS",
+                Modifier.weight(1f)
+                .wrapContentWidth(Alignment.CenterHorizontally),
+                style= customTypography.bodyMedium,
+                color = primary_navy_blue)
+            ClickableIcon(
+                modifier = Modifier.align(Alignment.CenterVertically),
+                id = R.drawable.arrow_forward,
+                description = "documentation"
+            )
+            {
+                navController.navigate(
+                    "${HomeNavigation.DocumentationRoute}/" +
+                            "${category}/" +
+                            "${unNumber}/" +
+                            "${unSubstance}/" +
+                            "${quantity}/" +
+                            "${iceQuantity}/"+
+                            "${shippingMethod}/"+
+                            "${shipperName}/"+
+                            "${shipperAddress}/"+
+                            "${receiverName}/"+
+                            "${receiverAddress}/"+
+                            "${substanceName}/"+
+                            "${responsibleName}/"+
+                            "${responsiblePhone}"
 
-    Text("MARKS AND LABELS",style= customTypography.bodyMedium, color = primary_navy_blue)
+                ) {
+                    launchSingleTop = true
+                }
+            }
+
+        }
+
         Spacer(modifier = Modifier.height(5.dp))
         if(shipping_name_number){
             InfoBox(Modifier,"$unSubstance\n UN $unNumber","","")

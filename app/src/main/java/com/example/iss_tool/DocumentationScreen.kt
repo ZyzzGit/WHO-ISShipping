@@ -48,8 +48,8 @@ fun DocumentationScreen(
     category: Category,
     unNumber: Int?,
     unSubstance: UnSubstance,
-    quantity: Int,
-    ice: Int,
+    quantity: Int?,
+    ice: Int?,
     shippingMethod: ShippingMethod,
     shipperName: String,
     shipperAddress: String,
@@ -64,7 +64,7 @@ fun DocumentationScreen(
             .fillMaxHeight(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(text = "Documentation", style = customTypography.displaySmall, color = customColorScheme.primary)
+        Text(text = "Documentation", style = customTypography.bodyLarge, color = customColorScheme.primary)
         val context = LocalContext.current
         val root = context.cacheDir
 
@@ -77,7 +77,7 @@ fun DocumentationScreen(
         if (category == Category.A || unNumber == 3291) {
             LaunchedEffect(Unit) {
                 documentDGTD = getFilledDangerousGoodDeclaration(
-                    context, category, unNumber, unSubstance, quantity, ice, shippingMethod, shipperName, shipperAddress, receiverName, receiverAddress, substanceName, responsibleName, responsiblePhone
+                    context, category, unNumber, unSubstance, quantity!!, ice!!, shippingMethod, shipperName, shipperAddress, receiverName, receiverAddress, substanceName, responsibleName, responsiblePhone
                 )
             }
         }
@@ -107,7 +107,7 @@ fun DocumentationScreen(
             onClick = {
                 try {
                     val renderer = PDFRenderer(documentDGTD)
-                    pageImage = renderer.renderImage(0, 1f, ImageType.RGB);
+                    pageImage = renderer.renderImage(0, 1f, ImageType.RGB)
                 } catch (error: Throwable) {
                     throw Error("Could not render pdf: $error")
                 }

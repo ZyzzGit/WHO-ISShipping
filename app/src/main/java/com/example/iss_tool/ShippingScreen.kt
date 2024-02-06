@@ -2,7 +2,6 @@ package com.example.iss_tool
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,30 +13,20 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.wrapContentWidth
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.iss_tool.theme.black
-import com.example.iss_tool.theme.blue_who
 import com.example.iss_tool.theme.customColorScheme
 import com.example.iss_tool.theme.customShapes
 import com.example.iss_tool.theme.customTypography
-import com.example.iss_tool.theme.grey_who
 import com.example.iss_tool.theme.orange_who
-import com.example.iss_tool.theme.white
 
 @Composable
 fun ShippingScreen(
@@ -47,7 +36,9 @@ fun ShippingScreen(
     unNumber: Int?,
     unSubstance: UnSubstance,
     quantity: Int?,
-    substanceName:String?
+    substanceName:String?,
+    ice:String?,
+    iceQuantity:Int?
 ){
     Column(
         modifier = modifier
@@ -125,7 +116,9 @@ fun ShippingScreen(
                                 "${unSubstance}/" +
                                 "${quantity}/" +
                                 "${substanceName}/" +
-                                "Passenger"
+                                "Passenger/"+
+                                "${ice}/"+
+                                "${iceQuantity}"
 
                     ) {
                         launchSingleTop = true
@@ -155,7 +148,9 @@ fun ShippingScreen(
                                 "${unSubstance}/" +
                                 "${quantity}/" +
                                 "${substanceName}/" +
-                                "CargoOnly"
+                                "CargoOnly/"+
+                                "${ice}/"+
+                                "${iceQuantity}"
 
                     ) {
                         launchSingleTop = true
@@ -187,7 +182,9 @@ fun ShippingScreen(
                                 "${unSubstance}/" +
                                 "${quantity}/" +
                                 "${substanceName}/" +
-                                "ByRoad"
+                                "ByRoad/"+
+                                "${ice}/"+
+                                "${iceQuantity}"
 
                     ) {
                         launchSingleTop = true

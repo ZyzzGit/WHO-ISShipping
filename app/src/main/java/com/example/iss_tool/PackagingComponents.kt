@@ -138,7 +138,7 @@ import com.example.iss_tool.theme.white
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun Triplepackagingsystem(modifier:Modifier,category:Category,ice:Boolean){
+fun Triplepackagingsystem(modifier:Modifier,category:Category,ice:String){
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -167,6 +167,10 @@ fun Triplepackagingsystem(modifier:Modifier,category:Category,ice:Boolean){
                 Text("1. PRIMARY RECEPTABLE",style= customTypography.bodyMedium)
                 Text("- It shall be leakproof;" ,
                     Modifier.align(Alignment.Start),style= customTypography.bodySmall)
+                if(ice == "YES"){
+                    Text("- It shall maintain its integrity at the temperature of dry ice;" ,
+                        Modifier.align(Alignment.Start),style= customTypography.bodySmall)
+                }
                 if(category == Category.A){
                     Text("- It shall be of glass,metal or plastics;\n" +
                             "- Positive means of ensuring a leakproof seal shall be provided, i.e. a heat seal. a skirted stopper or a metal crimp steal. If screw caps are used, they should be secured by positive means, i.e. tape,paraffin sealing tape or manufactured locking closure.\n" +
@@ -202,6 +206,10 @@ fun Triplepackagingsystem(modifier:Modifier,category:Category,ice:Boolean){
                 Text("2. SECONDARY PACKAGING",style= customTypography.bodyMedium)
                 Text("- It shall be leakproof;",
                     Modifier.align(Alignment.Start),style= customTypography.bodySmall)
+                if(ice == "YES"){
+                    Text("- It shall maintain its integrity at the temperature of dry ice;" ,
+                        Modifier.align(Alignment.Start),style= customTypography.bodySmall)
+                }
                 if(category == Category.A){
                     Text("Whatever the intended temperature of the consignment, the primary receptacle OR the secondary packaging must be capable of withstanding a pressure differential of not less than 95kPA (0.95 bar), as well astemperatures in the range of -40°C to +55°C." ,
                         Modifier.align(Alignment.Start),style= customTypography.bodySmall)
@@ -217,7 +225,7 @@ fun Triplepackagingsystem(modifier:Modifier,category:Category,ice:Boolean){
                 alignment = Alignment.Center
             )}
         }
-        if(category == Category.B){
+        if(category == Category.B && ice == "NO"){
             Spacer(Modifier.height(8.dp))
             Box(Modifier.fillMaxWidth().align(Alignment.CenterHorizontally).background(white)){
                 Column(Modifier.fillMaxWidth().padding(5.dp), horizontalAlignment = Alignment.CenterHorizontally){
@@ -266,12 +274,13 @@ fun Triplepackagingsystem(modifier:Modifier,category:Category,ice:Boolean){
                             "If the packaging is not approved 4GU/CLASS 6.2..., you must verify that your packaging is the same as the prototype tested.",
                         Modifier.align(Alignment.Start),style= customTypography.bodySmall)
                 }
-                else if(category == Category.B){
+                else if(category == Category.B && ice == "NO"){
                     Text("Put the suitable cushioning material and the secondary packaging into the outer packaging\n" +
                             "An itemized list of contents shall be enclosed between the secondary container and outer packaging.\n" +
                             "Close the Outer packaging",
                         Modifier.align(Alignment.Start),style= customTypography.bodySmall)
                 }
+
                 else {
                 Text("Put the secondary packaging into the outer packaging",
                     Modifier.align(Alignment.Start),style= customTypography.bodySmall)}
@@ -280,6 +289,68 @@ fun Triplepackagingsystem(modifier:Modifier,category:Category,ice:Boolean){
                 contentDescription = "packaging",
                 alignment = Alignment.Center
             )}
+        }
+        if(ice =="YES"){
+        Spacer(Modifier.height(8.dp))
+        Box(Modifier.fillMaxWidth().align(Alignment.CenterHorizontally).background(white)){
+            Column(Modifier.fillMaxWidth().padding(5.dp), horizontalAlignment = Alignment.CenterHorizontally){
+                Text("POLYSTRENE BOX",style= customTypography.bodyMedium)
+                Text("The polystrene permit the release of carbon dioxide gas to prevent to build-up pressure that could rupture the packagings.",
+                    Modifier.align(Alignment.Start),style= customTypography.bodySmall)
+                Image(
+                painter = painterResource(R.drawable.polystrene_box),
+                contentDescription = "packaging",
+                alignment = Alignment.Center
+            )}
+        }
+        Spacer(Modifier.height(8.dp))
+        Box(Modifier.fillMaxWidth().align(Alignment.CenterHorizontally).background(white)){
+            Column(Modifier.fillMaxWidth().padding(5.dp), horizontalAlignment = Alignment.CenterHorizontally){
+                if(category == Category.A){
+                Text("Put the marked and labelled package in the polystrene box. ",
+                    Modifier.align(Alignment.Start),style= customTypography.bodySmall)}
+                Text("Interior supports shall be provided to secure the package in the original position after dry ice, inserted into free spaces, has dissipated.",
+                    Modifier.align(Alignment.Start),style= customTypography.bodySmall)
+
+                Image(
+                painter = painterResource(R.drawable.ice_box),
+                contentDescription = "packaging",
+                alignment = Alignment.Center
+            )}
+
+
+        }
+           if(category == Category.A){
+            Spacer(Modifier.height(8.dp))
+                Box(Modifier.fillMaxWidth().align(Alignment.CenterHorizontally).background(white)){
+                    Column(Modifier.fillMaxWidth().padding(5.dp), horizontalAlignment = Alignment.CenterHorizontally){
+                        Text("Put the Polystrene box containing the fibreboard box UN approved class 6.2(4GU) properly fixed in an overpack.\n" +
+                                "Close the overpack (outer fibreboard box) that shall be labelled and marked as an overpack.",
+                            Modifier.align(Alignment.Start),style= customTypography.bodySmall)
+                        Image(
+                        painter = painterResource(R.drawable.ice_box_a),
+                        contentDescription = "packaging",
+                        alignment = Alignment.Center
+                    )}
+                }
+           }
+            if(category == Category.B){
+                Spacer(Modifier.height(8.dp))
+                Box(Modifier.fillMaxWidth().align(Alignment.CenterHorizontally).background(white)){
+                    Column(Modifier.fillMaxWidth().padding(5.dp), horizontalAlignment = Alignment.CenterHorizontally){
+                        Text("Put the polysterene box and the secondary packaging properly fixed in the outer packaging."+
+                                "An itemized list of contents shall be enclosed between the secondary container and outer packaging.\n" +
+                                "Close the outer packaging",
+                            Modifier.align(Alignment.Start),style= customTypography.bodySmall)
+                        Image(
+                            painter = painterResource(R.drawable.ice_box_a),
+                            contentDescription = "packaging",
+                            alignment = Alignment.Center
+                        )}
+                }
+            }
+
+
         }
         if(category == Category.B){
         Spacer(Modifier.height(8.dp))
@@ -299,3 +370,5 @@ fun Triplepackagingsystem(modifier:Modifier,category:Category,ice:Boolean){
 
     }
 }
+
+
