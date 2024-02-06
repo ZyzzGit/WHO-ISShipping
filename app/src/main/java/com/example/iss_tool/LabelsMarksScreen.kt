@@ -111,7 +111,7 @@ fun LabelsMarksScreen(
                 .wrapContentWidth(Alignment.CenterHorizontally),
                 style= customTypography.bodyMedium,
                 color = primary_navy_blue)
-            if(category == Category.A) {
+
                 ClickableIcon(
                     modifier = Modifier.align(Alignment.CenterVertically),
                     id = R.drawable.arrow_forward,
@@ -137,7 +137,7 @@ fun LabelsMarksScreen(
                     ) {
                         launchSingleTop = true
                     }
-                }
+
             }
         }
 

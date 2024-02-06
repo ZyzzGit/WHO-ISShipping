@@ -269,7 +269,7 @@ fun NavGraphBuilder.homeGraph(navController: NavHostController, modifier: Modifi
                 category = category!!,
                 unNumber = unNumber,
                 unSubstance = unSubstance!!,
-                quantity = quantity!!,
+                quantity = quantity,
                 ice = ice!!,
                 shippingMethod = shippingMethod!!,
                 shipperName = shipperName!!,
