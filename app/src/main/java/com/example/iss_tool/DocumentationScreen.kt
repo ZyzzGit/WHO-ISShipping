@@ -1,17 +1,26 @@
 package com.example.iss_tool
 
+import android.app.Activity
 import android.content.ContentValues
 import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Environment
 import android.provider.MediaStore
+import android.view.View
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Snackbar
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -60,18 +69,18 @@ fun DocumentationScreen(
     Column(
         modifier = modifier
             .padding(24.dp)
-            .fillMaxWidth()
-            .fillMaxHeight(),
-        horizontalAlignment = Alignment.CenterHorizontally
+            .fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.SpaceEvenly
+
     ) {
         Text(text = "Documentation", style = customTypography.bodyLarge, color = customColorScheme.primary)
         val context = LocalContext.current
-        val root = context.cacheDir
 
         var documentDGTD: PDDocument? by remember { mutableStateOf(null) }
         var status by remember { mutableStateOf("") }
 
-        var pageImage: Bitmap? by remember { mutableStateOf(null) }
+        //var pageImage: Bitmap? by remember { mutableStateOf(null) }
 
         // Dangerous goods declaration required only for category A substances and biological/clinical/medical wastes (UN 3291)
         if (category == Category.A || unNumber == 3291) {
@@ -88,9 +97,9 @@ fun DocumentationScreen(
                     try {
                         val fileName = "FilledDGTD.pdf"
                         documentDGTD!!.isAllSecurityToBeRemoved = true
-                        downloadPdf(context, fileName, documentDGTD!!)
+                        val path = downloadPdf(context, fileName, documentDGTD!!)
                         documentDGTD!!.close()
-                        status = "Saved filled DGTD to downloads/$fileName"
+                        status = "Saved to ${path.substring(path.lastIndexOf('/', path.lastIndexOf('/')))}" // Only display the relevant part, that is Download(s)/filename
                     } catch (error: Throwable) {
                         status = "Download failed: $error"
                     }
@@ -102,7 +111,7 @@ fun DocumentationScreen(
             }
         }
 
-        if (documentDGTD != null && !documentDGTD!!.document.isClosed) {
+        /*if (documentDGTD != null && !documentDGTD!!.document.isClosed) {
             OutlinedButton(
             onClick = {
                 try {
@@ -126,10 +135,16 @@ fun DocumentationScreen(
                 modifier.fillMaxWidth(),
                 contentScale = ContentScale.Crop
             )
+        }*/
+
+        InfoBody(infoText = "Always check if there is any state variation and/or operator variations")
+
+        if (status != "") {
+            val snackbarHostState = LocalSnackbarHostState.current
+            LaunchedEffect(status) {
+                snackbarHostState.showSnackbar(status, duration = SnackbarDuration.Short)
+            }
         }
-
-        Text(text = status, style = customTypography.bodySmall)
-
     }
 }
 
@@ -232,7 +247,7 @@ private fun getFilledDangerousGoodDeclaration(
 }
 
 
-fun downloadPdf(context: Context, fileName: String, document: PDDocument) {
+fun downloadPdf(context: Context, fileName: String, document: PDDocument): String {
     val byteArrayOutputStream = ByteArrayOutputStream()
     document.save(byteArrayOutputStream)
 
@@ -246,13 +261,28 @@ fun downloadPdf(context: Context, fileName: String, document: PDDocument) {
     val uri: Uri? = resolver.insert(MediaStore.Files.getContentUri("external"), contentValues)
 
     uri?.let { outputFileUri ->
+        // Write to downloads folder
         context.contentResolver.openOutputStream(outputFileUri).use { outputStream ->
             outputStream?.write(byteArrayOutputStream.toByteArray())
             outputStream?.flush()
         }
-    }
 
-    print("uri: $uri")
+        // Get the file path from the URI
+        val cursor = context.contentResolver.query(outputFileUri, null, null, null, null)
+        cursor?.use {
+            if (it.moveToFirst()) {
+                val columnIndex = it.getColumnIndex(MediaStore.MediaColumns.DATA)
+                if (columnIndex != -1) {
+                    return it.getString(columnIndex) // Return the file path pdf was stored to
+                }
+            }
+        }
+        // If URI or file path retrieval fails
+        throw IllegalStateException("downloadPdf: Failed to retrieve file path from URI: $outputFileUri")
+    }
+    // If URI is null
+    throw IllegalStateException("downloadPdf: Failed to insert file into MediaStore")
+
 }
 
 

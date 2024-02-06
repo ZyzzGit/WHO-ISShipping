@@ -379,6 +379,25 @@ fun HomeScreen(navController: NavHostController, modifier: Modifier) {
             },
             text = "Click here if you don’t know your substance type!"
         )
+        // TODO: REMOVE DEBUGGING CODE BELOW
+        /*navController.navigate(
+            HomeNavigation.DocumentationRoute +
+                    "/${Category.A}/" +
+                    "${2814}/" +
+                    "${UnSubstance.ISHumans}/" +
+                    "${42}/" +
+                    "${17}/" +
+                    "${ShippingMethod.Passenger}/" +
+                    "Nico/" +
+                    "Examplestreet 7/" +
+                    "WHO Italy/" +
+                    "Via something 93/" +
+                    "Kyasanur Forest disease virus/" +
+                    "Leonardo da Vinci/" +
+                    "+39 884794294"
+        ) {
+            launchSingleTop = true
+        }*/
     }
 }
 

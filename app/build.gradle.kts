@@ -46,7 +46,6 @@ android {
 
 
 dependencies {
-    implementation("com.tom-roush:pdfbox-android:2.0.27.0")
     val roomversion = "2.6.1"
     //Room database
     implementation("androidx.room:room-runtime:$roomversion")
@@ -64,7 +63,7 @@ dependencies {
     implementation ("androidx.compose.ui:ui:1.5.4")
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
-    implementation("androidx.compose.material3:material3")
+    implementation("androidx.compose.material3:material3:1.1.2")
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("androidx.navigation:navigation-runtime-ktx:2.7.6")

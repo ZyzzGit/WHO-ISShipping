@@ -10,9 +10,14 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.compositionLocalOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.lifecycle.ViewModelProvider
@@ -92,25 +97,34 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+val LocalSnackbarHostState = compositionLocalOf<SnackbarHostState> { error("No SnackbarHostState provided") }
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen() {
     val navController = rememberNavController()
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = {
-                    Show_logo(id = R.drawable.who_logo, color = blue_who)
-                }
+    val snackbarHostState = remember { SnackbarHostState() }
+    CompositionLocalProvider(
+        LocalSnackbarHostState provides snackbarHostState
+    ) {
+        Scaffold(
+            snackbarHost = {
+                SnackbarHost(snackbarHostState)
+            },
+            topBar = {
+                TopAppBar(
+                    title = {
+                        Show_logo(id = R.drawable.who_logo, color = blue_who)
+                    }
+                )
+            },
+            bottomBar = { AppBottomBar(navController = navController) },
+        ) //content:
+        { paddingValues ->
+            BottomNavigationGraph(
+                navController = navController,
+                modifier = Modifier.padding(paddingValues)
             )
-        },
-        bottomBar = { AppBottomBar(navController = navController) },
-    ) //content:
-    {paddingValues->
-        BottomNavigationGraph(
-            navController = navController,
-            modifier = Modifier.padding(paddingValues)
-        )
+        }
     }
 }
 @Composable
