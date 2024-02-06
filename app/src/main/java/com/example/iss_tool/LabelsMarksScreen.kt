@@ -111,33 +111,34 @@ fun LabelsMarksScreen(
                 .wrapContentWidth(Alignment.CenterHorizontally),
                 style= customTypography.bodyMedium,
                 color = primary_navy_blue)
-            ClickableIcon(
-                modifier = Modifier.align(Alignment.CenterVertically),
-                id = R.drawable.arrow_forward,
-                description = "documentation"
-            )
-            {
-                navController.navigate(
-                    "${HomeNavigation.DocumentationRoute}/" +
-                            "${category}/" +
-                            "${unNumber}/" +
-                            "${unSubstance}/" +
-                            "${quantity}/" +
-                            "${iceQuantity}/"+
-                            "${shippingMethod}/"+
-                            "${shipperName}/"+
-                            "${shipperAddress}/"+
-                            "${receiverName}/"+
-                            "${receiverAddress}/"+
-                            "${substanceName}/"+
-                            "${responsibleName}/"+
-                            "${responsiblePhone}"
+            if(category == Category.A) {
+                ClickableIcon(
+                    modifier = Modifier.align(Alignment.CenterVertically),
+                    id = R.drawable.arrow_forward,
+                    description = "documentation"
+                )
+                {
+                    navController.navigate(
+                        "${HomeNavigation.DocumentationRoute}/" +
+                                "${category}/" +
+                                "${unNumber}/" +
+                                "${unSubstance}/" +
+                                "${quantity}/" +
+                                "${iceQuantity}/" +
+                                "${shippingMethod}/" +
+                                "${shipperName}/" +
+                                "${shipperAddress}/" +
+                                "${receiverName}/" +
+                                "${receiverAddress}/" +
+                                "${substanceName}/" +
+                                "${responsibleName}/" +
+                                "${responsiblePhone}"
 
-                ) {
-                    launchSingleTop = true
+                    ) {
+                        launchSingleTop = true
+                    }
                 }
             }
-
         }
 
         Spacer(modifier = Modifier.height(5.dp))

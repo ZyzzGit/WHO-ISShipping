@@ -140,7 +140,7 @@ private fun getFilledDangerousGoodDeclaration(
     unNumber: Int?,
     unSubstance: UnSubstance,
     quantity: Int,
-    ice: Int,
+    ice: Int?,
     shippingMethod: ShippingMethod,
     shipperName: String,
     shipperAddress: String,
@@ -214,7 +214,7 @@ private fun getFilledDangerousGoodDeclaration(
         }
 
         // Fill extra row when shipping with ice
-        if (ice > 0) {
+        if (ice!! > 0) {
             un.value = un.value + "\n\n\nUN\n1845"
             shippingName.value = shippingName.value + "\n\n\nDry ice"
             classDivision.value = classDivision.value + "\n\n\n\n9"
