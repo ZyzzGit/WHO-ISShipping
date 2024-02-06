@@ -1,7 +1,11 @@
 package com.example.iss_tool
 
+import android.content.ContentValues
 import android.content.Context
 import android.graphics.Bitmap
+import android.net.Uri
+import android.os.Environment
+import android.provider.MediaStore
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -32,6 +36,7 @@ import com.tom_roush.pdfbox.pdmodel.interactive.form.PDComboBox
 import com.tom_roush.pdfbox.pdmodel.interactive.form.PDTextField
 import com.tom_roush.pdfbox.rendering.ImageType
 import com.tom_roush.pdfbox.rendering.PDFRenderer
+import java.io.ByteArrayOutputStream
 import java.io.InputStream
 import java.time.LocalDate
 
@@ -81,11 +86,11 @@ fun DocumentationScreen(
             OutlinedButton(
                 onClick = {
                     try {
-                        val path = root.absolutePath + "/FilledDGTD.pdf"
+                        val fileName = "FilledDGTD.pdf"
                         documentDGTD!!.isAllSecurityToBeRemoved = true
-                        documentDGTD!!.save(path)                       // TODO: Perhaps save to download folder, or let user decide destination
+                        downloadPdf(context, fileName, documentDGTD!!)
                         documentDGTD!!.close()
-                        status = "Saved filled DGTD to $path"
+                        status = "Saved filled DGTD to downloads/$fileName"
                     } catch (error: Throwable) {
                         status = "Download failed: $error"
                     }
@@ -115,7 +120,12 @@ fun DocumentationScreen(
         }
 
         if (pageImage != null) {
-            Image(bitmap = pageImage!!.asImageBitmap() , contentDescription = "DGTD pdf filled", modifier.fillMaxWidth(), contentScale = ContentScale.Crop)
+            Image(
+                bitmap = pageImage!!.asImageBitmap(),
+                contentDescription = "DGTD pdf filled",
+                modifier.fillMaxWidth(),
+                contentScale = ContentScale.Crop
+            )
         }
 
         Text(text = status, style = customTypography.bodySmall)
@@ -219,6 +229,30 @@ private fun getFilledDangerousGoodDeclaration(
     } catch (error: Throwable) {
         throw Error("Pdf could not be loaded: $error")
     }
+}
+
+
+fun downloadPdf(context: Context, fileName: String, document: PDDocument) {
+    val byteArrayOutputStream = ByteArrayOutputStream()
+    document.save(byteArrayOutputStream)
+
+    val contentValues = ContentValues().apply {
+        put(MediaStore.MediaColumns.DISPLAY_NAME, fileName)
+        put(MediaStore.MediaColumns.MIME_TYPE, "application/pdf")
+        put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS)
+    }
+
+    val resolver = context.contentResolver
+    val uri: Uri? = resolver.insert(MediaStore.Files.getContentUri("external"), contentValues)
+
+    uri?.let { outputFileUri ->
+        context.contentResolver.openOutputStream(outputFileUri).use { outputStream ->
+            outputStream?.write(byteArrayOutputStream.toByteArray())
+            outputStream?.flush()
+        }
+    }
+
+    print("uri: $uri")
 }
 
 

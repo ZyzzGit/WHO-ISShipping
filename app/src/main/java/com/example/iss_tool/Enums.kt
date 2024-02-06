@@ -23,7 +23,7 @@ enum class UnSubstance(private val unName: String) {
     ISAnimalsOnly("Infectious Substance Affecting Animals Only"),
     Biological("Biological Substance"),
     IWaste("Infectious Waste"),
-    Exmept("Exempt Human or Animal Specimen");
+    Exempt("Exempt Human or Animal Specimen");
 
     override fun toString(): String {
         return unName

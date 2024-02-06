@@ -65,7 +65,7 @@ private var infectiousAffectingAnimalsOnlyLeaf = ClassificationLeaf(
 
 private var exemptLeaf = ClassificationLeaf(
     category = Category.Exempt,
-    unSubstance = UnSubstance.Exmept,
+    unSubstance = UnSubstance.Exempt,
     additionalInfo = "Apply basic triple packaging system."
 )
 
