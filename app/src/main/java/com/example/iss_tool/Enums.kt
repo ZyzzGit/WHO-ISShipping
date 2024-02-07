@@ -1,10 +1,7 @@
 package com.example.iss_tool
 
 enum class Category(private val categoryName: String) {
-    A("Category A"),
-    B("Category B"),
-    Exempt("Exempt Human or Animal Specimen"),
-    Exception("Exception");
+    A("Category A"), B("Category B"), Exempt("Exempt Human or Animal Specimen"), Exception("Exception");
 
     override fun toString(): String {
         return categoryName
@@ -18,12 +15,10 @@ enum class Category(private val categoryName: String) {
 }
 
 enum class UnSubstance(private val unName: String) {
-    ISCategoryA("Infectious Substance Category A"),
-    ISHumans("Infectious Substance Affecting Humans"),
-    ISAnimalsOnly("Infectious Substance Affecting Animals Only"),
-    Biological("Biological Substance"),
-    IWaste("Infectious Waste"),
-    Exempt("Exempt Human or Animal Specimen");
+    ISCategoryA("Infectious Substance Category A"), ISHumans("Infectious Substance Affecting Humans"), ISAnimalsOnly(
+        "Infectious Substance Affecting Animals Only"
+    ),
+    Biological("Biological Substance"), IWaste("Infectious Waste"), Exempt("Exempt Human or Animal Specimen");
 
     override fun toString(): String {
         return unName
@@ -37,9 +32,7 @@ enum class UnSubstance(private val unName: String) {
 }
 
 enum class ShippingMethod(private val method: String) {
-    CargoOnly("CargoOnly"),
-    Passenger("Passenger"),
-    ByRoad("ByRoad");
+    CargoOnly("CargoOnly"), Passenger("Passenger"), ByRoad("ByRoad");
 
     override fun toString(): String {
         return method

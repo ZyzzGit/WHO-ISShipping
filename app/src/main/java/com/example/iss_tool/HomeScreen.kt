@@ -30,14 +30,13 @@ object HomeNavigation {
     const val ShippingRoute = "shipping"
     const val ShippingDecision = "shipping decision"
     const val ShippingInformationRoute = "shippingInfo"
-    const val MarkingRoute = "markingroute"
+    const val MarkingRoute = "markingRoute"
     const val DocumentationRoute = "documentation"
 }
 
 fun NavGraphBuilder.homeGraph(navController: NavHostController, modifier: Modifier) {
     navigation(
-        startDestination = HomeNavigation.MainHomeRoute,
-        route = BottomBarScreen.Home.route
+        startDestination = HomeNavigation.MainHomeRoute, route = BottomBarScreen.Home.route
     ) {
         composable(route = HomeNavigation.MainHomeRoute) {
             HomeScreen(navController = navController, modifier = modifier)
@@ -49,27 +48,29 @@ fun NavGraphBuilder.homeGraph(navController: NavHostController, modifier: Modifi
             })
         ) { navBackStackEntry ->
             val unNumber = navBackStackEntry.arguments?.getString("unNumber")
-            ClassificationScreen(navController = navController, modifier = modifier, unNumber = unNumber)
+            ClassificationScreen(
+                navController = navController, modifier = modifier, unNumber = unNumber
+            )
         }
-        composable(
-          route = "${HomeNavigation.PackagingRoute}/{category}/{unNumber}/{unSubstance}/{quantity}/{substanceName}/{iceQuantity}",
-          arguments = listOf(
-              navArgument("category") { type = NavType.StringType },
-              navArgument("unNumber") { type = NavType.StringType; nullable = true  },
-//              navArgument("unNumber") { nullable = true },
-              navArgument("unSubstance") { type = NavType.StringType },
-//              navArgument("quantity") { type = NavType.IntType },
-              navArgument("quantity") { type = NavType.StringType; nullable = true  },
-              navArgument("substanceName") { type = NavType.StringType;nullable = true },
-              navArgument("iceQuantity") { type = NavType.IntType }
-          )
-        ) {navBackStackEntry ->
-            val category = navBackStackEntry.arguments?.getString("category")?.let { Category.fromString(it) }
+        composable(route = "${HomeNavigation.PackagingRoute}/{category}/{unNumber}/{unSubstance}/{quantity}/{substanceName}/{iceQuantity}/{packNumber}",
+            arguments = listOf(navArgument("category") { type = NavType.StringType },
+                navArgument("unNumber") { type = NavType.StringType; nullable = true },
+                navArgument("unSubstance") { type = NavType.StringType },
+                navArgument("quantity") { type = NavType.StringType; nullable = true },
+                navArgument("substanceName") { type = NavType.StringType;nullable = true },
+                navArgument("iceQuantity") { type = NavType.IntType },
+                navArgument("packNumber") { type = NavType.IntType }
+
+            )) { navBackStackEntry ->
+            val category =
+                navBackStackEntry.arguments?.getString("category")?.let { Category.fromString(it) }
             val unNumber = navBackStackEntry.arguments?.getString("unNumber")?.toIntOrNull()
-            val unSubstance = navBackStackEntry.arguments?.getString("unSubstance")?.let { UnSubstance.fromString(it) }
+            val unSubstance = navBackStackEntry.arguments?.getString("unSubstance")
+                ?.let { UnSubstance.fromString(it) }
             val quantity = navBackStackEntry.arguments?.getString("quantity")?.toIntOrNull()
             val substanceName = navBackStackEntry.arguments?.getString("substanceName")
             val iceQuantity = navBackStackEntry.arguments?.getInt("iceQuantity")
+            val packNumber = navBackStackEntry.arguments?.getInt("packNumber")
             PackagingScreen(
                 navController = navController,
                 modifier = modifier,
@@ -77,24 +78,23 @@ fun NavGraphBuilder.homeGraph(navController: NavHostController, modifier: Modifi
                 unNumber = unNumber,
                 unSubstance = unSubstance,
                 quantity = quantity,
-                substanceName=substanceName,
-                iceQuantity =  iceQuantity!!
+                substanceName = substanceName,
+                iceQuantity = iceQuantity!!,
+                packNumber = packNumber,
             )
         }
-        composable(
-            route = "${HomeNavigation.ShippingRoute}/{category}/{unNumber}/{unSubstance}/{quantity}/{substanceName}/{iceQuantity}",
-            arguments = listOf(
-                navArgument("category") { type = NavType.StringType },
+        composable(route = "${HomeNavigation.ShippingRoute}/{category}/{unNumber}/{unSubstance}/{quantity}/{substanceName}/{iceQuantity}",
+            arguments = listOf(navArgument("category") { type = NavType.StringType },
                 navArgument("unNumber") { type = NavType.StringType;nullable = true },
                 navArgument("unSubstance") { type = NavType.StringType },
                 navArgument("quantity") { type = NavType.StringType;nullable = true },
                 navArgument("substanceName") { type = NavType.StringType;nullable = true },
-                navArgument("iceQuantity") { type = NavType.IntType  }
-            )
-        ) {navBackStackEntry ->
-            val category = navBackStackEntry.arguments?.getString("category")?.let { Category.fromString(it) }
+                navArgument("iceQuantity") { type = NavType.IntType })) { navBackStackEntry ->
+            val category =
+                navBackStackEntry.arguments?.getString("category")?.let { Category.fromString(it) }
             val unNumber = navBackStackEntry.arguments?.getString("unNumber")?.toIntOrNull()
-            val unSubstance = navBackStackEntry.arguments?.getString("unSubstance")?.let { UnSubstance.fromString(it) }
+            val unSubstance = navBackStackEntry.arguments?.getString("unSubstance")
+                ?.let { UnSubstance.fromString(it) }
             val quantity = navBackStackEntry.arguments?.getString("quantity")?.toIntOrNull()
             val substanceName = navBackStackEntry.arguments?.getString("substanceName")
             val iceQuantity = navBackStackEntry.arguments?.getInt("iceQuantity")
@@ -109,21 +109,19 @@ fun NavGraphBuilder.homeGraph(navController: NavHostController, modifier: Modifi
                 iceQuantity = iceQuantity!!
             )
         }
-        composable(
-            route = "${HomeNavigation.ShippingDecision}/{category}/{unNumber}/{unSubstance}/{quantity}/{substanceName}/{shippingMethod}/{iceQuantity}",
-            arguments = listOf(
-                navArgument("category") { type = NavType.StringType },
+        composable(route = "${HomeNavigation.ShippingDecision}/{category}/{unNumber}/{unSubstance}/{quantity}/{substanceName}/{shippingMethod}/{iceQuantity}",
+            arguments = listOf(navArgument("category") { type = NavType.StringType },
                 navArgument("unNumber") { type = NavType.StringType;nullable = true },
                 navArgument("unSubstance") { type = NavType.StringType },
                 navArgument("quantity") { type = NavType.StringType;nullable = true },
                 navArgument("substanceName") { type = NavType.StringType;nullable = true },
-                navArgument("shippingMethod"){type = NavType.StringType} ,
-                navArgument("iceQuantity") { type = NavType.IntType }
-            )
-        ) {navBackStackEntry ->
-            val category = navBackStackEntry.arguments?.getString("category")?.let { Category.fromString(it) }
+                navArgument("shippingMethod") { type = NavType.StringType },
+                navArgument("iceQuantity") { type = NavType.IntType })) { navBackStackEntry ->
+            val category =
+                navBackStackEntry.arguments?.getString("category")?.let { Category.fromString(it) }
             val unNumber = navBackStackEntry.arguments?.getString("unNumber")?.toIntOrNull()
-            val unSubstance = navBackStackEntry.arguments?.getString("unSubstance")?.let { UnSubstance.fromString(it) }
+            val unSubstance = navBackStackEntry.arguments?.getString("unSubstance")
+                ?.let { UnSubstance.fromString(it) }
             val quantity = navBackStackEntry.arguments?.getString("quantity")?.toIntOrNull()
             val substanceName = navBackStackEntry.arguments?.getString("substanceName")
             val shippingMethod = navBackStackEntry.arguments?.getString("shippingMethod")
@@ -148,16 +146,19 @@ fun NavGraphBuilder.homeGraph(navController: NavHostController, modifier: Modifi
                 navArgument("unSubstance") { type = NavType.StringType },
                 navArgument("quantity") { type = NavType.StringType;nullable = true },
                 navArgument("substanceName") { type = NavType.StringType;nullable = true },
-                navArgument("shippingMethod"){type = NavType.StringType},
+                navArgument("shippingMethod") { type = NavType.StringType },
                 navArgument("iceQuantity") { type = NavType.IntType },
             )
-        ) {navBackStackEntry ->
-            val category = navBackStackEntry.arguments?.getString("category")?.let { Category.fromString(it) }
+        ) { navBackStackEntry ->
+            val category =
+                navBackStackEntry.arguments?.getString("category")?.let { Category.fromString(it) }
             val unNumber = navBackStackEntry.arguments?.getString("unNumber")?.toIntOrNull()
-            val unSubstance = navBackStackEntry.arguments?.getString("unSubstance")?.let { UnSubstance.fromString(it) }
+            val unSubstance = navBackStackEntry.arguments?.getString("unSubstance")
+                ?.let { UnSubstance.fromString(it) }
             val quantity = navBackStackEntry.arguments?.getString("quantity")?.toIntOrNull()
             val substanceName = navBackStackEntry.arguments?.getString("substanceName")
-            val shippingMethod = navBackStackEntry.arguments?.getString("shippingMethod")?.let { ShippingMethod.fromString(it) }
+            val shippingMethod = navBackStackEntry.arguments?.getString("shippingMethod")
+                ?.let { ShippingMethod.fromString(it) }
             val iceQuantity = navBackStackEntry.arguments?.getInt("iceQuantity")
             ShippingInformationScreen(
                 navController = navController,
@@ -171,10 +172,8 @@ fun NavGraphBuilder.homeGraph(navController: NavHostController, modifier: Modifi
                 iceQuantity = iceQuantity!!
             )
         }
-        composable(
-            route = "${HomeNavigation.MarkingRoute}/{category}/{unNumber}/{unSubstance}/{quantity}/{substanceName}/{shippingMethod}/{shipperName}/{shipperAddress}/{receiverName}/{receiverAddress}/{responsibleName}/{responsiblePhone}/{iceQuantity}",
-            arguments = listOf(
-                navArgument("category") { type = NavType.StringType },
+        composable(route = "${HomeNavigation.MarkingRoute}/{category}/{unNumber}/{unSubstance}/{quantity}/{substanceName}/{shippingMethod}/{shipperName}/{shipperAddress}/{receiverName}/{receiverAddress}/{responsibleName}/{responsiblePhone}/{iceQuantity}",
+            arguments = listOf(navArgument("category") { type = NavType.StringType },
                 navArgument("unNumber") { type = NavType.StringType;nullable = true },
                 navArgument("unSubstance") { type = NavType.StringType },
                 navArgument("quantity") { type = NavType.StringType;nullable = true },
@@ -184,17 +183,18 @@ fun NavGraphBuilder.homeGraph(navController: NavHostController, modifier: Modifi
                 navArgument("shipperAddress") { type = NavType.StringType },
                 navArgument("receiverName") { type = NavType.StringType },
                 navArgument("receiverAddress") { type = NavType.StringType },
-                navArgument("responsibleName") { type = NavType.StringType; nullable = true},
-                navArgument("responsiblePhone") { type = NavType.StringType; nullable = true } ,
-                navArgument("iceQuantity") { type = NavType.IntType }
-            )
-        ){navBackStackEntry ->
-            val category = navBackStackEntry.arguments?.getString("category")?.let { Category.fromString(it) }
+                navArgument("responsibleName") { type = NavType.StringType; nullable = true },
+                navArgument("responsiblePhone") { type = NavType.StringType; nullable = true },
+                navArgument("iceQuantity") { type = NavType.IntType })) { navBackStackEntry ->
+            val category =
+                navBackStackEntry.arguments?.getString("category")?.let { Category.fromString(it) }
             val unNumber = navBackStackEntry.arguments?.getString("unNumber")?.toIntOrNull()
-            val unSubstance = navBackStackEntry.arguments?.getString("unSubstance")?.let { UnSubstance.fromString(it) }
+            val unSubstance = navBackStackEntry.arguments?.getString("unSubstance")
+                ?.let { UnSubstance.fromString(it) }
             val quantity = navBackStackEntry.arguments?.getString("quantity")?.toIntOrNull()
             val substanceName = navBackStackEntry.arguments?.getString("substanceName")
-            val shippingMethod = navBackStackEntry.arguments?.getString("shippingMethod")?.let { ShippingMethod.fromString(it) }
+            val shippingMethod = navBackStackEntry.arguments?.getString("shippingMethod")
+                ?.let { ShippingMethod.fromString(it) }
             val shipperName = navBackStackEntry.arguments?.getString("shipperName")
             val shipperAddress = navBackStackEntry.arguments?.getString("shipperAddress")
             val receiverName = navBackStackEntry.arguments?.getString("receiverName")
@@ -205,46 +205,48 @@ fun NavGraphBuilder.homeGraph(navController: NavHostController, modifier: Modifi
             LabelsMarksScreen(
                 navController = navController,
                 modifier = modifier,
-                category =category!!,
-                unNumber =unNumber,
-                unSubstance =unSubstance!!,
-                quantity =quantity,
-                substanceName =substanceName,
-                shippingMethod =shippingMethod!!,
-                shipperName =shipperName!!,
-                shipperAddress =shipperAddress!!,
-                receiverName =receiverName!!,
-                receiverAddress =receiverAddress!!,
-                responsibleName =responsibleName,
-                responsiblePhone =responsiblePhone,
+                category = category!!,
+                unNumber = unNumber,
+                unSubstance = unSubstance!!,
+                quantity = quantity,
+                substanceName = substanceName,
+                shippingMethod = shippingMethod!!,
+                shipperName = shipperName!!,
+                shipperAddress = shipperAddress!!,
+                receiverName = receiverName!!,
+                receiverAddress = receiverAddress!!,
+                responsibleName = responsibleName,
+                responsiblePhone = responsiblePhone,
                 iceQuantity = iceQuantity!!
             )
         }
         composable(
-          route = "${HomeNavigation.DocumentationRoute}/{category}/{unNumber}/{unSubstance}/{quantity}/{iceQuantity}/{shippingMethod}/{shipperName}/{shipperAddress}/" +
-                  "{receiverName}/{receiverAddress}/{substanceName}/{responsibleName}/{responsiblePhone}",
-          arguments = listOf(
-              navArgument("category") { type = NavType.StringType },
-              navArgument("unNumber") { type = NavType.StringType; nullable = true },
-              navArgument("unSubstance") { type = NavType.StringType },
-              navArgument("quantity") { type = NavType.StringType;nullable = true },
-              navArgument("iceQuantity") { type = NavType.IntType },
-              navArgument("shippingMethod") { type = NavType.StringType },
-              navArgument("shipperName") { type = NavType.StringType },
-              navArgument("shipperAddress") { type = NavType.StringType },
-              navArgument("receiverName") { type = NavType.StringType },
-              navArgument("receiverAddress") { type = NavType.StringType },
-              navArgument("substanceName") { nullable = true },
-              navArgument("responsibleName") { type = NavType.StringType; nullable = true},
-              navArgument("responsiblePhone") { type = NavType.StringType; nullable = true } ,
-          )
-        ) {navBackStackEntry ->
-            val category = navBackStackEntry.arguments?.getString("category")?.let { Category.fromString(it) }
+            route = "${HomeNavigation.DocumentationRoute}/{category}/{unNumber}/{unSubstance}/{quantity}/{iceQuantity}/{shippingMethod}/{shipperName}/{shipperAddress}/" + "{receiverName}/{receiverAddress}/{substanceName}/{responsibleName}/{responsiblePhone}",
+            arguments = listOf(
+                navArgument("category") { type = NavType.StringType },
+                navArgument("unNumber") { type = NavType.StringType; nullable = true },
+                navArgument("unSubstance") { type = NavType.StringType },
+                navArgument("quantity") { type = NavType.StringType;nullable = true },
+                navArgument("iceQuantity") { type = NavType.IntType },
+                navArgument("shippingMethod") { type = NavType.StringType },
+                navArgument("shipperName") { type = NavType.StringType },
+                navArgument("shipperAddress") { type = NavType.StringType },
+                navArgument("receiverName") { type = NavType.StringType },
+                navArgument("receiverAddress") { type = NavType.StringType },
+                navArgument("substanceName") { nullable = true },
+                navArgument("responsibleName") { type = NavType.StringType; nullable = true },
+                navArgument("responsiblePhone") { type = NavType.StringType; nullable = true },
+            )
+        ) { navBackStackEntry ->
+            val category =
+                navBackStackEntry.arguments?.getString("category")?.let { Category.fromString(it) }
             val unNumber = navBackStackEntry.arguments?.getString("unNumber")?.toIntOrNull()
-            val unSubstance = navBackStackEntry.arguments?.getString("unSubstance")?.let { UnSubstance.fromString(it) }
+            val unSubstance = navBackStackEntry.arguments?.getString("unSubstance")
+                ?.let { UnSubstance.fromString(it) }
             val quantity = navBackStackEntry.arguments?.getString("quantity")?.toIntOrNull()
             val iceQuantity = navBackStackEntry.arguments?.getInt("iceQuantity")
-            val shippingMethod = navBackStackEntry.arguments?.getString("shippingMethod")?.let { ShippingMethod.fromString(it) }
+            val shippingMethod = navBackStackEntry.arguments?.getString("shippingMethod")
+                ?.let { ShippingMethod.fromString(it) }
             val shipperName = navBackStackEntry.arguments?.getString("shipperName")
             val shipperAddress = navBackStackEntry.arguments?.getString("shipperAddress")
             val receiverName = navBackStackEntry.arguments?.getString("receiverName")
@@ -275,7 +277,7 @@ fun NavGraphBuilder.homeGraph(navController: NavHostController, modifier: Modifi
 
 @Composable
 fun HomeScreen(navController: NavHostController, modifier: Modifier) {
-    Column (
+    Column(
         modifier = modifier
             .padding(24.dp)
             .fillMaxWidth(),
@@ -284,77 +286,66 @@ fun HomeScreen(navController: NavHostController, modifier: Modifier) {
         Text(
             text = "Let's Get Started!",
             style = customTypography.bodyLarge,
-            color = customColorScheme.primary)
-        Text(text = "Choose your substance to be shipped",
+            color = customColorScheme.primary
+        )
+        Text(
+            text = "Choose your substance to be shipped",
             style = customTypography.bodyMedium,
             color = black
         )
         Spacer(modifier = Modifier.height(24.dp))
-        Row (
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(
-                space = 20.dp,
-                alignment = Alignment.CenterHorizontally
+        Row(
+            modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(
+                space = 20.dp, alignment = Alignment.CenterHorizontally
             )
         ) {
             SubstanceSelectionButton(
-                modifier = Modifier.weight(1f),
-                onClick = {
+                modifier = Modifier.weight(1f), onClick = {
                     // use '-' as unNumber for Category Exempt
                     navController.navigate("${HomeNavigation.ClassificationRoute}?unNumber=2814") {
                         popUpTo(navController.graph.findStartDestination().id)
                         launchSingleTop = true
-                    }},
-                text = "Infectious Substance Affecting Humans",
-                unNumber = 2814
+                    }
+                }, text = "Infectious Substance Affecting Humans", unNumber = 2814
             )
             SubstanceSelectionButton(
-                modifier = Modifier.weight(1f),
-                onClick = {
+                modifier = Modifier.weight(1f), onClick = {
                     // use '-' as unNumber for Category Exempt
                     navController.navigate("${HomeNavigation.ClassificationRoute}?unNumber=2900") {
                         popUpTo(navController.graph.findStartDestination().id)
                         launchSingleTop = true
-                    }},
-                text = "Infectious Substance Affecting Animals",
-                unNumber = 2900
+                    }
+                }, text = "Infectious Substance Affecting Animals", unNumber = 2900
             )
         }
         Spacer(modifier = Modifier.height(24.dp))
-        Row (
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(
-                space = 20.dp,
-                alignment = Alignment.CenterHorizontally
+        Row(
+            modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(
+                space = 20.dp, alignment = Alignment.CenterHorizontally
             )
         ) {
             SubstanceSelectionButton(
-                modifier = Modifier.weight(1f),
-                onClick = {
+                modifier = Modifier.weight(1f), onClick = {
                     // use '-' as unNumber for Category Exempt
                     navController.navigate("${HomeNavigation.ClassificationRoute}?unNumber=3373") {
                         popUpTo(navController.graph.findStartDestination().id)
                         launchSingleTop = true
-                    }},
-                text = "Biological Substances Category B",
-                unNumber = 3373
+                    }
+                }, text = "Biological Substances Category B", unNumber = 3373
             )
             SubstanceSelectionButton(
-                modifier = Modifier.weight(1f),
-                onClick = {
+                modifier = Modifier.weight(1f), onClick = {
                     // use '-' as unNumber for Category Exempt
                     navController.navigate("${HomeNavigation.ClassificationRoute}?unNumber=3291") {
                         popUpTo(navController.graph.findStartDestination().id)
                         launchSingleTop = true
-                    }},
-                text = "Biomedical, Clinical or Medical Waste",
-                unNumber = 3291
+                    }
+                }, text = "Biomedical, Clinical or Medical Waste", unNumber = 3291
             )
         }
         Spacer(modifier = Modifier.height(24.dp))
-        Row (
-            modifier = Modifier.fillMaxWidth(0.5f),
-            horizontalArrangement = Arrangement.Center
+        Row(
+            modifier = Modifier.fillMaxWidth(0.5f), horizontalArrangement = Arrangement.Center
         ) {
             SubstanceSelectionButton(
                 onClick = {
@@ -362,22 +353,20 @@ fun HomeScreen(navController: NavHostController, modifier: Modifier) {
                     navController.navigate("${HomeNavigation.ClassificationRoute}?unNumber=-") {
                         popUpTo(navController.graph.findStartDestination().id)
                         launchSingleTop = true
-                    }},
-                text = "Human/Animal Specimen Category Exempt"
+                    }
+                }, text = "Human/Animal Specimen Category Exempt"
             )
         }
         Spacer(modifier = Modifier.height(34.dp))
         ClassificationStartButton(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(92.dp),
-            onClick = {
+                .height(92.dp), onClick = {
                 navController.navigate(HomeNavigation.ClassificationRoute) {
                     popUpTo(navController.graph.findStartDestination().id)
                     launchSingleTop = true
                 }
-            },
-            text = "Click here if you don’t know your substance type!"
+            }, text = "Click here if you don’t know your substance type!"
         )
         // TODO: REMOVE DEBUGGING CODE BELOW
         /*navController.navigate(

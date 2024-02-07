@@ -28,14 +28,15 @@ import com.example.iss_tool.theme.customTypography
 import com.example.iss_tool.theme.yellow_who
 
 
-
 /**
  * argument unNumber skips the classification process by directly selecting a leaf
  * should only be provided when accessing screen from substance selection buttons in HomeScreen
  * **/
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun ClassificationScreen(navController: NavController, modifier: Modifier, unNumber: String? = null) {
+fun ClassificationScreen(
+    navController: NavController, modifier: Modifier, unNumber: String? = null
+) {
     var currentNode by remember { mutableStateOf<Any?>(classificationDecisionTree) }
 
     if (unNumber != null) {
@@ -54,7 +55,8 @@ fun ClassificationScreen(navController: NavController, modifier: Modifier, unNum
             verticalArrangement = Arrangement.Center
         ) {
             Text(
-                text = node.question, style = customTypography.bodyMedium,
+                text = node.question,
+                style = customTypography.bodyMedium,
                 modifier = Modifier.height(170.dp)
             )
             Spacer(modifier = Modifier.height(24.dp))
@@ -115,25 +117,28 @@ fun ClassificationScreen(navController: NavController, modifier: Modifier, unNum
             }
 
             val keyboardController = LocalSoftwareKeyboardController.current
+
+            //Retrieve substance from Room Database
             var substanceList = listOf("")
             val substanceViewModel: SubstanceViewModel = viewModel()
             val allData by substanceViewModel._readAllData.observeAsState(emptyList())
             var tableList = listOf<List<String>>()
+
             allData.forEach {
-                substanceList += it.substanceName?:""
+                substanceList += it.substanceName ?: ""
             }
             tableList = allData.map { substance ->
                 listOf(substance.substanceName ?: "", substance.code ?: "")
             }
 
-            if (leaf.category == Category.A || leaf.category == Category.B) {
-            FormDisplay(navController=navController,leaf = leaf, substanceList = substanceList, tableList=tableList,Modifier) {
+            FormDisplay(
+                navController = navController,
+                leaf = leaf,
+                substanceList = substanceList,
+                tableList = tableList,
+                Modifier
+            ) {
                 keyboardController?.hide()
-                }
-
-            }
-            else if(leaf.category == Category.Exempt){
-                ExemptDisplay(navController = navController, leaf = leaf, modifier = Modifier)
             }
         }
 

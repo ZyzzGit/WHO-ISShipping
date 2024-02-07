@@ -3,7 +3,6 @@ package com.example.iss_tool
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -25,6 +24,7 @@ enum class IceOption(val text: String) {
     Yes("YES"),
     No("NO")
 }
+
 @Composable
 fun OptionRadioButton(
     option: IceOption,
@@ -39,7 +39,6 @@ fun OptionRadioButton(
                 onClick = { onOptionSelected(option) }
             )
             .padding(8.dp),
-//            .background(MaterialTheme.colorScheme.primaryContainer),
         verticalAlignment = Alignment.CenterVertically
     ) {
         RadioButton(
@@ -47,32 +46,34 @@ fun OptionRadioButton(
             onClick = { onOptionSelected(option) },
             modifier = Modifier.size(16.dp)
         )
-
         Spacer(modifier = Modifier.width(4.dp))
-
-        Text(option.text)
+        Text(option.text, style = customTypography.bodyMedium)
     }
 }
 
 @Composable
-fun shipment(modifier: Modifier,shipmentMethod:String,title:String,info_body:String){
-        Text(
-                text = "$title",
-                style = customTypography.bodyLarge,
-                color = orange_who,
-        )
-        noteText(modifier = modifier,
-        id=R.drawable.info_icon,
-        icon_info = "info",
-        textInfo ="$info_body")
-        Spacer(modifier = Modifier.height(24.dp))
+fun Shipment(modifier: Modifier, shipmentMethod: String, title: String, infoBody: String) {
+    Text(
+        text = title,
+        style = customTypography.bodyLarge,
+        color = orange_who,
+    )
+    NoteText(
+        modifier = modifier,
+        id = R.drawable.info_icon,
+        iconInfo = "info",
+        textInfo = infoBody
+    )
 }
 
 @Composable
-fun noteText(modifier:Modifier,id:Int,icon_info:String,textInfo:String){
-    Row(modifier = modifier.fillMaxWidth()){
-        Icon(painter = painterResource(id = id), contentDescription ="$icon_info")
-        Text(text="$textInfo",
+fun NoteText(modifier: Modifier, id: Int, iconInfo: String, textInfo: String) {
+    Row(modifier = modifier.fillMaxWidth()) {
+        Icon(painter = painterResource(id = id), contentDescription = iconInfo)
+        Text(
+            text = textInfo,
             style = customTypography.bodySmall,
-            color = black)}
+            color = black
+        )
+    }
 }

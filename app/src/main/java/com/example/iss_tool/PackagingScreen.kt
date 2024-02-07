@@ -1,6 +1,5 @@
 package com.example.iss_tool
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -25,7 +24,7 @@ import com.example.iss_tool.theme.customTypography
 /**
  * Screen handling packaging process for Category A and B, given classification from ClassificationScreen
  * **/
-@OptIn(ExperimentalFoundationApi::class)
+
 @Composable
 fun PackagingScreen(
     navController: NavController,
@@ -34,8 +33,9 @@ fun PackagingScreen(
     unNumber: Int?,
     unSubstance: UnSubstance?,
     quantity: Int?,
-    substanceName:String?,
-    iceQuantity:Int
+    substanceName: String?,
+    iceQuantity: Int,
+    packNumber: Int?
 ) {
 
     Column(
@@ -45,23 +45,135 @@ fun PackagingScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceEvenly
     ) {
+        ClickableIcon(
+            modifier = Modifier.align(Alignment.End),
+            id = R.drawable.arrow_forward,
+            description = "Proceed",
+            step = "SHIPPING"
+        ) {
+            when (category) {
+                Category.A -> {
+                    if (quantity in 51..4000) {
+                        navController.navigate(
+                            "${HomeNavigation.ShippingDecision}/" +
+                                    "${category}/" +
+                                    "${unNumber}/" +
+                                    "${unSubstance}/" +
+                                    "${quantity}/" +
+                                    "${substanceName}/" +
+                                    "CargoOnly/" +
+                                    "$iceQuantity"
+
+                        ) {
+                            launchSingleTop = true
+                        }
+                    } else if (quantity!! >= 4000 || packNumber!! * iceQuantity > 200) {
+                        navController.navigate(
+                            "${HomeNavigation.ShippingDecision}/" +
+                                    "${category}/" +
+                                    "${unNumber}/" +
+                                    "${unSubstance}/" +
+                                    "${quantity}/" +
+                                    "${substanceName}/" +
+                                    "ByRoad/" +
+                                    "$iceQuantity"
+                        ) {
+                            launchSingleTop = true
+                        }
+                    } else {
+                        navController.navigate(
+                            "${HomeNavigation.ShippingRoute}/" +
+                                    "${category}/" +
+                                    "${unNumber}/" +
+                                    "${unSubstance}/" +
+                                    "${quantity}/" +
+                                    "${substanceName}/" +
+                                    "$iceQuantity"
+
+                        ) {
+                            launchSingleTop = true
+                        }
+                    }
+                }
+
+                Category.B -> {
+                    if (quantity!! > 1000 || packNumber!! * iceQuantity > 200) {
+                        navController.navigate(
+                            "${HomeNavigation.ShippingDecision}/" +
+                                    "${category}/" +
+                                    "${unNumber}/" +
+                                    "${unSubstance}/" +
+                                    "${quantity}/" +
+                                    "${substanceName}/" +
+                                    "ByRoad/" +
+                                    "$iceQuantity"
+                        ) {
+                            launchSingleTop = true
+                        }
+                    } else {
+                        navController.navigate(
+                            "${HomeNavigation.ShippingRoute}/" +
+                                    "${category}/" +
+                                    "${unNumber}/" +
+                                    "${unSubstance}/" +
+                                    "${quantity}/" +
+                                    "${substanceName}/" +
+                                    "$iceQuantity"
+
+                        ) {
+                            launchSingleTop = true
+                        }
+                    }
+                }
+
+                else -> {
+                    if ((packNumber!! * iceQuantity) > 200) {
+                        navController.navigate(
+                            "${HomeNavigation.ShippingDecision}/" +
+                                    "${category}/" +
+                                    "${unNumber}/" +
+                                    "${unSubstance}/" +
+                                    "${quantity}/" +
+                                    "${substanceName}/" +
+                                    "ByRoad/" +
+                                    "$iceQuantity"
+                        ) {
+                            launchSingleTop = true
+                        }
+                    } else {
+                        navController.navigate(
+                            "${HomeNavigation.ShippingRoute}/" +
+                                    "${category}/" +
+                                    "${unNumber}/" +
+                                    "${unSubstance}/" +
+                                    "${quantity}/" +
+                                    "${substanceName}/" +
+                                    "$iceQuantity"
+
+                        ) {
+                            launchSingleTop = true
+                        }
+                    }
+                }
+            }
+        }
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 5.dp),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            if(unNumber != null){
-            Text(
-                text = "$unSubstance\nUN $unNumber\n",
-                style = customTypography.bodyLarge,
-                color = customColorScheme.primary,
-                modifier = Modifier
-                    .weight(1f)
-                    .wrapContentWidth(Alignment.CenterHorizontally)
-                    .align(Alignment.CenterVertically)
-            )}
-            else{
+            if (unNumber != null) {
+                Text(
+                    text = "$unSubstance\nUN $unNumber\n",
+                    style = customTypography.bodyLarge,
+                    color = customColorScheme.primary,
+                    modifier = Modifier
+                        .weight(1f)
+                        .wrapContentWidth(Alignment.CenterHorizontally)
+                        .align(Alignment.CenterVertically)
+                )
+            } else {
                 Text(
                     text = "$unSubstance\n",
                     style = customTypography.bodyLarge,
@@ -72,113 +184,20 @@ fun PackagingScreen(
                         .align(Alignment.CenterVertically)
                 )
             }
+        }
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .fillMaxHeight()
+                .clip(customShapes.large)
+                .background(blue_who.copy(alpha = 0.2f))
+                .padding(bottom = 10.dp, start = 10.dp, end = 10.dp)
+        ) {
 
-            ClickableIcon(modifier = Modifier.align(Alignment.CenterVertically),id = R.drawable.arrow_forward, description = "Proceed") {
-               when(category){
-                   Category.A -> {
-                       if(quantity in 51..4000){
-                           navController.navigate(
-                               "${HomeNavigation.ShippingDecision}/" +
-                                       "${category}/" +
-                                       "${unNumber}/" +
-                                       "${unSubstance}/" +
-                                       "${quantity}/"+
-                                       "${substanceName}/"+
-                                       "CargoOnly/"+
-                                       "$iceQuantity"
-
-                           ) {
-                               launchSingleTop = true
-                           }
-                       }
-                       else if (quantity!! >= 4000){
-                           navController.navigate(
-                               "${HomeNavigation.ShippingDecision}/" +
-                                       "${category}/" +
-                                       "${unNumber}/" +
-                                       "${unSubstance}/" +
-                                       "${quantity}/"+
-                                       "${substanceName}/"+
-                                       "ByRoad/"+
-                                       "$iceQuantity"
-                           ) {
-                               launchSingleTop = true
-                           }
-                       }
-                       else {
-                           navController.navigate(
-                               "${HomeNavigation.ShippingRoute}/" +
-                                       "${category}/" +
-                                       "${unNumber}/" +
-                                       "${unSubstance}/" +
-                                       "${quantity}/"+
-                                       "${substanceName}/"+
-                                       "$iceQuantity"
-
-                           ) {
-                               launchSingleTop = true
-                           }
-                       }
-                   }
-                   Category.B -> {
-                       if(quantity!! > 1000){
-                           navController.navigate(
-                               "${HomeNavigation.ShippingDecision}/" +
-                                       "${category}/" +
-                                       "${unNumber}/" +
-                                       "${unSubstance}/" +
-                                       "${quantity}/"+
-                                       "${substanceName}/"+
-                                       "ByRoad/"+
-                                       "$iceQuantity"
-                           ) {
-                               launchSingleTop = true
-                           }
-                       }
-                       else{
-                       navController.navigate(
-                           "${HomeNavigation.ShippingRoute}/" +
-                                   "${category}/" +
-                                   "${unNumber}/" +
-                                   "${unSubstance}/" +
-                                   "${quantity}/"+
-                                   "${substanceName}/"+
-                                   "$iceQuantity"
-
-                       ) {
-                           launchSingleTop = true
-                       }}
-                   }
-                   else -> {
-                       navController.navigate(
-                           "${HomeNavigation.ShippingRoute}/" +
-                                   "${category}/" +
-                                   "${unNumber}/" +
-                                   "${unSubstance}/" +
-                                   "${quantity}/"+
-                                   "${substanceName}/"+
-                                   "$iceQuantity"
-
-                       ) {
-                           launchSingleTop = true
-                       }
-                   }
-               }
-            }
-            }
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .fillMaxHeight()
-                    .clip(customShapes.large)
-                    .background(blue_who.copy(alpha = 0.2f))
-                    .padding(bottom = 10.dp, start = 10.dp, end = 10.dp)
-            ) {
-
-                Triplepackagingsystem(Modifier,category,iceQuantity > 0)
-
-            }
+            Triplepackagingsystem(Modifier, category, iceQuantity > 0)
 
         }
 
     }
+
+}

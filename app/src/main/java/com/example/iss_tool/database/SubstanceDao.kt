@@ -10,9 +10,11 @@ import androidx.room.Query
 @Dao
 interface SubstanceDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun addSubstance(substance:Substance)
+    suspend fun addSubstance(substance: Substance)
+
     @Insert
     suspend fun insertEntities(entities: List<Substance>)
+
     @Query("SELECT * FROM Substance ORDER BY id ASC")
     fun readAllData(): LiveData<List<Substance>>
 

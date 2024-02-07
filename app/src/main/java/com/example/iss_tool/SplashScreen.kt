@@ -37,7 +37,7 @@ fun SplashScreen(onSplashScreenDismissed: () -> Unit) {
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-             Image(
+            Image(
                 painter = painterResource(id = R.drawable.biohazard_icon),
                 contentDescription = null,
                 modifier = Modifier.size(148.dp),
@@ -46,8 +46,8 @@ fun SplashScreen(onSplashScreenDismissed: () -> Unit) {
 
         }
 
-        }
     }
+}
 
 
 @Preview(showBackground = true)

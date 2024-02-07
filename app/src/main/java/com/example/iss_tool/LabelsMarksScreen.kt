@@ -11,8 +11,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentWidth
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -43,61 +43,77 @@ fun LabelsMarksScreen(
     responsiblePhone: String?,
     iceQuantity: Int
 
-    ){
+) {
     Column(
         modifier = modifier
             .padding(24.dp)
             .fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        var shipper_info : Boolean = false
-        var receiver_info : Boolean =  false
-        var responsible_info : Boolean = false
-        var infectious_label : Boolean = false
-        var un_specification_mark : Boolean = false
-        var orientation_arrows : Boolean = false
-        var shipping_name_number:Boolean = false
-        var cargo_label : Boolean = false
-//        TODO when ice added
-        var dry_ice_label:Boolean = false
-        var dangerous_goods : Boolean = false
+        ClickableIcon(
+            modifier = Modifier.align(Alignment.End),
+            id = R.drawable.arrow_forward,
+            description = "documentation",
+            step = "DOCUMENTATION"
+        ) {
+            navController.navigate(
+                "${HomeNavigation.DocumentationRoute}/" + "${category}/" + "${unNumber}/" + "${unSubstance}/" + "${quantity}/" + "${iceQuantity}/" + "${shippingMethod}/" + "${shipperName}/" + "${shipperAddress}/" + "${receiverName}/" + "${receiverAddress}/" + "${substanceName}/" + "${responsibleName}/" + "$responsiblePhone"
 
-        var shipping_name:Boolean = false
-        var shipping_number:Boolean = false
+            ) {
+                launchSingleTop = true
+            }
 
-        if(iceQuantity > 0){
-            dry_ice_label = true
-            dangerous_goods = true
         }
-        when(category){
-            Category.A->
-            {
-                shipper_info = true
-                receiver_info = true
-                responsible_info = true
-                infectious_label = true
-                un_specification_mark = true
-                if(quantity!! > 50){
-                    orientation_arrows = true
+        var shipperInfo = false
+        var receiverInfo = false
+        var responsibleInfo = false
+        var infectiousLabel = false
+        var unSpecificationMark = false
+        var orientationArrows = false
+        var shippingNameNumber = false
+        var cargoLabel = false
+        var dryIceLabel = false
+        var dangerousGoodsLabel = false
+        var shippingName = false
+        var shippingNumber = false
+
+        if (iceQuantity > 0) {
+            dryIceLabel = true
+            dangerousGoodsLabel = true
+        }
+        when (category) {
+            Category.A -> {
+                shipperInfo = true
+                receiverInfo = true
+                responsibleInfo = true
+                infectiousLabel = true
+                unSpecificationMark = true
+                if (quantity!! > 50) {
+                    orientationArrows = true
                 }
-                shipping_name_number=true
-                if(shippingMethod == ShippingMethod.CargoOnly){
-                    cargo_label = true
+                shippingNameNumber = true
+                if (shippingMethod == ShippingMethod.CargoOnly) {
+                    cargoLabel = true
                 }
             }
-            Category.B->{
-                shipper_info = true
-                receiver_info = true
-                shipping_name = true
-                shipping_number = true
+
+            Category.B -> {
+                shipperInfo = true
+                receiverInfo = true
+                shippingName = true
+                shippingNumber = true
 
             }
-            Category.Exempt->{
-                shipper_info = true
-                receiver_info = true
-                shipping_name = true
+
+            Category.Exempt -> {
+                shipperInfo = true
+                receiverInfo = true
+                shippingName = true
             }
-            else -> { throw Exception("Argument exception: Category.$category is not handled by LabelsMarksScreen.")}
+
+            else -> {
+                throw Exception("Argument exception: Category.$category is not handled by LabelsMarksScreen.")
+            }
         }
         Row(
             modifier = Modifier
@@ -105,73 +121,64 @@ fun LabelsMarksScreen(
                 .padding(bottom = 5.dp),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Text("MARKS AND LABELS",
-                Modifier.weight(1f)
-                .wrapContentWidth(Alignment.CenterHorizontally),
-                style= customTypography.bodyMedium,
-                color = primary_navy_blue)
+            Text(
+                "MARKS AND LABELS",
+                Modifier
+                    .weight(1f)
+                    .wrapContentWidth(Alignment.CenterHorizontally),
+                style = customTypography.bodyMedium,
+                color = primary_navy_blue
+            )
 
-                ClickableIcon(
-                    modifier = Modifier.align(Alignment.CenterVertically),
-                    id = R.drawable.arrow_forward,
-                    description = "documentation"
-                )
-                {
-                    navController.navigate(
-                        "${HomeNavigation.DocumentationRoute}/" +
-                                "${category}/" +
-                                "${unNumber}/" +
-                                "${unSubstance}/" +
-                                "${quantity}/" +
-                                "${iceQuantity}/" +
-                                "${shippingMethod}/" +
-                                "${shipperName}/" +
-                                "${shipperAddress}/" +
-                                "${receiverName}/" +
-                                "${receiverAddress}/" +
-                                "${substanceName}/" +
-                                "${responsibleName}/" +
-                                "$responsiblePhone"
-
-                    ) {
-                        launchSingleTop = true
-                    }
-
-            }
         }
-
-        Spacer(modifier = Modifier.height(5.dp))
-        if(shipping_name_number){
-            InfoBox(Modifier,"$unSubstance\n UN $unNumber","","")
-        }
-        Spacer(modifier = Modifier.height(5.dp))
-        if(shipping_name){
-            InfoBox(Modifier,"$unSubstance","","")
-        }
-        Spacer(modifier = Modifier.height(5.dp))
-    if(shipper_info){
-        InfoBox(Modifier,"SHIPPER",shipperName,shipperAddress)
-    }
-        Spacer(modifier = Modifier.height(5.dp))
-    if(receiver_info){
-        InfoBox(modifier = Modifier, title = "RECEIVER", name = receiverName, address = receiverAddress)
-    }
-        Spacer(modifier = Modifier.height(5.dp))
-    if(responsible_info){
-        InfoBox(modifier = Modifier, title = "EMERGENCY \n" +
-                "CONTACT 24H/24H", name = "$responsibleName", address ="$responsiblePhone" )
-    }
-        Spacer(modifier = Modifier.height(5.dp))
-        if(dry_ice_label){
-            InfoBox(modifier = Modifier, title = "DRY ICE \n" +
-                    "UN 1845", name = "NET WEIGHT: $iceQuantity Kg", address ="" )
-    }
-        LazyVerticalGrid(
-            columns = GridCells.Adaptive(100.dp),
-            modifier = Modifier.fillMaxSize()
+        Column(
+            modifier = modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState()),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            if (infectious_label)
-            { item {
+            Spacer(modifier = Modifier.height(5.dp))
+            if (shippingNameNumber) {
+                InfoBox(Modifier, "$unSubstance\n UN $unNumber", "", "")
+            }
+            Spacer(modifier = Modifier.height(5.dp))
+            if (shippingName) {
+                InfoBox(Modifier, "$unSubstance", "", "")
+            }
+            Spacer(modifier = Modifier.height(5.dp))
+            if (shipperInfo) {
+                InfoBox(Modifier, "SHIPPER", shipperName, shipperAddress)
+            }
+            Spacer(modifier = Modifier.height(5.dp))
+            if (receiverInfo) {
+                InfoBox(
+                    modifier = Modifier,
+                    title = "RECEIVER",
+                    name = receiverName,
+                    address = receiverAddress
+                )
+            }
+            Spacer(modifier = Modifier.height(5.dp))
+            if (responsibleInfo) {
+                InfoBox(
+                    modifier = Modifier,
+                    title = "EMERGENCY \n" + "CONTACT 24H/24H",
+                    name = "$responsibleName",
+                    address = "$responsiblePhone"
+                )
+            }
+            Spacer(modifier = Modifier.height(5.dp))
+            if (dryIceLabel) {
+                InfoBox(
+                    modifier = Modifier,
+                    title = "DRY ICE \n" + "UN 1845",
+                    name = "NET WEIGHT: $iceQuantity Kg",
+                    address = ""
+                )
+            }
+
+
+            if (infectiousLabel) {
 
                     Image(
                         painter = painterResource(R.drawable.infectious_label_a),
@@ -180,33 +187,21 @@ fun LabelsMarksScreen(
                             .padding(8.dp)
                             .size(100.dp)
                             .clip(shape = MaterialTheme.shapes.medium)
-//                            .clickable {
-//                                // Handle image click if needed
-//                                println("Infectious Label clicked")
-//                            }
                     )
                 }
-            }
-            if (shipping_number) {
-                item {
+            if (shippingNumber) {
+
 
                     Image(
                         painter = painterResource(R.drawable.infectious_label_a),
                         contentDescription = "Shipping Number",
                         modifier = Modifier
                             .padding(8.dp)
-//                            .size(100.dp)
                             .clip(shape = MaterialTheme.shapes.large)
-//                            .clickable {
-//                                // Handle image click if needed
-//                                println("Infectious Label clicked")
-//                            }
-                    )
-                }
-            }
-            if (cargo_label) {
-                item {
 
+                    )
+            }
+            if (cargoLabel) {
                     Image(
                         painter = painterResource(R.drawable.infectious_label_a),
                         contentDescription = "Cargo Label",
@@ -214,15 +209,10 @@ fun LabelsMarksScreen(
                             .padding(8.dp)
                             .size(100.dp)
                             .clip(shape = MaterialTheme.shapes.large)
-//                            .clickable {
-//                                // Handle image click if needed
-//                                println("Infectious Label clicked")
-//                            }
                     )
-                }
+
             }
-            if (orientation_arrows) {
-            item {
+            if (orientationArrows) {
                     Image(
                         painter = painterResource(R.drawable.infectious_label_a),
                         contentDescription = "Orientation",
@@ -230,32 +220,10 @@ fun LabelsMarksScreen(
                             .padding(8.dp)
                             .size(100.dp)
                             .clip(shape = MaterialTheme.shapes.large)
-//                            .clickable {
-//                                // Handle image click if needed
-//                                println("Infectious Label clicked")
-//                            }
-                    )
-                }
-            }
-            if (un_specification_mark) {
-            item {
 
-                    Image(
-                        painter = painterResource(R.drawable.infectious_label_a),
-                        contentDescription = "UN specification Mark",
-                        modifier = Modifier
-                            .padding(8.dp)
-                            .size(100.dp)
-                            .clip(shape = MaterialTheme.shapes.large)
-//                            .clickable {
-//                                // Handle image click if needed
-//                                println("Infectious Label clicked")
-//                            }
                     )
-                }
             }
-            if (dangerous_goods) {
-            item {
+            if (unSpecificationMark) {
                     Image(
                         painter = painterResource(R.drawable.infectious_label_a),
                         contentDescription = "UN specification Mark",
@@ -263,34 +231,28 @@ fun LabelsMarksScreen(
                             .padding(8.dp)
                             .size(100.dp)
                             .clip(shape = MaterialTheme.shapes.large)
-//                            .clickable {
-//                                // Handle image click if needed
-//                                println("Infectious Label clicked")
-//                            }
                     )
-                }
+            }
+            if (dangerousGoodsLabel) {
+                    Image(
+                        painter = painterResource(R.drawable.infectious_label_a),
+                        contentDescription = "UN specification Mark",
+                        modifier = Modifier
+                            .padding(8.dp)
+                            .size(100.dp)
+                            .clip(shape = MaterialTheme.shapes.large)
+                    )
             }
         }
-        StartButton(onClick = {
-            navController.navigate(
-                "${HomeNavigation.DocumentationRoute}/" +
-                        "${category}/" +
-                        "${unNumber}/" +
-                        "${unSubstance}/" +
-                        "$quantity/" +
-                        "${iceQuantity}/" +
-                        "${shippingMethod}//" +
-                        "${shipperName}/" +
-                        "${shipperAddress}/" +
-                        "${receiverName}/" +
-                        "${receiverAddress}/" +
-                        "${substanceName}/" +
-                        "${responsibleName}/" +
-                        "$responsiblePhone"
-            ) {
-                launchSingleTop = true
-            }},
-            text = "To documentation"
+        StartButton(
+            onClick = {
+                navController.navigate(
+                    "${HomeNavigation.DocumentationRoute}/" + "${category}/" + "${unNumber}/" + "${unSubstance}/" + "$quantity/" + "${iceQuantity}/" + "${shippingMethod}//" + "${shipperName}/" + "${shipperAddress}/" + "${receiverName}/" + "${receiverAddress}/" + "${substanceName}/" + "${responsibleName}/" + "$responsiblePhone"
+                ) {
+                    launchSingleTop = true
+                }
+            }, text = "To documentation"
         )
     }
 }
+

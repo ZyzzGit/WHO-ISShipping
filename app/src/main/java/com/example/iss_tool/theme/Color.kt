@@ -14,7 +14,7 @@ val green_who = Color(0xFF80BC00)
 val orange_who = Color(0xFFF26829)
 val yellow_who = Color(0xFFF4A81D)
 val magenta_who = Color(0xFFA6228C)
-val purple_who=Color(0xFF5B2C86)
+val purple_who = Color(0xFF5B2C86)
 val emergency_red_who = Color(0xFFEF3842)
 
 // Define your custom color scheme

@@ -36,9 +36,9 @@ fun ShippingScreen(
     unNumber: Int?,
     unSubstance: UnSubstance,
     quantity: Int?,
-    substanceName:String?,
-    iceQuantity:Int
-){
+    substanceName: String?,
+    iceQuantity: Int
+) {
     Column(
         modifier = modifier
             .padding(24.dp)
@@ -72,40 +72,54 @@ fun ShippingScreen(
                 )
             }
         }
-        when(category){
-            Category.A ->{
-                noteText(modifier = Modifier,
-                    id=R.drawable.info_icon,
-                    icon_info = "info",
-                    textInfo ="For shipments being carried in the cargo hold of passenger aircraft, no more than 50mL or 50g of Category A infectious substance per package is allowed. \n" +
-                            "For shipments being carried on a cargo only aircraft, no more than 4L or 4kg of Category A infectious substance per package is allowed.")
+        when (category) {
+            Category.A -> {
+                NoteText(
+                    modifier = Modifier,
+                    id = R.drawable.info_icon,
+                    iconInfo = "info",
+                    textInfo = "For shipments being carried in the cargo hold of passenger aircraft, no more than 50mL or 50g of Category A infectious substance per package is allowed. \n" +
+                            "For shipments being carried on a cargo only aircraft, no more than 4L or 4kg of Category A infectious substance per package is allowed."
+                )
             }
+
             Category.B -> {
-                noteText(modifier = Modifier,
-                    id=R.drawable.info_icon,
-                    icon_info = "info",
-                    textInfo ="For shipments being carried by air (passenger or cargo aircraft), the primary inner receptacle must not contain more than 1L and the outer packaging must not contain more than 4L of material. This excludes any quantity of coolants used, such as dry ice or liquid nitrogen. \n" +
+                NoteText(
+                    modifier = Modifier,
+                    id = R.drawable.info_icon,
+                    iconInfo = "info",
+                    textInfo = "For shipments being carried by air (passenger or cargo aircraft), the primary inner receptacle must not contain more than 1L and the outer packaging must not contain more than 4L of material. This excludes any quantity of coolants used, such as dry ice or liquid nitrogen. \n" +
                             "For shipments being carried via surface transport (road, rail or maritime), there are no quantity limits per package."
                 )
             }
+
             Category.Exempt -> {}
-            else -> { throw Exception("Argument exception: Category.$category is not handled by ShippingScreen.") }
+            else -> {
+                throw Exception("Argument exception: Category.$category is not handled by ShippingScreen.")
+            }
         }
 
         Spacer(modifier = Modifier.height(24.dp))
-        Text("Select your shipping method",
-            style= customTypography.bodyMedium,
-            modifier = Modifier.align(Alignment.Start))
+        Text(
+            "Select your shipping method",
+            style = customTypography.bodyMedium,
+            modifier = Modifier.align(Alignment.Start)
+        )
         Spacer(modifier = Modifier.height(24.dp))
         Row(
-            modifier = Modifier.fillMaxWidth().requiredHeight(120.dp),
-            horizontalArrangement = Arrangement.spacedBy(space = 22.dp,
+            modifier = Modifier
+                .fillMaxWidth()
+                .requiredHeight(120.dp),
+            horizontalArrangement = Arrangement.spacedBy(
+                space = 22.dp,
                 alignment = Alignment.CenterHorizontally
             )
         )
         {
             FloatingActionButton(
-                modifier = Modifier.weight(.1f).border(1.dp,black, shape = customShapes.large),
+                modifier = Modifier
+                    .weight(.1f)
+                    .border(1.dp, black, shape = customShapes.large),
                 onClick = {
 
                     navController.navigate(
@@ -115,7 +129,7 @@ fun ShippingScreen(
                                 "${unSubstance}/" +
                                 "${quantity}/" +
                                 "${substanceName}/" +
-                                "Passenger/"+
+                                "Passenger/" +
                                 "$iceQuantity"
 
                     ) {
@@ -131,13 +145,21 @@ fun ShippingScreen(
                         .fillMaxWidth()
                         .fillMaxHeight()
                         .clip(customShapes.large)
-                        .background(customColorScheme.background), contentAlignment = Alignment.Center
+                        .background(customColorScheme.background),
+                    contentAlignment = Alignment.Center
                 ) {
-                   Text( "PASSENGER\n"+"AIRCRAFT", style = customTypography.bodyMedium, color = orange_who,textAlign = TextAlign.Center)
+                    Text(
+                        "PASSENGER\n" + "AIRCRAFT",
+                        style = customTypography.bodyMedium,
+                        color = orange_who,
+                        textAlign = TextAlign.Center
+                    )
                 }
             }
             FloatingActionButton(
-                modifier = Modifier.weight(.1f).border(1.dp,black, shape = customShapes.large),
+                modifier = Modifier
+                    .weight(.1f)
+                    .border(1.dp, black, shape = customShapes.large),
                 onClick = {
                     navController.navigate(
                         "${HomeNavigation.ShippingDecision}/" +
@@ -146,7 +168,7 @@ fun ShippingScreen(
                                 "${unSubstance}/" +
                                 "${quantity}/" +
                                 "${substanceName}/" +
-                                "CargoOnly/"+
+                                "CargoOnly/" +
                                 "$iceQuantity"
 
                     ) {
@@ -162,15 +184,23 @@ fun ShippingScreen(
                         .fillMaxWidth()
                         .fillMaxHeight()
                         .clip(customShapes.large)
-                        .background(customColorScheme.background), contentAlignment = Alignment.Center
+                        .background(customColorScheme.background),
+                    contentAlignment = Alignment.Center
                 ) {
-                    Text( "CARGO \n" +
-                            "AIRCRAFT \n" +
-                            "ONLY", style = customTypography.bodyMedium, color = orange_who, textAlign = TextAlign.Center)
+                    Text(
+                        "CARGO \n" +
+                                "AIRCRAFT \n" +
+                                "ONLY",
+                        style = customTypography.bodyMedium,
+                        color = orange_who,
+                        textAlign = TextAlign.Center
+                    )
                 }
             }
             FloatingActionButton(
-                modifier = Modifier.weight(.1f).border(1.dp,black, shape = customShapes.large),
+                modifier = Modifier
+                    .weight(.1f)
+                    .border(1.dp, black, shape = customShapes.large),
                 onClick = {
                     navController.navigate(
                         "${HomeNavigation.ShippingDecision}/" +
@@ -179,7 +209,7 @@ fun ShippingScreen(
                                 "${unSubstance}/" +
                                 "${quantity}/" +
                                 "${substanceName}/" +
-                                "ByRoad/"+
+                                "ByRoad/" +
                                 "$iceQuantity"
 
                     ) {
@@ -195,9 +225,15 @@ fun ShippingScreen(
                         .fillMaxWidth()
                         .fillMaxHeight()
                         .clip(customShapes.large)
-                        .background(customColorScheme.background), contentAlignment = Alignment.Center
+                        .background(customColorScheme.background),
+                    contentAlignment = Alignment.Center
                 ) {
-                    Text( "ROAD", style = customTypography.bodyMedium, color = orange_who, textAlign = TextAlign.Center)
+                    Text(
+                        "ROAD",
+                        style = customTypography.bodyMedium,
+                        color = orange_who,
+                        textAlign = TextAlign.Center
+                    )
                 }
             }
 

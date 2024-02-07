@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -18,7 +17,7 @@ import com.example.iss_tool.theme.customColorScheme
 import com.example.iss_tool.theme.customTypography
 
 
-@OptIn(ExperimentalComposeUiApi::class)
+
 @Composable
 fun ShippingDecision(
     navController: NavController,
@@ -30,7 +29,7 @@ fun ShippingDecision(
     substanceName: String?,
     shippingMethod: String,
     iceQuantity: Int
-){
+) {
     Column(
         modifier = modifier
             .padding(24.dp)
@@ -38,6 +37,27 @@ fun ShippingDecision(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceEvenly
     ) {
+        ClickableIcon(
+            modifier = Modifier.align(Alignment.End),
+            id = R.drawable.arrow_forward,
+            description = "information",
+            step = "MARKS AND LABELS"
+        )
+        {
+            navController.navigate(
+                "${HomeNavigation.ShippingInformationRoute}/" +
+                        "${category}/" +
+                        "${unNumber}/" +
+                        "${unSubstance}/" +
+                        "${quantity}/" +
+                        "${substanceName}/" +
+                        "${shippingMethod}/" +
+                        "$iceQuantity"
+
+            ) {
+                launchSingleTop = true
+            }
+        }
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -63,83 +83,87 @@ fun ShippingDecision(
                         .wrapContentWidth(Alignment.CenterHorizontally)
                 )
             }
-                ClickableIcon(
-                    modifier = Modifier.align(Alignment.CenterVertically),
-                    id = R.drawable.arrow_forward,
-                    description = "information"
-                )
-                {
-                    navController.navigate(
-                        "${HomeNavigation.ShippingInformationRoute}/" +
-                                "${category}/" +
-                                "${unNumber}/" +
-                                "${unSubstance}/" +
-                                "${quantity}/" +
-                                "${substanceName}/"+
-                                "${shippingMethod}/"+
-                                "$iceQuantity"
-
-                    ) {
-                        launchSingleTop = true
-                    }
-                }
-
         }
-        when(category){
-            Category.A -> when(shippingMethod){
+        when (category) {
+            Category.A -> when (shippingMethod) {
                 "CargoOnly" -> {
-                    shipment(modifier = Modifier,
+                    Shipment(
+                        modifier = Modifier,
                         shipmentMethod = shippingMethod,
                         title = "Cargo Aircraft Only",
-                        info_body = "For shipments being carried on a cargo only aircraft, no more than 4L or 4kg of Category A infectious substance per package is allowed." )
-                            }
-                "Passenger" -> {
-                    shipment(modifier = Modifier,
-                        shipmentMethod = shippingMethod,
-                        title = "Passenger Aircraft",
-                        info_body = "For shipments being carried in the cargo hold of passenger aircraft, no more than 50mL or 50g of Category A infectious substance per package is allowed."
+                        infoBody = "For shipments being carried on a cargo only aircraft, no more than 4L or 4kg of Category A infectious substance per package is allowed."
                     )
                 }
+
+                "Passenger" -> {
+                    Shipment(
+                        modifier = Modifier,
+                        shipmentMethod = shippingMethod,
+                        title = "Passenger Aircraft",
+                        infoBody = "For shipments being carried in the cargo hold of passenger aircraft, no more than 50mL or 50g of Category A infectious substance per package is allowed."
+                    )
+                }
+
                 "ByRoad" -> {
-                    shipment(modifier = Modifier,
+                    Shipment(
+                        modifier = Modifier,
                         shipmentMethod = shippingMethod,
                         title = "Road",
-                        info_body = "For shipments being carried via surface transport (road, rail or maritime), there are no quantity limits per package. "
+                        infoBody = "For shipments being carried via surface transport (road, rail or maritime), there are no quantity limits per package. "
                     )
                 }
             }
-            Category.B -> when(shippingMethod){
+
+            Category.B -> when (shippingMethod) {
                 "CargoOnly" -> {
-                    shipment(modifier = Modifier,
+                    Shipment(
+                        modifier = Modifier,
                         shipmentMethod = shippingMethod,
                         title = "Cargo Aircraft Only",
-                        info_body = "For shipments being carried by air (passenger or cargo aircraft), the primary inner receptacle must not contain more than 1L and the outer packaging must not contain more than 4L of material. This excludes any quantity of coolants used, such as dry ice or liquid nitrogen. \n"
+                        infoBody = "For shipments being carried by air (passenger or cargo aircraft), the primary inner receptacle must not contain more than 1L and the outer packaging must not contain more than 4L of material. This excludes any quantity of coolants used, such as dry ice or liquid nitrogen. \n"
                     )
                 }
+
                 "Passenger" -> {
-                    shipment(modifier = Modifier,
+                    Shipment(
+                        modifier = Modifier,
                         shipmentMethod = shippingMethod,
                         title = "Passenger Aircraft",
-                        info_body = "For shipments being carried by air (passenger or cargo aircraft), the primary inner receptacle must not contain more than 1L and the outer packaging must not contain more than 4L of material. This excludes any quantity of coolants used, such as dry ice or liquid nitrogen. \n"
+                        infoBody = "For shipments being carried by air (passenger or cargo aircraft), the primary inner receptacle must not contain more than 1L and the outer packaging must not contain more than 4L of material. This excludes any quantity of coolants used, such as dry ice or liquid nitrogen. \n"
                     )
                 }
+
                 "ByRoad" -> {
-                    shipment(modifier = Modifier,
+                    Shipment(
+                        modifier = Modifier,
                         shipmentMethod = shippingMethod,
                         title = "Road",
-                        info_body = "For shipments being carried via surface transport (road, rail or maritime), there are no quantity limits per package. "
+                        infoBody = "For shipments being carried via surface transport (road, rail or maritime), there are no quantity limits per package. "
                     )
                 }
             }
-            Category.Exempt ->{
-                shipment(modifier = Modifier,
+
+            Category.Exempt -> {
+                Shipment(
+                    modifier = Modifier,
                     shipmentMethod = shippingMethod,
                     title = shippingMethod,
-                    info_body = "For shipments of Exempt Human or Animal Specimen Category, there are no quantity limits per package. "
+                    infoBody = "For shipments of Exempt Human or Animal Specimen Category, there are no quantity limits per package. "
                 )
             }
-            else -> { throw Exception("Argument exception: Category.$category is not handled by ShippingDecisionScreen.")}
-        }
 
+            else -> {
+                throw Exception("Argument exception: Category.$category is not handled by ShippingDecisionScreen.")
             }
+        }
+        if (iceQuantity != 0) {
+            NoteText(
+                modifier = modifier,
+                id = R.drawable.info_icon,
+                iconInfo = "info",
+                textInfo = "The total quantity of Dry Ice is limited to 200 Kg per aircraft."
+            )
+        }
+    }
 }
+

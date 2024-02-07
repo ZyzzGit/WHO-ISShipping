@@ -64,7 +64,9 @@ fun DocumentationScreen(
     shipperAddress: String,
     receiverName: String,
     receiverAddress: String,
-    substanceName: String?, responsibleName: String?, responsiblePhone: String? // only provided for Category A
+    substanceName: String?,
+    responsibleName: String?,
+    responsiblePhone: String? // only provided for Category A
 ) {
     Column(
         modifier = modifier
@@ -74,7 +76,11 @@ fun DocumentationScreen(
         verticalArrangement = Arrangement.SpaceEvenly
 
     ) {
-        Text(text = "Documentation", style = customTypography.bodyLarge, color = customColorScheme.primary)
+        Text(
+            text = "Documentation",
+            style = customTypography.bodyLarge,
+            color = customColorScheme.primary
+        )
         val context = LocalContext.current
 
         var documentDGTD: PDDocument? by remember { mutableStateOf(null) }
@@ -86,7 +92,20 @@ fun DocumentationScreen(
         if (category == Category.A || unNumber == 3291) {
             LaunchedEffect(Unit) {
                 documentDGTD = getFilledDangerousGoodDeclaration(
-                    context, category, unNumber, unSubstance, quantity, iceQuantity, shippingMethod, shipperName, shipperAddress, receiverName, receiverAddress, substanceName, responsibleName, responsiblePhone
+                    context,
+                    category,
+                    unNumber,
+                    unSubstance,
+                    quantity,
+                    iceQuantity,
+                    shippingMethod,
+                    shipperName,
+                    shipperAddress,
+                    receiverName,
+                    receiverAddress,
+                    substanceName,
+                    responsibleName,
+                    responsiblePhone
                 )
             }
         }
@@ -103,9 +122,7 @@ fun DocumentationScreen(
                     } catch (error: Throwable) {
                         status = "Download failed: $error"
                     }
-                },
-                modifier.align(Alignment.Start),
-                enabled = !documentDGTD!!.document.isClosed
+                }, modifier.align(Alignment.Start), enabled = !documentDGTD!!.document.isClosed
             ) {
                 Text(text = "Download DGTD")
             }
@@ -113,16 +130,14 @@ fun DocumentationScreen(
 
         /*if (documentDGTD != null && !documentDGTD!!.document.isClosed) {
             OutlinedButton(
-            onClick = {
-                try {
-                    val renderer = PDFRenderer(documentDGTD)
-                    pageImage = renderer.renderImage(0, 1f, ImageType.RGB)
-                } catch (error: Throwable) {
-                    throw Error("Could not render pdf: $error")
-                }
-            },
-            modifier.align(Alignment.Start),
-            enabled = !documentDGTD!!.document.isClosed
+                onClick = {
+                    try {
+                        val renderer = PDFRenderer(documentDGTD)
+                        pageImage = renderer.renderImage(0, 1f, ImageType.RGB)
+                    } catch (error: Throwable) {
+                        throw Error("Could not render pdf: $error")
+                    }
+                }, modifier.align(Alignment.Start), enabled = !documentDGTD!!.document.isClosed
             ) {
                 Text(text = "Preview DGTD")
             }
@@ -164,10 +179,11 @@ private fun getFilledDangerousGoodDeclaration(
     substanceName: String?,
     responsibleName: String?,
     responsiblePhone: String?
-) : PDDocument {
+): PDDocument {
 
     PDFBoxResourceLoader.init(context)
-    val pdd: InputStream = context.resources.openRawResource(R.raw.shippers_declaration_dangerous_goods)
+    val pdd: InputStream =
+        context.resources.openRawResource(R.raw.shippers_declaration_dangerous_goods)
 
     try {
         // Load PDF
@@ -187,7 +203,8 @@ private fun getFilledDangerousGoodDeclaration(
         val un = acroForm.getField("UN or ID") as PDTextField
         val shippingName = acroForm.getField("Proper Shipping Name") as PDTextField
         val classDivision = acroForm.getField("Class or Division") as PDTextField
-        val quantityAndPackagingType = acroForm.getField("Quantity and Type of Packing") as PDTextField
+        val quantityAndPackagingType =
+            acroForm.getField("Quantity and Type of Packing") as PDTextField
         val packagingInstructions = acroForm.getField("Packing Instruction") as PDTextField
         val responsiblePerson = acroForm.getField("Additional Handling Information") as PDTextField
         val signatoryName = acroForm.getField("Name-title") as PDTextField
@@ -209,19 +226,22 @@ private fun getFilledDangerousGoodDeclaration(
         // Additional info for category A only
         if (category == Category.A) {
             shippingName.value = shippingName.value + "\n($substanceName)"
-            responsiblePerson.value = "Responsible person: $responsibleName\nPhone: $responsiblePhone"
+            responsiblePerson.value =
+                "Responsible person: $responsibleName\nPhone: $responsiblePhone"
         }
 
-        // Fill shipment limitations
+        // Fill Shipment limitations
         when (shippingMethod) {
             ShippingMethod.CargoOnly -> {
                 cargoOnly.setValue(cargoOnly.options[0])
                 passengerAndCargo.setValue(cargoOnly.options[1])
             }
+
             ShippingMethod.Passenger -> {
                 cargoOnly.setValue(cargoOnly.options[1])
                 passengerAndCargo.setValue(cargoOnly.options[0])
             }
+
             else -> {
                 cargoOnly.setValue(cargoOnly.options[1])
                 passengerAndCargo.setValue(cargoOnly.options[1])
@@ -233,12 +253,14 @@ private fun getFilledDangerousGoodDeclaration(
             un.value = un.value + "\n\n\nUN\n1845"
             shippingName.value = shippingName.value + "\n\n\nDry ice"
             classDivision.value = classDivision.value + "\n\n\n\n9"
-            quantityAndPackagingType.value = quantityAndPackagingType.value + "\n\n\n\n${iceQuantity}kg"
+            quantityAndPackagingType.value =
+                quantityAndPackagingType.value + "\n\n\n\n${iceQuantity}kg"
             packagingInstructions.value = packagingInstructions.value + "\n\n\n\n954"
         }
 
         // Assume always packing in single fiberboard box
-        quantityAndPackagingType.value = quantityAndPackagingType.value + "\n\nAll packed in one fiberboard box"
+        quantityAndPackagingType.value =
+            quantityAndPackagingType.value + "\n\nAll packed in one fiberboard box"
 
         return document
     } catch (error: Throwable) {

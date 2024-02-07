@@ -4,7 +4,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 
 
-
 @Composable
 fun MyCustomTheme(content: @Composable () -> Unit) {
     // Apply the custom color scheme to the MaterialTheme

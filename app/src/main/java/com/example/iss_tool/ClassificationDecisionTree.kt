@@ -11,7 +11,7 @@ class ClassificationLeaf(
     var unSubstance: UnSubstance? = null,
     val additionalInfo: String? = null,
     var quantity: Int? = null,
-    var substanceName:String?=null
+    var substanceName: String? = null
 )
 
 /**
@@ -30,7 +30,7 @@ class ClassificationNode(
     val right: Any
 ) {
     init {
-        require(left is ClassificationNode|| left is ClassificationLeaf) {
+        require(left is ClassificationNode || left is ClassificationLeaf) {
             "ClassificationNode.left must be either ClassificationNode or ClassificationLeaf"
         }
         require(right is ClassificationNode || right is ClassificationLeaf) {
@@ -52,15 +52,11 @@ private var exceptionLeaf = ClassificationLeaf(
 )
 
 private var infectiousAffectingHumansLeaf = ClassificationLeaf(
-    category = Category.A,
-    unNumber = 2814,
-    unSubstance = UnSubstance.ISHumans
+    category = Category.A, unNumber = 2814, unSubstance = UnSubstance.ISHumans
 )
 
 private var infectiousAffectingAnimalsOnlyLeaf = ClassificationLeaf(
-    category = Category.A,
-    unNumber = 2900,
-    unSubstance = UnSubstance.ISAnimalsOnly
+    category = Category.A, unNumber = 2900, unSubstance = UnSubstance.ISAnimalsOnly
 )
 
 private var exemptLeaf = ClassificationLeaf(
@@ -70,35 +66,19 @@ private var exemptLeaf = ClassificationLeaf(
 )
 
 private var infectiousBiologicalLeaf = ClassificationLeaf(
-    category = Category.B,
-    unNumber = 3373,
-    unSubstance = UnSubstance.Biological
+    category = Category.B, unNumber = 3373, unSubstance = UnSubstance.Biological
 )
 
 private var infectiousWasteLeaf = ClassificationLeaf(
     category = Category.B,
     unNumber = 3291,
     unSubstance = UnSubstance.IWaste,
-    additionalInfo = "Biomedical Waste, n.o.s.\n" +
-            "OR Clinical Waste, unspecified n.o.s.\n" +
-            "OR Medical Waste, n.o.s."
+    additionalInfo = "Biomedical Waste, n.o.s.\n" + "OR Clinical Waste, unspecified n.o.s.\n" + "OR Medical Waste, n.o.s."
 )
 
 private var infectiousCategoryALeaf = ClassificationLeaf(
-    category = Category.A,
-    unSubstance = UnSubstance.ISCategoryA
+    category = Category.A, unSubstance = UnSubstance.ISCategoryA
 )
-//
-//private var categoryASplitNode = ClassificationNode(
-//    question = "Is exposure to the specimen likely to cause serious disease in healthy humans or animals?",
-//    leftIconId = R.drawable.animal_icon,
-//    rightIconId = R.drawable.human_icon,
-//    leftIconLabel = "Animals only",
-//    rightIconLabel = "Humans and animals",
-//    left = infectiousAffectingAnimalsOnlyLeaf,
-//    right = infectiousAffectingHumansLeaf
-//)
-
 
 private var categoryBSplitNode = ClassificationNode(
     question = "Is the substance a biomedical, medical or clinical waste?",
@@ -119,13 +99,7 @@ private var criticalBiologicalAgentsNode = ClassificationNode(
 )
 
 var classificationDecisionTree = ClassificationNode(
-    question = "Is the material or substance one of the following:\n" +
-            "• Sterile (free from biological agents)\n" +
-            "• Neutralized/inactivated\n" +
-            "• Environmental samples (e.g. food or water)\n" +
-            "• A product for transplant/transfusion\n" +
-            "• A dried blood spot\n" +
-            "• A regulated biological product",
+    question = "Is the material or substance one of the following:\n" + "• Sterile (free from biological agents)\n" + "• Neutralized/inactivated\n" + "• Environmental samples (e.g. food or water)\n" + "• A product for transplant/transfusion\n" + "• A dried blood spot\n" + "• A regulated biological product",
     left = exceptionLeaf,
     right = criticalBiologicalAgentsNode,
 )

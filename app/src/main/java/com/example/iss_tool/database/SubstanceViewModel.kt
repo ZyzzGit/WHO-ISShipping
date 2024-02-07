@@ -7,11 +7,11 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class SubstanceViewModel(application: Application): AndroidViewModel(application) {
+class SubstanceViewModel(application: Application) : AndroidViewModel(application) {
 
     private val readAllData: LiveData<List<Substance>>
     private val repository: SubstanceRepository
-//    private val readAnimalSub:List<String>
+
     init {
         val SubstanceDao = SubstanceDatabase.getDatabase(application).SubstanceDao()
         repository = SubstanceRepository(SubstanceDao)

@@ -145,15 +145,15 @@ fun ShippingInformationScreen(
                                 "${category}/" +
                                 "${unNumber}/" +
                                 "${unSubstance}/" +
-                                "${quantity}/"+
-                                "${substanceName}/"+
-                                "${shippingMethod}/"+
-                                "${shipperName}/"+
-                                "${shipperAddress}/"+
-                                "${receiverName}/"+
-                                "${receiverAddress}/"+
-                                "${responsibleName}/"+
-                                "${responsiblePhone}/"+
+                                "${quantity}/" +
+                                "${substanceName}/" +
+                                "${shippingMethod}/" +
+                                "${shipperName}/" +
+                                "${shipperAddress}/" +
+                                "${receiverName}/" +
+                                "${receiverAddress}/" +
+                                "${responsibleName}/" +
+                                "${responsiblePhone}/" +
                                 "$iceQuantity"
 
                     ) {
