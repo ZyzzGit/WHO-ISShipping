@@ -66,7 +66,7 @@ fun DocumentationScreen(
         verticalArrangement = Arrangement.Top
 
     ) {
-        Text(text = "Documentation", style = customTypography.displayMedium, color = customColorScheme.primary)
+        Text(text = "Documentation", style = customTypography.displaySmall, color = customColorScheme.primary)
         val context = LocalContext.current
 
         var documentDGTD: PDDocument? by remember { mutableStateOf(null) }
