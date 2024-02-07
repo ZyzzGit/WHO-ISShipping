@@ -40,6 +40,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
@@ -58,6 +59,7 @@ import com.example.iss_tool.theme.customShapes
 import com.example.iss_tool.theme.customTypography
 import com.example.iss_tool.theme.emergency_red_who
 import com.example.iss_tool.theme.primary_navy_blue
+import com.example.iss_tool.theme.success_green
 import com.example.iss_tool.theme.white
 
 sealed class BottomBarScreen(
@@ -363,21 +365,35 @@ fun CustomOutlinedTextField(
     }
 }
 
-
-//@Composable
-//fun ClickableIcon(modifier: Modifier, id: Int, description: String, onClick: () -> Unit) {
-//        Icon(painter = painterResource(id),
-//            contentDescription = description,
-//            modifier = modifier.clickable { onClick() })
-//
-//}
-
 @Composable
 fun ClickableIcon(modifier: Modifier, id: Int, description: String, step:String,onClick: () -> Unit) {
     Row(modifier = modifier.clickable { onClick() }) {
         Text(text = step,style= customTypography.bodyMedium, color = Color.Gray)
         Icon(painter = painterResource(id),
         contentDescription = description, tint = Color.Gray, modifier = Modifier.size(20.dp)
+        )
+    }
+}
+
+@Composable
+fun DownloadCompleteIcon(
+    modifier: Modifier = Modifier
+) {
+    Box(
+        modifier = modifier
+            .size(125.dp)
+            .background(
+                color = success_green,
+                shape = androidx.compose.foundation.shape.CircleShape
+            )
+    ) {
+        Icon(
+            painter = painterResource(id = R.drawable.download_done),
+            modifier = Modifier
+                .align(Alignment.Center)
+                .graphicsLayer(alpha = 0.8f),
+            contentDescription = "download_done_icon",
+            tint = Color.White
         )
     }
 }

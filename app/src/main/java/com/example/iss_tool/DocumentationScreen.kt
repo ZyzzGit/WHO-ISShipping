@@ -1,26 +1,19 @@
 package com.example.iss_tool
 
-import android.app.Activity
 import android.content.ContentValues
 import android.content.Context
-import android.graphics.Bitmap
+import android.content.Intent
 import android.net.Uri
 import android.os.Environment
 import android.provider.MediaStore
-import android.view.View
-import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.Snackbar
-import androidx.compose.material3.SnackbarDuration
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -30,11 +23,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.asImageBitmap
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat.startActivity
+import androidx.core.content.FileProvider.getUriForFile
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.iss_tool.theme.customColorScheme
@@ -43,9 +36,8 @@ import com.tom_roush.pdfbox.android.PDFBoxResourceLoader
 import com.tom_roush.pdfbox.pdmodel.PDDocument
 import com.tom_roush.pdfbox.pdmodel.interactive.form.PDComboBox
 import com.tom_roush.pdfbox.pdmodel.interactive.form.PDTextField
-import com.tom_roush.pdfbox.rendering.ImageType
-import com.tom_roush.pdfbox.rendering.PDFRenderer
 import java.io.ByteArrayOutputStream
+import java.io.File
 import java.io.InputStream
 import java.time.LocalDate
 
@@ -64,102 +56,71 @@ fun DocumentationScreen(
     shipperAddress: String,
     receiverName: String,
     receiverAddress: String,
-    substanceName: String?,
-    responsibleName: String?,
-    responsiblePhone: String? // only provided for Category A
+    substanceName: String?, responsibleName: String?, responsiblePhone: String? // only provided for Category A
 ) {
     Column(
         modifier = modifier
             .padding(24.dp)
             .fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.SpaceEvenly
+        verticalArrangement = Arrangement.Top
 
     ) {
-        Text(
-            text = "Documentation",
-            style = customTypography.bodyLarge,
-            color = customColorScheme.primary
-        )
+        Text(text = "Documentation", style = customTypography.displayMedium, color = customColorScheme.primary)
         val context = LocalContext.current
 
         var documentDGTD: PDDocument? by remember { mutableStateOf(null) }
-        var status by remember { mutableStateOf("") }
-
-        //var pageImage: Bitmap? by remember { mutableStateOf(null) }
+        var downloadPath: String? by remember { mutableStateOf(null ) }
 
         // Dangerous goods declaration required only for category A substances and biological/clinical/medical wastes (UN 3291)
         if (category == Category.A || unNumber == 3291) {
             LaunchedEffect(Unit) {
                 documentDGTD = getFilledDangerousGoodDeclaration(
-                    context,
-                    category,
-                    unNumber,
-                    unSubstance,
-                    quantity,
-                    iceQuantity,
-                    shippingMethod,
-                    shipperName,
-                    shipperAddress,
-                    receiverName,
-                    receiverAddress,
-                    substanceName,
-                    responsibleName,
-                    responsiblePhone
+                    context, category, unNumber, unSubstance, quantity, iceQuantity, shippingMethod, shipperName, shipperAddress, receiverName, receiverAddress, substanceName, responsibleName, responsiblePhone
                 )
             }
         }
 
-        if (documentDGTD != null) {
+        if (documentDGTD != null && downloadPath == null) {
             OutlinedButton(
                 onClick = {
                     try {
                         val fileName = "FilledDGTD.pdf"
                         documentDGTD!!.isAllSecurityToBeRemoved = true
-                        val path = downloadPdf(context, fileName, documentDGTD!!)
+                        downloadPath = downloadPdf(context, fileName, documentDGTD!!)
                         documentDGTD!!.close()
-                        status = "Saved to ${path.substring(path.lastIndexOf('/', path.lastIndexOf('/')))}" // Only display the relevant part, that is Download(s)/filename
                     } catch (error: Throwable) {
-                        status = "Download failed: $error"
+                        throw Error("Download failed: $error")
                     }
-                }, modifier.align(Alignment.Start), enabled = !documentDGTD!!.document.isClosed
+                },
+                modifier.align(Alignment.Start),
+                enabled = !documentDGTD!!.document.isClosed
             ) {
                 Text(text = "Download DGTD")
             }
         }
 
-        /*if (documentDGTD != null && !documentDGTD!!.document.isClosed) {
-            OutlinedButton(
-                onClick = {
-                    try {
-                        val renderer = PDFRenderer(documentDGTD)
-                        pageImage = renderer.renderImage(0, 1f, ImageType.RGB)
-                    } catch (error: Throwable) {
-                        throw Error("Could not render pdf: $error")
-                    }
-                }, modifier.align(Alignment.Start), enabled = !documentDGTD!!.document.isClosed
-            ) {
-                Text(text = "Preview DGTD")
-            }
-        }
-
-        if (pageImage != null) {
-            Image(
-                bitmap = pageImage!!.asImageBitmap(),
-                contentDescription = "DGTD pdf filled",
-                modifier.fillMaxWidth(),
-                contentScale = ContentScale.Crop
+        if (downloadPath != null) {
+            Spacer(modifier = Modifier.height(70.dp))
+            DownloadCompleteIcon(modifier = Modifier.padding(10.dp))
+            Text(
+                text = "Download completed!",
+                style = customTypography.bodyLarge,
+                color = customColorScheme.primary
             )
-        }*/
+            Text(
+                text = "Open ${downloadPath!!.substring(downloadPath!!.lastIndexOf('/') + 1)}",
+                modifier = Modifier
+                    .padding(16.dp)
+                    .clickable {
+                        openPdfExternally(context, downloadPath!!)
+                    },
+                style = customTypography.bodyLarge,
+                color = customColorScheme.primary
+            )
+        }
 
         InfoBody(infoText = "Always check if there is any state variation and/or operator variations")
-
-        if (status != "") {
-            val snackbarHostState = LocalSnackbarHostState.current
-            LaunchedEffect(status) {
-                snackbarHostState.showSnackbar(status, duration = SnackbarDuration.Short)
-            }
-        }
     }
 }
 
@@ -179,11 +140,10 @@ private fun getFilledDangerousGoodDeclaration(
     substanceName: String?,
     responsibleName: String?,
     responsiblePhone: String?
-): PDDocument {
+) : PDDocument {
 
     PDFBoxResourceLoader.init(context)
-    val pdd: InputStream =
-        context.resources.openRawResource(R.raw.shippers_declaration_dangerous_goods)
+    val pdd: InputStream = context.resources.openRawResource(R.raw.shippers_declaration_dangerous_goods)
 
     try {
         // Load PDF
@@ -203,8 +163,7 @@ private fun getFilledDangerousGoodDeclaration(
         val un = acroForm.getField("UN or ID") as PDTextField
         val shippingName = acroForm.getField("Proper Shipping Name") as PDTextField
         val classDivision = acroForm.getField("Class or Division") as PDTextField
-        val quantityAndPackagingType =
-            acroForm.getField("Quantity and Type of Packing") as PDTextField
+        val quantityAndPackagingType = acroForm.getField("Quantity and Type of Packing") as PDTextField
         val packagingInstructions = acroForm.getField("Packing Instruction") as PDTextField
         val responsiblePerson = acroForm.getField("Additional Handling Information") as PDTextField
         val signatoryName = acroForm.getField("Name-title") as PDTextField
@@ -226,22 +185,19 @@ private fun getFilledDangerousGoodDeclaration(
         // Additional info for category A only
         if (category == Category.A) {
             shippingName.value = shippingName.value + "\n($substanceName)"
-            responsiblePerson.value =
-                "Responsible person: $responsibleName\nPhone: $responsiblePhone"
+            responsiblePerson.value = "Responsible person: $responsibleName\nPhone: $responsiblePhone"
         }
 
-        // Fill Shipment limitations
+        // Fill shipment limitations
         when (shippingMethod) {
             ShippingMethod.CargoOnly -> {
                 cargoOnly.setValue(cargoOnly.options[0])
                 passengerAndCargo.setValue(cargoOnly.options[1])
             }
-
             ShippingMethod.Passenger -> {
                 cargoOnly.setValue(cargoOnly.options[1])
                 passengerAndCargo.setValue(cargoOnly.options[0])
             }
-
             else -> {
                 cargoOnly.setValue(cargoOnly.options[1])
                 passengerAndCargo.setValue(cargoOnly.options[1])
@@ -253,14 +209,12 @@ private fun getFilledDangerousGoodDeclaration(
             un.value = un.value + "\n\n\nUN\n1845"
             shippingName.value = shippingName.value + "\n\n\nDry ice"
             classDivision.value = classDivision.value + "\n\n\n\n9"
-            quantityAndPackagingType.value =
-                quantityAndPackagingType.value + "\n\n\n\n${iceQuantity}kg"
+            quantityAndPackagingType.value = quantityAndPackagingType.value + "\n\n\n\n${iceQuantity}kg"
             packagingInstructions.value = packagingInstructions.value + "\n\n\n\n954"
         }
 
         // Assume always packing in single fiberboard box
-        quantityAndPackagingType.value =
-            quantityAndPackagingType.value + "\n\nAll packed in one fiberboard box"
+        quantityAndPackagingType.value = quantityAndPackagingType.value + "\n\nAll packed in one fiberboard box"
 
         return document
     } catch (error: Throwable) {
@@ -304,7 +258,21 @@ fun downloadPdf(context: Context, fileName: String, document: PDDocument): Strin
     }
     // If URI is null
     throw IllegalStateException("downloadPdf: Failed to insert file into MediaStore")
+}
 
+
+fun openPdfExternally(context: Context, path: String) {
+    try {
+        val pdfFile = File(path)
+        val contentUri: Uri = getUriForFile(context, context.packageName + ".provider", pdfFile)
+        val intent = Intent(Intent.ACTION_VIEW).apply {
+            setDataAndType(contentUri, "application/pdf")
+            flags = Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_ACTIVITY_CLEAR_TOP
+        }
+        startActivity(context, intent, null)
+    } catch (e: Exception) {
+        throw Exception("openPdfExternally: Failed to open pdf: $e")
+    }
 }
 
 

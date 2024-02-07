@@ -17,6 +17,8 @@ val magenta_who = Color(0xFFA6228C)
 val purple_who = Color(0xFF5B2C86)
 val emergency_red_who = Color(0xFFEF3842)
 
+val success_green = Color(0xFF93E785)
+
 // Define your custom color scheme
 val customColorScheme = lightColorScheme(
     primary = primary_navy_blue,
