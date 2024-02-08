@@ -226,9 +226,9 @@ fun FormDisplay(
                 leaf.quantity = assignedQuantity?.toInt()
             }
             if (selectedIceOption == IceOption.No) {
-                if((leaf.category == Category.A || leaf.category == Category.B) && assignedSubstance == null) {
+                if(leaf.category == Category.A && (leaf.substanceName == null || assignedSubstance == null)) {
                     substanceError=true
-                } else if (leaf.category == Category.A && (leaf.quantity == null)) {
+                } else if (leaf.quantity == null || assignedQuantity == null) {
                     quantityError = true
                 }
                 else{
