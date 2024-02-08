@@ -44,26 +44,25 @@ fun FormDisplay(
 
     // State for substance selection
     var assignedSubstance by remember { mutableStateOf<String?>(null) }
-    var showErrorsubstance by remember { mutableStateOf(false) }
+    var substanceError by remember { mutableStateOf(false) }
     var expanded by remember { mutableStateOf(false) }
-
-    // State for quantity input
-    var text by remember { mutableStateOf(TextFieldValue("")) }
-    var assignedValue by remember { mutableStateOf<String?>(null) }
-    var showError by remember { mutableStateOf(false) }
-
-    //Assigned values for substance and quantity
-    var assignedValue2 by remember { mutableStateOf<String?>(null) }
     var selectedSubstance by remember { mutableStateOf(substanceList[0]) }
 
-    // State for ice quantity input
-    var text2 by remember { mutableStateOf(TextFieldValue("")) }
-    var showError2 by remember { mutableStateOf(false) }
+    // State for quantity input
+    var quantityText by remember { mutableStateOf(TextFieldValue("")) }
+    var assignedQuantity by remember { mutableStateOf<String?>(null) }
+    var quantityError by remember { mutableStateOf(false) }
+
+    // State for ice input
+    var iceQuantityText by remember { mutableStateOf(TextFieldValue("")) }
+    var iceQuantityError by remember { mutableStateOf(false) }
+    var assignedIceQuantity by remember { mutableStateOf<String?>(null) }
+    var selectedIceOption by remember { mutableStateOf<IceOption?>(IceOption.No) }
 
     //State for number of packages input
-    var numberofpackages by remember { mutableStateOf(TextFieldValue("")) }
-    var numberofpackagesError by remember { mutableStateOf(false) }
-    var assignedNbofpackages by remember { mutableStateOf<String?>(null) }
+    var numPackages by remember { mutableStateOf(TextFieldValue("")) }
+    var numPackagesError by remember { mutableStateOf(false) }
+    var assignedNumPackages by remember { mutableStateOf<String?>(null) }
 
 
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -97,7 +96,7 @@ fun FormDisplay(
                             onClick = {
                                 selectedSubstance = selectedSubstance_
                                 expanded = false
-                                showErrorsubstance = false
+                                substanceError = false
 
                             },
                             contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding,
@@ -106,7 +105,7 @@ fun FormDisplay(
                 }
 
             }
-            if (showErrorsubstance) {
+            if (substanceError) {
                 ErrorMessage(message = "Substance is required")
             }
         }
@@ -116,11 +115,11 @@ fun FormDisplay(
         Spacer(modifier = Modifier.height(24.dp))
         OutlinedTextFieldComponent(
             text = "Quantity in mL or g",
-            value = text,
-            showError = showError,
+            value = quantityText,
+            showError = quantityError,
             onValueChange = {
-                text = if (it.text.isDigitsOnly()) it else text
-                showError = false // Hide the error message when the user starts typing
+                quantityText = if (it.text.isDigitsOnly()) it else quantityText
+                quantityError = false // Hide the error message when the user starts typing
             },
             onDoneAction = {
                 onDoneAction
@@ -128,12 +127,11 @@ fun FormDisplay(
             modifier = modifier.fillMaxWidth()
         )
 
-        if (showError) {
+        if (quantityError) {
             ErrorMessage("Quantity is required!", modifier = modifier)
         }
     }
 
-    var selectedOption by remember { mutableStateOf<IceOption?>(IceOption.No) }
     Spacer(modifier = Modifier.height(24.dp))
     Box(
         modifier = Modifier
@@ -148,38 +146,38 @@ fun FormDisplay(
         ) {
             Text("Are you using Ice as Refrigerant?",style = customTypography.bodyMedium)
             OptionRadioButton(option = IceOption.Yes,
-                selectedOption = selectedOption,
-                onOptionSelected = { selectedOption = it })
+                selectedOption = selectedIceOption,
+                onOptionSelected = { selectedIceOption = it })
             OptionRadioButton(option = IceOption.No,
-                selectedOption = selectedOption,
-                onOptionSelected = { selectedOption = it })
+                selectedOption = selectedIceOption,
+                onOptionSelected = { selectedIceOption = it })
 
-            if (selectedOption == IceOption.Yes) {
+            if (selectedIceOption == IceOption.Yes) {
 
                 // Display quantity  box when yes is selected
                 OutlinedTextFieldComponent(
                     text = "Quantity in Kg",
-                    value = text2,
-                    showError = showError2,
+                    value = iceQuantityText,
+                    showError = iceQuantityError,
                     onValueChange = {
-                        text2 = if (it.text.isDigitsOnly()) it else text2
-                        showError2 = false // Hide the error message when the user starts typing
+                        iceQuantityText = if (it.text.isDigitsOnly()) it else iceQuantityText
+                        iceQuantityError = false // Hide the error message when the user starts typing
                     },
                     onDoneAction = {
                         keyboardController?.hide()
                     },
                     modifier = Modifier.fillMaxWidth()
                 )
-                if (showError2) {
+                if (iceQuantityError) {
                     ErrorMessage("Quantity is required!", modifier = Modifier)
                 }
                 OutlinedTextFieldComponent(
                     text = "Number of packages",
-                    value = numberofpackages,
-                    showError = numberofpackagesError,
+                    value = numPackages,
+                    showError = numPackagesError,
                     onValueChange = {
-                        numberofpackages = if (it.text.isDigitsOnly()) it else numberofpackages
-                        numberofpackagesError =
+                        numPackages = if (it.text.isDigitsOnly()) it else numPackages
+                        numPackagesError =
                             false // Hide the error message when the user starts typing
                     },
                     onDoneAction = {
@@ -187,7 +185,7 @@ fun FormDisplay(
                     },
                     modifier = Modifier.fillMaxWidth()
                 )
-                if (numberofpackagesError) {
+                if (numPackagesError) {
                     ErrorMessage("Number of packages is required!", modifier = Modifier)
                 }
 
@@ -199,15 +197,15 @@ fun FormDisplay(
         StartButton(onClick = {
             if (leaf.category == Category.A) {
                 if (selectedSubstance.isNullOrEmpty()) {
-                    showErrorsubstance = true
+                    substanceError = true
                 } else {
                     assignedSubstance = selectedSubstance
                 }
             }
-            if (text.text.isEmpty()) {
-                showError = true
+            if (quantityText.text.isEmpty()) {
+                quantityError = true
             } else {
-                assignedValue = text.text
+                assignedQuantity = quantityText.text
             }
             if (assignedSubstance != null) {
                 val specificSubstanceName = assignedSubstance
@@ -224,12 +222,14 @@ fun FormDisplay(
                 leaf.substanceName = assignedSubstance
             }
 
-            if (assignedValue != null) {
-                leaf.quantity = assignedValue?.toInt()
+            if (assignedQuantity != null) {
+                leaf.quantity = assignedQuantity?.toInt()
             }
-            if (selectedOption == IceOption.No) {
-                if((leaf.category == Category.A || leaf.category == Category.B) && assignedSubstance ==null){
-                    showErrorsubstance=true
+            if (selectedIceOption == IceOption.No) {
+                if((leaf.category == Category.A || leaf.category == Category.B) && assignedSubstance == null){
+                    substanceError=true
+                } else if (leaf.category == Category.A && leaf.quantity == null) {
+                    quantityError = true
                 }
                 else{
                     navController.navigate(
@@ -239,15 +239,20 @@ fun FormDisplay(
                     }
                 }
             } else {
-                if (text2.text.isEmpty()) {
-                    showError2 = true
-                } else if (numberofpackages.text.isEmpty()) {
-                    numberofpackagesError = true
+                if (iceQuantityText.text.isEmpty()) {
+                    iceQuantityError = true
+                } else if (numPackages.text.isEmpty()) {
+                    numPackagesError = true
+                } else if (leaf.quantity == null) {
+                    quantityError = true
+                } else if (leaf.category == Category.A && leaf.substanceName == null) {
+                    substanceError = true
                 } else {
-                    assignedValue2 = text2.text
-                    assignedNbofpackages = numberofpackages.text
+                    println("quantity: ${leaf.quantity}, substanceName = ${leaf.substanceName}")
+                    assignedIceQuantity = iceQuantityText.text
+                    assignedNumPackages = numPackages.text
                     navController.navigate(
-                        "${HomeNavigation.PackagingRoute}/" + "${leaf.category}/" + "${leaf.unNumber}/" + "${leaf.unSubstance}/" + "${leaf.quantity}/" + "${leaf.substanceName}/" + "${assignedValue2!!.toInt()}/" + "${assignedNbofpackages}"
+                        "${HomeNavigation.PackagingRoute}/" + "${leaf.category}/" + "${leaf.unNumber}/" + "${leaf.unSubstance}/" + "${leaf.quantity}/" + "${leaf.substanceName}/" + "${assignedIceQuantity!!.toInt()}/" + "${assignedNumPackages}"
 
                     ) {
                         launchSingleTop = true
