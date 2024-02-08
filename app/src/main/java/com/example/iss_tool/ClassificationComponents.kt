@@ -223,14 +223,20 @@ fun FormDisplay(
                 }
                 leaf.substanceName = assignedSubstance
             }
+
             if (assignedValue != null) {
                 leaf.quantity = assignedValue?.toInt()
             }
             if (selectedOption == IceOption.No) {
-                navController.navigate(
-                    "${HomeNavigation.PackagingRoute}/" + "${leaf.category}/" + "${leaf.unNumber}/" + "${leaf.unSubstance}/" + "${leaf.quantity}/" + "${leaf.substanceName}/" + "${0}/" + "${0}"
-                ) {
-                    launchSingleTop = true
+                if((leaf.category == Category.A || leaf.category == Category.B) && assignedSubstance ==null){
+                    showErrorsubstance=true
+                }
+                else{
+                    navController.navigate(
+                        "${HomeNavigation.PackagingRoute}/" + "${leaf.category}/" + "${leaf.unNumber}/" + "${leaf.unSubstance}/" + "${leaf.quantity}/" + "${leaf.substanceName}/" + "${0}/" + "${0}"
+                    ) {
+                        launchSingleTop = true
+                    }
                 }
             } else {
                 if (text2.text.isEmpty()) {
