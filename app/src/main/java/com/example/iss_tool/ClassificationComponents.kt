@@ -228,7 +228,7 @@ fun FormDisplay(
             if (selectedIceOption == IceOption.No) {
                 if(leaf.category == Category.A && (leaf.substanceName == null || assignedSubstance == null)) {
                     substanceError=true
-                } else if (leaf.quantity == null || assignedQuantity == null) {
+                } else if ((leaf.category == Category.A || leaf.category == Category.B) && (leaf.quantity == null || assignedQuantity == null)) {
                     quantityError = true
                 }
                 else{
@@ -243,7 +243,7 @@ fun FormDisplay(
                     iceQuantityError = true
                 } else if (numPackages.text.isEmpty()) {
                     numPackagesError = true
-                } else if (leaf.quantity == null  || assignedQuantity == null) {
+                } else if ((leaf.category == Category.A || leaf.category == Category.B) && (leaf.quantity == null  || assignedQuantity == null)) {
                     quantityError = true
                 } else if (leaf.category == Category.A && (leaf.substanceName == null || assignedSubstance == null)) {
                     substanceError = true
