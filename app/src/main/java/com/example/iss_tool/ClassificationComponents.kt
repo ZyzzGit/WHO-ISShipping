@@ -226,9 +226,9 @@ fun FormDisplay(
                 leaf.quantity = assignedQuantity?.toInt()
             }
             if (selectedIceOption == IceOption.No) {
-                if((leaf.category == Category.A || leaf.category == Category.B) && assignedSubstance == null){
+                if((leaf.category == Category.A || leaf.category == Category.B) && assignedSubstance == null) {
                     substanceError=true
-                } else if (leaf.category == Category.A && leaf.quantity == null) {
+                } else if (leaf.category == Category.A && (leaf.quantity == null)) {
                     quantityError = true
                 }
                 else{
@@ -243,12 +243,11 @@ fun FormDisplay(
                     iceQuantityError = true
                 } else if (numPackages.text.isEmpty()) {
                     numPackagesError = true
-                } else if (leaf.quantity == null) {
+                } else if (leaf.quantity == null  || assignedQuantity == null) {
                     quantityError = true
-                } else if (leaf.category == Category.A && leaf.substanceName == null) {
+                } else if (leaf.category == Category.A && (leaf.substanceName == null || assignedSubstance == null)) {
                     substanceError = true
                 } else {
-                    println("quantity: ${leaf.quantity}, substanceName = ${leaf.substanceName}")
                     assignedIceQuantity = iceQuantityText.text
                     assignedNumPackages = numPackages.text
                     navController.navigate(
