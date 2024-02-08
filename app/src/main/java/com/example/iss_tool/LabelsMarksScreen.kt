@@ -77,6 +77,9 @@ fun LabelsMarksScreen(
         var shippingName = false
         var shippingNumber = false
 
+        if (shippingMethod == ShippingMethod.CargoOnly) {
+            cargoLabel = true
+        }
         if (iceQuantity > 0) {
             dryIceLabel = true
             dangerousGoodsLabel = true
@@ -92,9 +95,7 @@ fun LabelsMarksScreen(
                     orientationArrows = true
                 }
                 shippingNameNumber = true
-                if (shippingMethod == ShippingMethod.CargoOnly) {
-                    cargoLabel = true
-                }
+
             }
 
             Category.B -> {
@@ -179,80 +180,51 @@ fun LabelsMarksScreen(
 
 
             if (infectiousLabel) {
+                MarksDisplay(
+                    modifier = Modifier,
+                    imageId = R.drawable.infectious_label_a,
+                    description = "Infectious Label"
+                )
 
-                    Image(
-                        painter = painterResource(R.drawable.infectious_label_a),
-                        contentDescription = "Infectious Label",
-                        modifier = Modifier
-                            .padding(8.dp)
-                            .size(100.dp)
-                            .clip(shape = MaterialTheme.shapes.medium)
-                    )
-                }
+            }
             if (shippingNumber) {
+                MarksDisplay(
+                    modifier = Modifier,
+                    imageId = R.drawable.shipping_number_b,
+                    description = "Shipping Number"
+                )
 
-
-                    Image(
-                        painter = painterResource(R.drawable.infectious_label_a),
-                        contentDescription = "Shipping Number",
-                        modifier = Modifier
-                            .padding(8.dp)
-                            .clip(shape = MaterialTheme.shapes.large)
-
-                    )
             }
             if (cargoLabel) {
-                    Image(
-                        painter = painterResource(R.drawable.infectious_label_a),
-                        contentDescription = "Cargo Label",
-                        modifier = Modifier
-                            .padding(8.dp)
-                            .size(100.dp)
-                            .clip(shape = MaterialTheme.shapes.large)
-                    )
-
+                MarksDisplay(
+                    modifier = Modifier,
+                    imageId = R.drawable.cargo_label,
+                    description = "Cargo Label"
+                )
             }
             if (orientationArrows) {
-                    Image(
-                        painter = painterResource(R.drawable.infectious_label_a),
-                        contentDescription = "Orientation",
-                        modifier = Modifier
-                            .padding(8.dp)
-                            .size(100.dp)
-                            .clip(shape = MaterialTheme.shapes.large)
-
-                    )
+                MarksDisplay(
+                    modifier = Modifier,
+                    imageId = R.drawable.orientation_arrows,
+                    description = "Orientation"
+                )
             }
             if (unSpecificationMark) {
-                    Image(
-                        painter = painterResource(R.drawable.infectious_label_a),
-                        contentDescription = "UN specification Mark",
-                        modifier = Modifier
-                            .padding(8.dp)
-                            .size(100.dp)
-                            .clip(shape = MaterialTheme.shapes.large)
-                    )
+                MarksDisplay(
+                    modifier = Modifier,
+                    imageId = R.drawable.un_number,
+                    description = "UN specification Mark"
+                )
+
             }
             if (dangerousGoodsLabel) {
-                    Image(
-                        painter = painterResource(R.drawable.infectious_label_a),
-                        contentDescription = "UN specification Mark",
-                        modifier = Modifier
-                            .padding(8.dp)
-                            .size(100.dp)
-                            .clip(shape = MaterialTheme.shapes.large)
-                    )
+                MarksDisplay(
+                    modifier = Modifier,
+                    imageId = R.drawable.dangerous_goods,
+                    description = "Dangerous label"
+                )
             }
         }
-        StartButton(
-            onClick = {
-                navController.navigate(
-                    "${HomeNavigation.DocumentationRoute}/" + "${category}/" + "${unNumber}/" + "${unSubstance}/" + "$quantity/" + "${iceQuantity}/" + "${shippingMethod}//" + "${shipperName}/" + "${shipperAddress}/" + "${receiverName}/" + "${receiverAddress}/" + "${substanceName}/" + "${responsibleName}/" + "$responsiblePhone"
-                ) {
-                    launchSingleTop = true
-                }
-            }, text = "To documentation"
-        )
     }
 }
 
