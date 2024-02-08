@@ -18,6 +18,11 @@ interface SubstanceDao {
     @Query("SELECT * FROM Substance ORDER BY id ASC")
     fun readAllData(): LiveData<List<Substance>>
 
-//    @Query("SELECT substanceName FROM Substance WHERE code='UN 2814'")
-//    fun readAnimalSub():List<String>
+    @Query("SELECT * FROM Substance WHERE code='UN 2900'")
+    fun readAnimalSub():LiveData<List<Substance>>
+
+    @Query("SELECT * FROM Substance WHERE code='UN 2814'")
+    fun readHumanSub():LiveData<List<Substance>>
+
+
 }

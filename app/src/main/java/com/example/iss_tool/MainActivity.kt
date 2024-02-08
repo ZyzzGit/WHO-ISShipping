@@ -116,37 +116,43 @@ fun MainScreen() {
 @Composable
 fun AppBottomBar(navController: NavHostController) {
     val screens = listOf(
-        BottomBarScreen.Home, BottomBarScreen.Info, BottomBarScreen.Settings
+        BottomBarScreen.Home,
+        BottomBarScreen.Info,
+        BottomBarScreen.Settings
     )
     NavigationBar {
         screens.forEach { screen ->
             AddItem(
-                screen = screen, navController = navController
+                screen = screen,
+                navController = navController
             )
         }
     }
 }
-
 @Composable
 fun RowScope.AddItem(
-    screen: BottomBarScreen, navController: NavHostController
+    screen: BottomBarScreen,
+    navController: NavHostController
 ) {
     val backStackEntry = navController.currentBackStackEntryAsState()
-    NavigationBarItem(label = {
-        Text(text = screen.label)
-    },
+    NavigationBarItem(
+        label = {
+            Text(text = screen.label)
+        },
         icon = {
             Icon(
-                painter = painterResource(id = screen.icon),
+                painter = painterResource(id =screen.icon),
                 contentDescription = screen.route + " icon"
             )
         },
-        selected = if (screen == BottomBarScreen.Home) HomeNavigation.MainHomeRoute == backStackEntry.value?.destination?.route
-        else screen.route == backStackEntry.value?.destination?.route,
+        selected = if (screen == BottomBarScreen.Home)
+            HomeNavigation.MainHomeRoute == backStackEntry.value?.destination?.route
+            else screen.route == backStackEntry.value?.destination?.route,
         onClick = {
             navController.navigate(screen.route) {
                 popUpTo(navController.graph.findStartDestination().id)
                 launchSingleTop = true
             }
-        })
+        }
+    )
 }

@@ -41,6 +41,7 @@ fun FormDisplay(
     modifier: Modifier = Modifier,
     onDoneAction: () -> Unit,
 ) {
+
     // State for substance selection
     var assignedSubstance by remember { mutableStateOf<String?>(null) }
     var showErrorsubstance by remember { mutableStateOf(false) }
@@ -68,7 +69,7 @@ fun FormDisplay(
     val keyboardController = LocalSoftwareKeyboardController.current
 
     if (leaf.category == Category.A || leaf.category == Category.B) {
-        if (leaf.category == Category.A && leaf.unNumber == null) {
+        if (leaf.category == Category.A) {
             Spacer(modifier = Modifier.height(24.dp))
             ExposedDropdownMenuBox(expanded = expanded, onExpandedChange = {
                 expanded = !expanded
@@ -211,13 +212,14 @@ fun FormDisplay(
             if (assignedSubstance != null) {
                 val specificSubstanceName = assignedSubstance
                 val matchingElement = tableList.firstOrNull { it[0] == specificSubstanceName }
+                if(leaf.unNumber == null){
+                    leaf.unNumber = matchingElement?.get(1)?.takeLast(4)?.toInt()
+                    if (leaf.unNumber == 2814) {
+                        leaf.unSubstance = UnSubstance.ISHumans
+                    } else if (leaf.unNumber == 2900) {
 
-                leaf.unNumber = matchingElement?.get(1)?.takeLast(4)?.toInt()
-                if (leaf.unNumber == 2814) {
-                    leaf.unSubstance = UnSubstance.ISHumans
-                } else if (leaf.unNumber == 2900) {
-
-                    leaf.unSubstance = UnSubstance.ISAnimalsOnly
+                        leaf.unSubstance = UnSubstance.ISAnimalsOnly
+                    }
                 }
                 leaf.substanceName = assignedSubstance
             }

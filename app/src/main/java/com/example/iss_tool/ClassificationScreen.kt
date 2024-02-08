@@ -1,5 +1,6 @@
 package com.example.iss_tool
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -8,8 +9,12 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
@@ -22,6 +27,7 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.iss_tool.database.Substance
 import com.example.iss_tool.database.SubstanceViewModel
 import com.example.iss_tool.theme.customColorScheme
 import com.example.iss_tool.theme.customTypography
@@ -32,6 +38,7 @@ import com.example.iss_tool.theme.yellow_who
  * argument unNumber skips the classification process by directly selecting a leaf
  * should only be provided when accessing screen from substance selection buttons in HomeScreen
  * **/
+@SuppressLint("UnrememberedMutableState")
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun ClassificationScreen(
@@ -95,7 +102,8 @@ fun ClassificationScreen(
         Column(
             modifier = modifier
                 .padding(24.dp)
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.Start,
         ) {
             Text(
@@ -118,27 +126,49 @@ fun ClassificationScreen(
 
             val keyboardController = LocalSoftwareKeyboardController.current
 
+
+
             //Retrieve substance from Room Database
+//            var substanceList = listOf("")
+//            val substanceViewModel: SubstanceViewModel = viewModel()
+//
+//            val allData by substanceViewModel._readAllData.observeAsState(emptyList())
+//            var tableList = listOf<List<String>>()
             var substanceList = listOf("")
             val substanceViewModel: SubstanceViewModel = viewModel()
-            val allData by substanceViewModel._readAllData.observeAsState(emptyList())
-            var tableList = listOf<List<String>>()
 
+            // Define allData as a State object with an initial value of emptyList()
+            var allData by mutableStateOf(emptyList<Substance>())
+
+            // Conditionally assign the value of allData based on a condition
+            if (leaf.unNumber == null) {
+                allData = substanceViewModel._readAllData.observeAsState(emptyList()).value
+            } else if(leaf.unNumber == 2900){
+                allData = substanceViewModel._readAnimalSub.observeAsState(emptyList()).value
+            }
+            else if(leaf.unNumber == 2814){
+                allData = substanceViewModel._readHumanSub.observeAsState(emptyList()).value
+            }
+
+            // Define tableList
+            var tableList = listOf<List<String>>()
             allData.forEach {
                 substanceList += it.substanceName ?: ""
             }
             tableList = allData.map { substance ->
                 listOf(substance.substanceName ?: "", substance.code ?: "")
             }
-
+            if(leaf.category != Category.Exception){
             FormDisplay(
                 navController = navController,
                 leaf = leaf,
                 substanceList = substanceList,
                 tableList = tableList,
+
                 Modifier
             ) {
                 keyboardController?.hide()
+            }
             }
         }
 
