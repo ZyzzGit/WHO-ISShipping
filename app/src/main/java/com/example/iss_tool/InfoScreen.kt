@@ -33,7 +33,7 @@ fun InfoScreen(modifier: Modifier) {
         {
             Icon(
                 modifier = Modifier.size(36.dp),
-                painter = painterResource(R.drawable.info_icon), contentDescription = "info_logo")
+                painter = painterResource(R.drawable.info_icon), contentDescription = "info_icon")
             Text(
                 text="Information",
                 style = customTypography.bodyLarge,

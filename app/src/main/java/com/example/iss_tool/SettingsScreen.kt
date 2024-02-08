@@ -28,6 +28,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.iss_tool.theme.black
+import com.example.iss_tool.theme.customColorScheme
 import com.example.iss_tool.theme.customTypography
 import com.example.iss_tool.theme.grey_who
 import com.example.iss_tool.theme.primary_navy_blue
@@ -42,11 +43,19 @@ fun SettingsScreen(modifier: Modifier) {
             .padding(24.dp)
             .fillMaxWidth()
     ){
-        Row(modifier = Modifier.fillMaxWidth()) {
-            Icon(painter = painterResource(R.drawable.settings_icon),
-                contentDescription = "description"
+        Row (
+            horizontalArrangement = Arrangement.spacedBy(space = 11.dp, alignment = Alignment.CenterHorizontally),
+            verticalAlignment = Alignment.CenterVertically
+        )
+        {
+            Icon(
+                modifier = Modifier.size(36.dp),
+                painter = painterResource(R.drawable.settings_icon), contentDescription = "settings_icon")
+            Text(
+                text="Settings",
+                style = customTypography.bodyLarge,
+                color = customColorScheme.primary
             )
-            Text(text="Settings", style= customTypography.bodyLarge,color = primary_navy_blue)
         }
 
         Spacer(modifier = Modifier.height(24.dp))
