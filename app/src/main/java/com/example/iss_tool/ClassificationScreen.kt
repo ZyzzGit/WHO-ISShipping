@@ -91,7 +91,7 @@ fun ClassificationScreen(
             }
             Spacer(modifier = Modifier.height(24.dp))
             if (node.additionalInfo != null) {
-                InfoBody(infoText = node.additionalInfo)
+                IconBody(iconId = R.drawable.info_icon, text = node.additionalInfo)
             }
         }
     } else if (currentNode is ClassificationLeaf) {

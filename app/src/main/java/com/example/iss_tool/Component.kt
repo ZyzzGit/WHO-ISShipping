@@ -242,20 +242,22 @@ fun BoxedFAB(
 }
 
 @Composable
-fun InfoBody(infoText: String) {
+fun IconBody(iconId: Int, text: String, color: Color = Color.Unspecified) {
     Row(
         modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Start
     ) {
         Icon(
-            modifier = Modifier.weight(0.06f),
-            painter = painterResource(id = R.drawable.info_icon),
-            contentDescription = "Info icon",
+            modifier = Modifier.size(24.dp).weight(0.06f),
+            painter = painterResource(iconId),
+            contentDescription = LocalContext.current.resources.getResourceName(iconId),
+            tint = color
         )
         Spacer(Modifier.width(3.dp))
         Text(
             modifier = Modifier.weight(0.94f),
-            text = infoText,
+            text = text,
             style = customTypography.bodyMedium.copy(fontSize = 11.sp),
+            color = color
         )
     }
 }

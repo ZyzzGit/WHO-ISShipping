@@ -120,7 +120,7 @@ fun DocumentationScreen(
             )
         }
 
-        InfoBody(infoText = "Always check if there is any state variation and/or operator variations")
+        IconBody(iconId = R.drawable.info_icon, text = "Always check if there is any state variation and/or operator variations")
     }
 }
 
